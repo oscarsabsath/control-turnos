@@ -1,0 +1,2567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Sistema de Gestión de Turnos y Responsabilidades - Viernes y Sábado</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      
+      /* 1. PREDICACIÓN */
+      --pred-bg: #eff6ff;
+      --pred-border: #93c5fd;
+      --pred-text: #1e40af;
+      --pred-badge: #2563eb;
+
+      /* 2. ALABANZA */
+      --alab-bg: #fffbeb;
+      --alab-border: #fde68a;
+      --alab-text: #92400e;
+      --alab-badge: #d97706;
+
+      /* 3. DIACONISAS */
+      --diac-fem-bg: #fdf2f8;
+      --diac-fem-border: #fbcfe8;
+      --diac-fem-text: #9d174d;
+      --diac-fem-badge: #db2777;
+
+      /* 4. DIÁCONOS */
+      --diac-masc-bg: #f0fdf4;
+      --diac-masc-border: #bbf7d0;
+      --diac-masc-text: #166534;
+      --diac-masc-badge: #16a34a;
+
+      /* 5. AUDIOVISUAL */
+      --audio-bg: #f5f3ff;
+      --audio-border: #ddd6fe;
+      --audio-text: #5b21b6;
+      --audio-badge: #7c3aed;
+
+      --danger: #ef4444;
+      --danger-bg: #fef2f2;
+      --danger-border: #fca5a5;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --success: #10b981;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 8px;
+      --shadow: 0 2px 4px -1px rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    }
+
+    html {
+      font-size: 13.5px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.42;
+      padding: 14px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header Compacto */
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      box-shadow: 0 4px 10px -2px rgba(30, 58, 138, 0.2);
+    }
+
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.25;
+    }
+
+    header p {
+      color: #bfdbfe;
+      margin-top: 4px;
+      font-size: 0.82rem;
+    }
+
+    /* Pestañas */
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tab-btn:hover {
+      background-color: #e2e8f0;
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--text);
+      background-color: #fff;
+      transition: border-color 0.15s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+
+    .hint {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Botones */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-danger {
+      background-color: #fee2e2;
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background-color: #fecaca;
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 0.76rem;
+    }
+
+    /* Alertas */
+    .alert {
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.84rem;
+    }
+
+    .alert-danger {
+      background-color: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: #991b1b;
+    }
+
+    /* Badges */
+    .badge-area {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .area-predicaciones {
+      background-color: var(--pred-bg);
+      color: var(--pred-text);
+      border: 1px solid var(--pred-border);
+    }
+
+    .area-alabanza {
+      background-color: var(--alab-bg);
+      color: var(--alab-text);
+      border: 1px solid var(--alab-border);
+    }
+
+    .area-diaconisas {
+      background-color: var(--diac-fem-bg);
+      color: var(--diac-fem-text);
+      border: 1px solid var(--diac-fem-border);
+    }
+
+    .area-diaconos {
+      background-color: var(--diac-masc-bg);
+      color: var(--diac-masc-text);
+      border: 1px solid var(--diac-masc-border);
+    }
+
+    .area-audiovisual {
+      background-color: var(--audio-bg);
+      color: var(--audio-text);
+      border: 1px solid var(--audio-border);
+    }
+
+    .badge-multidisciplinar {
+      background-color: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-day {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .badge-viernes {
+      background-color: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .badge-sabado {
+      background-color: #ffedd5;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
+    /* Tablas */
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.82rem;
+      min-width: 520px;
+    }
+
+    th {
+      background-color: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    /* Almanaque */
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calendar-current-month {
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-transform: capitalize;
+      min-width: 160px;
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    .calendar-filters {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calendar-grid-2cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 680px) {
+      .calendar-grid-2cols {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+
+    /* =========================================================
+       ALMANAQUE EN 8 COLUMNAS (LOS 8 DÍAS DE ASIGNACIÓN DEL MES)
+       VIERNES - SÁBADO - VIERNES - SÁBADO - VIERNES - SÁBADO - VIERNES - SÁBADO
+       ========================================================= */
+    .calendar-8days-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 16px;
+      margin-top: 10px;
+    }
+
+    .calendar-8days-wrapper {
+      min-width: 1200px;
+    }
+
+    .calendar-8days-header-row {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .col-8days-header {
+      padding: 10px 8px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .col-8days-header.is-friday {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      color: #ffffff;
+      border: 1px solid #1d4ed8;
+    }
+
+    .col-8days-header.is-saturday {
+      background: linear-gradient(135deg, #9a3412 0%, #ea580c 100%);
+      color: #ffffff;
+      border: 1px solid #c2410c;
+    }
+
+    .col-8days-day-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .col-8days-week-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      opacity: 0.92;
+    }
+
+    .col-8days-date-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.22);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 2px;
+    }
+
+    .calendar-8days-grid {
+      display: grid;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .col-8days-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 0 0 8px 8px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 420px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .col-8days-card:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+    }
+
+    .col-8days-card.is-friday {
+      border-top: 3px solid #2563eb;
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 25%);
+    }
+
+    .col-8days-card.is-saturday {
+      border-top: 3px solid #ea580c;
+      background: linear-gradient(180deg, #fffcf9 0%, #ffffff 25%);
+    }
+
+    .col-8days-card.is-today {
+      border: 2px solid var(--primary) !important;
+      border-top: 3px solid var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .col-8days-card.other-month {
+      opacity: 0.55;
+      background: #f8fafc;
+    }
+
+    .col-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .col-big-day {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .col-ministry-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .slot-item {
+      border-radius: 6px;
+      padding: 6px 7px;
+      font-size: 0.74rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      border-left: 3px solid;
+    }
+
+    .slot-predicaciones {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 3px solid var(--pred-badge);
+      color: #1e40af;
+    }
+
+    .slot-alabanza {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 3px solid var(--alab-badge);
+      color: #9a3412;
+    }
+
+    .slot-diaconisas {
+      background: #fdf2f8;
+      border: 1px solid #fbcfe8;
+      border-left: 3px solid var(--diac-fem-badge);
+      color: #9d174d;
+    }
+
+    .slot-diaconos {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 3px solid var(--diac-masc-badge);
+      color: #166534;
+    }
+
+    .slot-audiovisual {
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      border-left: 3px solid var(--audio-badge);
+      color: #5b21b6;
+    }
+
+    .btn-slot-empty {
+      width: 100%;
+      padding: 6px 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      color: #64748b;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .btn-slot-empty:hover {
+      background: #e2e8f0;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-col-add-more {
+      margin-top: auto;
+      padding: 6px 8px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--primary);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .btn-col-add-more:hover {
+      background: #eff6ff;
+      border-color: var(--primary);
+    }
+
+    .calendar-column-header {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-friday {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .header-saturday {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
+    .weekend-row-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .weekend-block-title {
+      background: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .calendar-cell-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 120px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .calendar-cell-card:hover {
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+      border-color: #cbd5e1;
+    }
+
+    .calendar-cell-card.is-friday {
+      border-color: #bfdbfe;
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 40%);
+    }
+
+    .calendar-cell-card.is-saturday {
+      border-color: #fed7aa;
+      background: linear-gradient(180deg, #fffdfb 0%, #ffffff 40%);
+    }
+
+    .calendar-cell-card.is-today {
+      border: 2px solid var(--primary) !important;
+    }
+
+    .calendar-cell-card.other-month {
+      opacity: 0.55;
+      background: #f8fafc;
+    }
+
+    .cell-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 6px;
+    }
+
+    .cell-date-info {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .cell-big-num {
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .cell-day-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .cell-month-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .cell-shifts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .shift-item-card {
+      padding: 6px 9px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .shift-info-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .shift-colab-name {
+      font-weight: 700;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shift-dept-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .cell-empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      padding: 10px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .btn-quick-add {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px dashed #94a3b8;
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.15s;
+      width: 100%;
+    }
+
+    .btn-quick-add:hover {
+      background: #e2e8f0;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(15, 23, 42, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 480px;
+      padding: 18px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    /* Stats bar */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stat-value {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 2px;
+      line-height: 1;
+    }
+
+    /* Toast */
+    #toastContainer {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      left: 16px;
+      max-width: 380px;
+      margin-left: auto;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 10px 14px;
+      border-radius: 6px;
+      color: white;
+      font-size: 0.84rem;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .toast-error { background-color: #dc2626; }
+    .toast-success { background-color: #059669; }
+    .toast-info { background-color: #2563eb; }
+
+    /* Reglas de visibilidad según autenticación */
+    body.is-admin .admin-only {
+      display: initial !important;
+    }
+    body:not(.is-admin) .admin-only {
+      display: none !important;
+    }
+
+    body.is-admin .public-only {
+      display: none !important;
+    }
+    body:not(.is-admin) .public-only {
+      display: block !important;
+    }
+
+    /* Header con barra de autenticación */
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      box-shadow: 0 4px 10px -2px rgba(30, 58, 138, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .header-info {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .auth-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(4px);
+    }
+
+    .auth-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .auth-badge.public {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .auth-badge.admin {
+      background: #10b981;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-light-glow {
+      background: #ffffff;
+      color: #1e3a8a;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .btn-light-glow:hover {
+      background: #f1f5f9;
+      transform: translateY(-1px);
+    }
+
+    .btn-white-outline {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      font-weight: 600;
+    }
+
+    .btn-white-outline:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #ffffff;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      header { padding: 12px 14px; flex-direction: column; align-items: stretch; }
+      header h1 { font-size: 1.15rem; }
+      .auth-bar { justify-content: space-between; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .stat-card:first-child { grid-column: span 2; }
+      .card { padding: 12px; }
+      .calendar-header { flex-direction: column; align-items: stretch; }
+      .calendar-nav { justify-content: space-between; }
+      input, select, textarea { font-size: 16px !important; }
+      .btn { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header con control de usuario -->
+    <header>
+      <div class="header-info">
+        <h1>📅 Gestión de Responsabilidades y Turnos</h1>
+        <p>Organización compartida para <strong>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual</strong> (Viernes y Sábado).</p>
+      </div>
+      <div class="auth-bar" id="authBar">
+        <!-- Renderizado dinámico vía JavaScript -->
+      </div>
+    </header>
+
+    <!-- Resumen / Estadísticas -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">👥 Total Hermanos</div>
+        <div class="stat-value" id="statColabs">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label" style="color: var(--pred-badge);">📖 Predicación</div>
+        <div class="stat-value" id="statPredicaciones" style="color: var(--pred-badge);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label" style="color: var(--alab-badge);">🎵 Alabanza</div>
+        <div class="stat-value" id="statAlabanza" style="color: var(--alab-badge);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label" style="color: var(--diac-fem-badge);">🌸 Diaconisas</div>
+        <div class="stat-value" id="statDiaconisas" style="color: var(--diac-fem-badge);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label" style="color: var(--diac-masc-badge);">🤝 Diáconos</div>
+        <div class="stat-value" id="statDiaconos" style="color: var(--diac-masc-badge);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label" style="color: var(--audio-badge);">🎥 Audiovisual</div>
+        <div class="stat-value" id="statAudiovisual" style="color: var(--audio-badge);">0</div>
+      </div>
+    </div>
+
+    <!-- Navegación por pestañas -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('calendarTab', this)">
+        📆 Almanaque (Vie y Sáb)
+      </button>
+      <button class="tab-btn" onclick="switchTab('assignTab', this)">
+        ➕ Asignar Responsabilidad
+      </button>
+      <button class="tab-btn" onclick="switchTab('collaboratorsTab', this)">
+        👥 Directorio de Hermanos
+      </button>
+      <button class="tab-btn" onclick="switchTab('shiftsListTab', this)">
+        📋 Registro General
+      </button>
+    </div>
+
+    <!-- PESTAÑA 1: ALMANAQUE (SOLO VIERNES Y SÁBADO) -->
+    <div id="calendarTab" class="tab-content active">
+      <div class="card">
+        <div class="calendar-header">
+          <div class="calendar-nav">
+            <button class="btn btn-outline btn-sm" onclick="changeMonth(-1)">◀ Anterior</button>
+            <span class="calendar-current-month" id="calendarMonthTitle">Octubre 2026</span>
+            <button class="btn btn-outline btn-sm" onclick="changeMonth(1)">Siguiente ▶</button>
+            <button class="btn btn-outline btn-sm" onclick="goToCurrentMonth()">Hoy</button>
+          </div>
+
+          <div class="calendar-filters" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <label style="font-weight: 600; font-size: 0.8rem;">Filtrar Área:</label>
+              <select id="filterDepartment" class="form-control" style="width: auto;" onchange="renderCalendar()">
+                <option value="ALL">Todas las Áreas</option>
+                <option value="predicaciones">📖 Predicación</option>
+                <option value="alabanza">🎵 Alabanza</option>
+                <option value="diaconisas">🌸 Diaconisas</option>
+                <option value="diaconos">🤝 Diáconos</option>
+                <option value="audiovisual">🎥 Audiovisual</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
+                🖨️ Imprimir / PDF
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="exportMonthExcelCSV()" title="Descargar informe de este mes en formato Excel (.csv)">
+                📊 Excel (.csv)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; font-size: 0.78rem; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); align-items: center; justify-content: space-between;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="width: 10px; height: 10px; background: var(--pred-badge); border-radius: 2px; display: inline-block;"></span>
+              <span>Predicación</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="width: 10px; height: 10px; background: var(--alab-badge); border-radius: 2px; display: inline-block;"></span>
+              <span>Alabanza</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="width: 10px; height: 10px; background: var(--diac-fem-badge); border-radius: 2px; display: inline-block;"></span>
+              <span>Diaconisas</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="width: 10px; height: 10px; background: var(--diac-masc-badge); border-radius: 2px; display: inline-block;"></span>
+              <span>Diáconos</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="width: 10px; height: 10px; background: var(--audio-badge); border-radius: 2px; display: inline-block;"></span>
+              <span>Audiovisual</span>
+            </div>
+          </div>
+          <div style="color: #475569; font-size: 0.76rem; font-weight: 700;">
+            🗓️ 8 Columnas: Los 8 días de turno del mes (Viernes y Sábado)
+          </div>
+        </div>
+
+        <!-- Contenedor dinámico del Almanaque en 8 Columnas -->
+        <div id="calendar8Container"></div>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 2: ASIGNAR RESPONSABILIDAD -->
+    <div id="assignTab" class="tab-content">
+      <!-- Banner para modo lectura / público -->
+      <div class="card public-only" style="background: #ffffff; text-align: center; padding: 36px 20px; border: 2px dashed #cbd5e1;">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">🔒</div>
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Modo Solo Lectura</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 460px; margin: 0 auto 16px;">
+          Esta página está disponible públicamente para consultar el calendario. Para asignar o editar responsabilidades, ingresa con la contraseña de administrador.
+        </p>
+        <button class="btn btn-primary" onclick="openLoginModal()" style="padding: 10px 22px; font-size: 0.9rem;">
+          🔑 Desbloquear con Contraseña
+        </button>
+      </div>
+
+      <!-- Formulario para administradores -->
+      <div class="grid-2 admin-only">
+        <div class="card">
+          <div class="card-title">
+            <span>📝 Asignar Responsabilidad</span>
+          </div>
+
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; color: #15803d; margin-bottom: 12px;">
+            💡 <strong>Cualquier hermano(a)</strong> puede ser seleccionado para <strong>Predicación, Alabanza, Diaconisas, Diáconos o Audiovisual</strong>.
+          </div>
+
+          <div id="conflictAlert" class="alert alert-danger" style="display: none;">
+            <div>
+              <strong>⛔ Conflicto detectado:</strong>
+              <div id="conflictAlertMessage" style="margin-top: 3px;"></div>
+            </div>
+          </div>
+
+          <form id="assignShiftForm" onsubmit="handleAssignShift(event)">
+            <div class="form-group">
+              <label for="assignDepartment">Área / Ministerio a Asignar *</label>
+              <select id="assignDepartment" class="form-control" required onchange="checkRealtimeConflict()">
+                <option value="">-- Seleccionar Área --</option>
+                <option value="predicaciones">📖 Predicación</option>
+                <option value="alabanza">🎵 Alabanza</option>
+                <option value="diaconisas">🌸 Diaconisas</option>
+                <option value="diaconos">🤝 Diáconos</option>
+                <option value="audiovisual">🎥 Audiovisual</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="assignCollaborator">Hermano(a) Responsable *</label>
+              <select id="assignCollaborator" class="form-control" required onchange="checkRealtimeConflict()">
+                <option value="">-- Seleccionar Hermano(a) --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="assignDate">Fecha del Turno (Solo Viernes o Sábado) *</label>
+              <input type="date" id="assignDate" class="form-control" required onchange="onDateSelected(this.value)">
+              <div id="dateValidationNotice" class="hint">⚠️ Seleccione una fecha (Viernes o Sábado).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="assignNotes">Notas u Observaciones (Opcional)</label>
+              <input type="text" id="assignNotes" class="form-control" placeholder="Ej: Tema: La Fidelidad de Dios / Oración">
+            </div>
+
+            <div style="margin-top: 18px; display: flex; gap: 8px;">
+              <button type="submit" id="btnSubmitShift" class="btn btn-primary" style="flex: 1;">
+                Confirmar y Asignar
+              </button>
+              <button type="button" class="btn btn-outline" onclick="resetAssignForm()">
+                Limpiar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card" style="background: #f8fafc;">
+          <div class="card-title">🛡️ Reglas de Asignación y Bloqueo</div>
+          <div style="font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px;">
+            <p>1️⃣ <strong>Flexibilidad total de áreas:</strong> Cualquier hermano(a) registrado puede participar indistintamente en <strong>Predicación, Alabanza, Diaconisas o Diáconos</strong>.</p>
+            <p>2️⃣ <strong>Bloqueo estricto del mismo día:</strong> Un hermano no puede tener dos responsabilidades en la misma fecha (incluso si son de áreas distintas).</p>
+            <div style="background: #fee2e2; border-left: 3px solid #ef4444; padding: 6px 10px; border-radius: 4px; color: #991b1b; font-weight: 600; font-size: 0.78rem;">
+              "Tiene que cambiar la fecha para este colaborador porque ya tiene un turno asignado ese día."
+            </div>
+            <p>3️⃣ <strong>Exclusivo Viernes y Sábado:</strong> No se pueden programar turnos de domingo a jueves.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 3: DIRECTORIO DE HERMANOS -->
+    <div id="collaboratorsTab" class="tab-content">
+      <div class="grid-2">
+        <!-- Registro solo para administradores -->
+        <div class="card admin-only">
+          <div class="card-title">➕ Registrar Hermano(a)</div>
+          <form id="colabForm" onsubmit="handleCreateCollaborator(event)">
+            <div class="form-group">
+              <label for="colabName">Nombre Completo *</label>
+              <input type="text" id="colabName" class="form-control" required placeholder="Ej: Hno. Carlos Mendoza">
+            </div>
+
+            <div class="form-group">
+              <label for="colabEmail">Correo Electrónico (Opcional)</label>
+              <input type="email" id="colabEmail" class="form-control" placeholder="carlos@iglesia.com">
+            </div>
+
+            <div class="form-group">
+              <label for="colabPhone">Teléfono / WhatsApp (Opcional)</label>
+              <input type="tel" id="colabPhone" class="form-control" placeholder="+34 600 000 000">
+            </div>
+
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 8px 12px; border-radius: 6px; font-size: 0.78rem; color: #1e40af; margin-bottom: 12px;">
+              🌟 <strong>Habilitación universal:</strong> Queda disponible de inmediato para cualquiera de las 4 áreas (Predicación, Alabanza, Diaconisas, Diáconos).
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 4px;">
+              Guardar en Directorio
+            </button>
+          </form>
+        </div>
+
+        <!-- Tarjeta informativa para visitantes en modo lectura -->
+        <div class="card public-only" style="background: #f8fafc;">
+          <div class="card-title">ℹ️ Directorio de Hermanos</div>
+          <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+            Este directorio contiene los hermanos y hermanas disponibles para servir en las diferentes responsabilidades.
+          </p>
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px 12px; border-radius: 6px; font-size: 0.8rem; color: #1e40af; margin-bottom: 14px;">
+            🔒 <strong>Gestión restringida:</strong> Para dar de alta nuevos colaboradores o eliminarlos, inicia sesión como administrador.
+          </div>
+          <button class="btn btn-primary" onclick="openLoginModal()" style="width: 100%;">
+            🔑 Iniciar Sesión para Gestionar
+          </button>
+        </div>
+
+        <!-- Directorio visible para todos -->
+        <div class="card">
+          <div class="card-title">
+            <span>👥 Directorio de Hermanos (<span id="colabsCountHeader">0</span>)</span>
+          </div>
+          <div class="table-container" style="max-height: 420px; overflow-y: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Disponibilidad</th>
+                  <th>Contacto</th>
+                  <th class="admin-only">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="colabsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 4: LISTA GENERAL DE TURNOS -->
+    <div id="shiftsListTab" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>📋 Registro General de Turnos</span>
+          <div>
+            <button class="btn btn-outline btn-sm" onclick="exportDataJSON()">
+              📥 Descargar Respaldo JSON
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+          <input type="text" id="searchShiftInput" class="form-control" style="max-width: 250px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
+          <select id="filterShiftDept" class="form-control" style="max-width: 200px;" onchange="renderShiftsTable()">
+            <option value="ALL">Todas las Áreas</option>
+            <option value="predicaciones">📖 Predicación</option>
+            <option value="alabanza">🎵 Alabanza</option>
+            <option value="diaconisas">🌸 Diaconisas</option>
+            <option value="diaconos">🤝 Diáconos</option>
+            <option value="audiovisual">🎥 Audiovisual</option>
+          </select>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Día</th>
+                <th>Responsable</th>
+                <th>Área / Ministerio</th>
+                <th>Notas / Observaciones</th>
+                <th class="admin-only">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="shiftsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL DETALLE DE DÍA -->
+  <div id="dayDetailModal" class="modal-backdrop" onclick="if (event.target === this) closeDayModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalDayTitle">Responsabilidades del Día</h3>
+        <button class="modal-close" onclick="closeDayModal()">&times;</button>
+      </div>
+      <div id="modalDayContent"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDayModal()">Cerrar</button>
+        <button class="btn btn-primary admin-only" id="btnModalAddShift">Asignar responsabilidad</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE INICIO DE SESIÓN / ACCESO ADMINISTRADOR -->
+  <div id="loginModal" class="modal-backdrop" onclick="if (event.target === this) closeLoginModal()">
+    <div class="modal" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔒 Acceso de Administrador</h3>
+        <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+      </div>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.45;">
+          Cualquier persona puede ver los turnos. Ingresa la contraseña de administrador para desbloquear la asignación, edición y eliminación de datos.
+        </p>
+        <div class="form-group">
+          <label for="adminPasswordInput">Contraseña de Administrador *</label>
+          <input type="password" id="adminPasswordInput" class="form-control" placeholder="Ingresa la contraseña..." autocomplete="current-password" required>
+          <div id="loginErrorMsg" style="color: #dc2626; font-size: 0.82rem; font-weight: 700; margin-top: 6px; display: none;">
+            ⛔ Contraseña incorrecta. Inténtalo de nuevo.
+          </div>
+        </div>
+        <div style="margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="rememberAdmin" checked style="cursor: pointer; width: 16px; height: 16px;">
+          <label for="rememberAdmin" style="font-size: 0.82rem; cursor: pointer; color: var(--text);">Recordar sesión en este navegador</label>
+        </div>
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 9px 12px; font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
+          🔑 <em>Contraseña inicial por defecto:</em> <strong>1234</strong><br>
+          <span style="font-size: 0.73rem; opacity: 0.9;">(Puedes cambiarla cuando quieras desde el botón "⚙️ Clave").</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeLoginModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Desbloquear Edición</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CAMBIAR CONTRASEÑA -->
+  <div id="changePasswordModal" class="modal-backdrop" onclick="if (event.target === this) closeChangePasswordModal()">
+    <div class="modal" style="max-width: 430px;">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ Cambiar Contraseña</h3>
+        <button class="modal-close" onclick="closeChangePasswordModal()">&times;</button>
+      </div>
+      <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 14px;">
+          Actualiza la contraseña utilizada para editar responsabilidades y turnos.
+        </p>
+        <div class="form-group">
+          <label for="currentPasswordInput">Contraseña Actual *</label>
+          <input type="password" id="currentPasswordInput" class="form-control" required placeholder="Contraseña actual...">
+        </div>
+        <div class="form-group">
+          <label for="newPasswordInput">Nueva Contraseña *</label>
+          <input type="password" id="newPasswordInput" class="form-control" required placeholder="Mínimo 3 caracteres..." minlength="3">
+        </div>
+        <div class="form-group">
+          <label for="confirmNewPasswordInput">Confirmar Nueva Contraseña *</label>
+          <input type="password" id="confirmNewPasswordInput" class="form-control" required placeholder="Repite la nueva contraseña...">
+        </div>
+        <div id="changePwdErrorMsg" style="color: #dc2626; font-size: 0.82rem; font-weight: 700; margin-bottom: 10px; display: none;"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeChangePasswordModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Nueva Contraseña</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script>
+    const DEPARTMENTS = {
+      'predicaciones': { id: 'predicaciones', name: 'Predicación', icon: '📖', badgeClass: 'area-predicaciones', color: '#2563eb' },
+      'alabanza': { id: 'alabanza', name: 'Alabanza', icon: '🎵', badgeClass: 'area-alabanza', color: '#d97706' },
+      'diaconisas': { id: 'diaconisas', name: 'Diaconisas', icon: '🌸', badgeClass: 'area-diaconisas', color: '#db2777' },
+      'diaconos': { id: 'diaconos', name: 'Diáconos', icon: '🤝', badgeClass: 'area-diaconos', color: '#16a34a' },
+      'audiovisual': { id: 'audiovisual', name: 'Audiovisual', icon: '🎥', badgeClass: 'area-audiovisual', color: '#7c3aed' }
+    };
+
+    const INITIAL_COLLABORATORS = [
+      { id: 'c1', name: 'Pastor David Morales', email: 'david@iglesia.com', phone: '611 111 222' },
+      { id: 'c2', name: 'Hno. Samuel Castillo', email: 'samuel@iglesia.com', phone: '622 222 333' },
+      { id: 'c3', name: 'Hna. Ester Navarro', email: 'ester@iglesia.com', phone: '633 333 444' },
+      { id: 'c4', name: 'Hno. Marcos Peña', email: 'marcos@iglesia.com', phone: '644 444 555' },
+      { id: 'c5', name: 'Hna. Marta López', email: 'marta@iglesia.com', phone: '655 555 666' },
+      { id: 'c6', name: 'Hna. Ruth Méndez', email: 'ruth@iglesia.com', phone: '666 666 777' },
+      { id: 'c7', name: 'Hno. Esteban Vega', email: 'esteban@iglesia.com', phone: '677 777 888' },
+      { id: 'c8', name: 'Hno. Felipe Torres', email: 'felipe@iglesia.com', phone: '688 888 999' }
+    ];
+
+    function getDemoShifts() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      return [
+        { id: 's1', collaboratorId: 'c2', departmentId: 'alabanza', date: `${y}-${m}-02`, dayOfWeek: 'Viernes', notes: 'Voz y guitarra' },
+        { id: 's2', collaboratorId: 'c1', departmentId: 'predicaciones', date: `${y}-${m}-02`, dayOfWeek: 'Viernes', notes: 'Tema: Mensaje de apertura' },
+        { id: 's3', collaboratorId: 'c2', departmentId: 'predicaciones', date: `${y}-${m}-03`, dayOfWeek: 'Sábado', notes: 'Tema: Predicación central' },
+        { id: 's4', collaboratorId: 'c5', departmentId: 'diaconisas', date: `${y}-${m}-03`, dayOfWeek: 'Sábado', notes: 'Recepción y bienvenida' },
+        { id: 's5', collaboratorId: 'c7', departmentId: 'diaconos', date: `${y}-${m}-03`, dayOfWeek: 'Sábado', notes: 'Apoyo y coordinación general' },
+        { id: 's6', collaboratorId: 'c4', departmentId: 'audiovisual', date: `${y}-${m}-02`, dayOfWeek: 'Viernes', notes: 'Transmisión y sonido' }
+      ];
+    }
+
+    function loadSafeData(keys, defaultData) {
+      for (const key of keys) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (raw && raw !== 'undefined' && raw !== 'null') {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              return parsed;
+            }
+          }
+        } catch (err) {
+          console.warn(`Error leyendo clave de almacenamiento ${key}:`, err);
+        }
+      }
+      return defaultData;
+    }
+
+    let collaborators = loadSafeData([
+      'church_collaborators_v4',
+      'church_collaborators_v3',
+      'church_collaborators_v2',
+      'church_collaborators',
+      'shifts_collaborators'
+    ], INITIAL_COLLABORATORS);
+
+    let shifts = loadSafeData([
+      'church_assignments_v4',
+      'church_assignments_v3',
+      'church_assignments_v2',
+      'church_assignments',
+      'shifts_data'
+    ], getDemoShifts());
+
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+
+    // --- CONTROL DE ACCESO Y AUTENTICACIÓN ---
+    let isAuthenticated = false;
+    let pendingAuthCallback = null;
+
+    function getAdminPassword() {
+      return localStorage.getItem('church_admin_pwd') || '1234';
+    }
+
+    function initAuth() {
+      const savedLocal = localStorage.getItem('church_is_admin');
+      const savedSession = sessionStorage.getItem('church_is_admin');
+      isAuthenticated = (savedLocal === 'true' || savedSession === 'true');
+      updateAuthUI();
+    }
+
+    function updateAuthUI() {
+      if (isAuthenticated) {
+        document.body.classList.add('is-admin');
+      } else {
+        document.body.classList.remove('is-admin');
+      }
+      renderAuthBar();
+    }
+
+    function renderAuthBar() {
+      const bar = document.getElementById('authBar');
+      if (!bar) return;
+      if (isAuthenticated) {
+        bar.innerHTML = `
+          <div class="auth-badge admin">
+            <span>🔓</span>
+            <span>Modo Administrador</span>
+          </div>
+          <button class="btn btn-white-outline btn-sm" onclick="openChangePasswordModal()" title="Cambiar clave de acceso">
+            ⚙️ Clave
+          </button>
+          <button class="btn btn-white-outline btn-sm" onclick="handleLogout()" title="Cerrar modo administrador">
+            🚪 Salir
+          </button>
+        `;
+      } else {
+        bar.innerHTML = `
+          <div class="auth-badge public">
+            <span>👁️</span>
+            <span>Modo Lectura</span>
+          </div>
+          <button class="btn btn-light-glow btn-sm" onclick="openLoginModal()">
+            🔒 Iniciar Sesión para Editar
+          </button>
+        `;
+      }
+    }
+
+    function openLoginModal(callback = null) {
+      pendingAuthCallback = callback;
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('loginErrorMsg').style.display = 'none';
+      document.getElementById('loginModal').classList.add('open');
+      setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.remove('open');
+      pendingAuthCallback = null;
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const entered = document.getElementById('adminPasswordInput').value;
+      const currentPwd = getAdminPassword();
+
+      if (entered === currentPwd) {
+        const remember = document.getElementById('rememberAdmin').checked;
+        isAuthenticated = true;
+        if (remember) {
+          localStorage.setItem('church_is_admin', 'true');
+        } else {
+          sessionStorage.setItem('church_is_admin', 'true');
+        }
+        document.getElementById('loginModal').classList.remove('open');
+        updateAuthUI();
+        renderCalendar();
+        renderCollaboratorsTable();
+        renderShiftsTable();
+        showToast('Acceso de administrador concedido', 'success');
+
+        if (pendingAuthCallback) {
+          const cb = pendingAuthCallback;
+          pendingAuthCallback = null;
+          cb();
+        }
+      } else {
+        document.getElementById('loginErrorMsg').style.display = 'block';
+        document.getElementById('adminPasswordInput').focus();
+      }
+    }
+
+    function handleLogout() {
+      isAuthenticated = false;
+      localStorage.removeItem('church_is_admin');
+      sessionStorage.removeItem('church_is_admin');
+      updateAuthUI();
+      renderCalendar();
+      renderCollaboratorsTable();
+      renderShiftsTable();
+      showToast('Modo editor cerrado. Ahora en modo solo lectura.', 'info');
+    }
+
+    function openChangePasswordModal() {
+      document.getElementById('changePasswordForm').reset();
+      document.getElementById('changePwdErrorMsg').style.display = 'none';
+      document.getElementById('changePasswordModal').classList.add('open');
+    }
+
+    function closeChangePasswordModal() {
+      document.getElementById('changePasswordModal').classList.remove('open');
+    }
+
+    function handleChangePassword(e) {
+      e.preventDefault();
+      const currentEntered = document.getElementById('currentPasswordInput').value;
+      const newPwd = document.getElementById('newPasswordInput').value;
+      const confirmPwd = document.getElementById('confirmNewPasswordInput').value;
+      const errorMsg = document.getElementById('changePwdErrorMsg');
+
+      const realCurrent = getAdminPassword();
+      if (currentEntered !== realCurrent) {
+        errorMsg.innerText = '⛔ La contraseña actual es incorrecta.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (newPwd.length < 3) {
+        errorMsg.innerText = '⛔ La nueva contraseña debe tener al menos 3 caracteres.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (newPwd !== confirmPwd) {
+        errorMsg.innerText = '⛔ Las contraseñas nuevas no coinciden.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      localStorage.setItem('church_admin_pwd', newPwd);
+      closeChangePasswordModal();
+      showToast('Contraseña de administrador actualizada con éxito', 'success');
+    }
+
+    function ensureAuth(callback) {
+      if (isAuthenticated) {
+        if (callback) callback();
+        return true;
+      }
+      openLoginModal(callback);
+      return false;
+    }
+
+    function saveData() {
+      try {
+        const colabJson = JSON.stringify(collaborators);
+        const shiftsJson = JSON.stringify(shifts);
+        localStorage.setItem('church_collaborators_v4', colabJson);
+        localStorage.setItem('church_assignments_v4', shiftsJson);
+        localStorage.setItem('church_collaborators', colabJson);
+        localStorage.setItem('church_assignments', shiftsJson);
+      } catch (err) {
+        console.error('Error al guardar datos en el navegador:', err);
+      }
+      updateStats();
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${type === 'error' ? '⛔' : '✅'}</span><div>${message}</div>`;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 4000);
+    }
+
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      let targetBtn = btnElement;
+      if (!targetBtn && typeof event !== 'undefined' && event && event.target) {
+        targetBtn = event.target.closest ? event.target.closest('.tab-btn') : null;
+      }
+      if (!targetBtn) {
+        targetBtn = document.querySelector(`.tab-btn[onclick*="${tabId}"]`);
+      }
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+      }
+
+      const content = document.getElementById(tabId);
+      if (content) {
+        content.classList.add('active');
+      }
+
+      if (tabId === 'calendarTab') renderCalendar();
+      if (tabId === 'shiftsListTab') renderShiftsTable();
+      if (tabId === 'collaboratorsTab') renderCollaboratorsTable();
+      if (tabId === 'assignTab') populateCollaboratorsDropdown();
+    }
+
+    function handleCreateCollaborator(e) {
+      e.preventDefault();
+      if (!ensureAuth(() => handleCreateCollaborator(e))) return;
+      const name = document.getElementById('colabName').value.trim();
+      const email = document.getElementById('colabEmail').value.trim();
+      const phone = document.getElementById('colabPhone').value.trim();
+      if (!name) return;
+
+      collaborators.push({ id: 'c_' + Date.now(), name, email: email || 'Sin correo', phone: phone || 'Sin teléfono' });
+      saveData();
+      document.getElementById('colabForm').reset();
+      renderCollaboratorsTable();
+      populateCollaboratorsDropdown();
+      showToast(`${name} registrado correctamente`, 'success');
+    }
+
+    function deleteCollaborator(id) {
+      if (!ensureAuth(() => deleteCollaborator(id))) return;
+      const colab = collaborators.find(c => c.id === id);
+      if (!colab) return;
+      if (!confirm(`¿Eliminar a ${colab.name}? Sus turnos asociados también se retirarán.`)) return;
+
+      collaborators = collaborators.filter(c => c.id !== id);
+      shifts = shifts.filter(s => s.collaboratorId !== id);
+      saveData();
+      renderCollaboratorsTable();
+      renderCalendar();
+      populateCollaboratorsDropdown();
+      showToast(`Registro eliminado`, 'info');
+    }
+
+    function renderCollaboratorsTable() {
+      const tbody = document.getElementById('colabsTableBody');
+      document.getElementById('colabsCountHeader').innerText = collaborators.length;
+      tbody.innerHTML = '';
+      collaborators.forEach(c => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${c.name}</strong></td>
+          <td><span class="badge-area badge-multidisciplinar">🌟 Cualquier Área</span></td>
+          <td style="font-size: 0.78rem;">${c.email}<br><span style="color:var(--text-muted);">${c.phone}</span></td>
+          <td class="admin-only"><button class="btn btn-danger btn-sm" onclick="deleteCollaborator('${c.id}')">Eliminar</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function populateCollaboratorsDropdown() {
+      const select = document.getElementById('assignCollaborator');
+      select.innerHTML = '<option value="">-- Seleccionar Hermano(a) --</option>';
+      const sorted = [...collaborators].sort((a, b) => a.name.localeCompare(b.name));
+      sorted.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.innerText = c.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function isFridayOrSaturday(dateString) {
+      if (!dateString) return false;
+      const parts = dateString.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      const day = d.getDay();
+      return day === 5 || day === 6;
+    }
+
+    function getDayOfWeekName(dateString) {
+      const parts = dateString.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      return days[d.getDay()];
+    }
+
+    function formatDateKey(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function onDateSelected(dateVal) {
+      const notice = document.getElementById('dateValidationNotice');
+      if (!dateVal) return;
+      if (!isFridayOrSaturday(dateVal)) {
+        const dayName = getDayOfWeekName(dateVal);
+        notice.innerHTML = `❌ El ${dateVal} es <strong>${dayName}</strong>. Solo se permite asignar en días <strong>Viernes o Sábado</strong>.`;
+        notice.style.color = '#dc2626';
+      } else {
+        const dayName = getDayOfWeekName(dateVal);
+        notice.innerHTML = `✅ <strong>Fecha válida:</strong> Es <strong>${dayName}</strong>.`;
+        notice.style.color = '#059669';
+      }
+      checkRealtimeConflict();
+    }
+
+    function checkRealtimeConflict() {
+      const colabId = document.getElementById('assignCollaborator').value;
+      const dateVal = document.getElementById('assignDate').value;
+      const alertBox = document.getElementById('conflictAlert');
+      const alertMsg = document.getElementById('conflictAlertMessage');
+      const submitBtn = document.getElementById('btnSubmitShift');
+
+      alertBox.style.display = 'none';
+      submitBtn.disabled = false;
+
+      if (!colabId || !dateVal) return false;
+
+      const conflict = shifts.find(s => s.collaboratorId === colabId && s.date === dateVal);
+      if (conflict) {
+        const colab = collaborators.find(c => c.id === colabId);
+        const colabName = colab ? colab.name : 'Este hermano(a)';
+        const assignedArea = DEPARTMENTS[conflict.departmentId] ? `${DEPARTMENTS[conflict.departmentId].icon} ${DEPARTMENTS[conflict.departmentId].name}` : conflict.departmentId;
+
+        alertMsg.innerHTML = `
+          El hermano(a) <strong>${colabName}</strong> ya tiene una responsabilidad asignada para la fecha <strong>${dateVal}</strong> en <strong>${assignedArea}</strong>.<br>
+          <span style="font-weight: 700; color: #b91c1c; font-size: 0.95rem; display: block; margin-top: 4px;">
+            ⚠️ TIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.
+          </span>
+        `;
+        alertBox.style.display = 'block';
+        submitBtn.disabled = true;
+        return true;
+      }
+      return false;
+    }
+
+    function handleAssignShift(e) {
+      e.preventDefault();
+      if (!ensureAuth(() => handleAssignShift(e))) return;
+      const departmentId = document.getElementById('assignDepartment').value;
+      const collaboratorId = document.getElementById('assignCollaborator').value;
+      const date = document.getElementById('assignDate').value;
+      const notes = document.getElementById('assignNotes').value.trim();
+
+      if (!isFridayOrSaturday(date)) {
+        alert('Solo se pueden asignar responsabilidades en días Viernes o Sábado.');
+        return;
+      }
+
+      const conflict = shifts.find(s => s.collaboratorId === collaboratorId && s.date === date);
+      if (conflict) {
+        const colab = collaborators.find(c => c.id === collaboratorId);
+        const conflictArea = DEPARTMENTS[conflict.departmentId] ? DEPARTMENTS[conflict.departmentId].name : conflict.departmentId;
+        alert(`⛔ ATENCIÓN: El hermano(a) ${colab ? colab.name : ''} ya tiene asignación en ${conflictArea} para esa fecha.\n\nTIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.`);
+        return;
+      }
+
+      shifts.push({
+        id: 'shift_' + Date.now(),
+        collaboratorId,
+        departmentId,
+        date,
+        dayOfWeek: getDayOfWeekName(date),
+        notes
+      });
+
+      saveData();
+      resetAssignForm();
+      showToast('Responsabilidad asignada con éxito', 'success');
+      switchTab('calendarTab');
+    }
+
+    function resetAssignForm() {
+      document.getElementById('assignShiftForm').reset();
+      document.getElementById('conflictAlert').style.display = 'none';
+      document.getElementById('btnSubmitShift').disabled = false;
+      document.getElementById('dateValidationNotice').innerHTML = '⚠️ Seleccione una fecha (Viernes o Sábado).';
+      document.getElementById('dateValidationNotice').style.color = 'var(--text-muted)';
+    }
+
+    function deleteShift(shiftId) {
+      if (!ensureAuth(() => deleteShift(shiftId))) return;
+      if (!confirm('¿Desea eliminar esta responsabilidad?')) return;
+      shifts = shifts.filter(s => s.id !== shiftId);
+      saveData();
+      renderCalendar();
+      renderShiftsTable();
+      showToast('Turno eliminado', 'info');
+    }
+
+    const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    function changeMonth(delta) {
+      currentMonth += delta;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      else if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderCalendar();
+    }
+
+    function goToCurrentMonth() {
+      const now = new Date();
+      currentYear = now.getFullYear();
+      currentMonth = now.getMonth();
+      renderCalendar();
+    }
+
+    const DEPT_ORDER = ['predicaciones', 'alabanza', 'diaconisas', 'diaconos', 'audiovisual'];
+
+    function renderCalendar() {
+      document.getElementById('calendarMonthTitle').innerText = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
+      const container = document.getElementById('calendar8Container');
+      if (!container) return;
+      container.innerHTML = '';
+      const deptFilter = document.getElementById('filterDepartment').value;
+      const today = new Date();
+      const todayStr = formatDateKey(today);
+
+      let cursor = new Date(currentYear, currentMonth, 1);
+      if (cursor.getDay() === 6) {
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        while (cursor.getDay() !== 5) {
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      }
+
+      // Estrictamente 4 semanas = exactamente 8 columnas (Viernes y Sábado x 4)
+      const weekends = [];
+      while (weekends.length < 4) {
+        const fri = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+        const sat = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
+
+        weekends.push({ friday: fri, saturday: sat });
+        cursor.setDate(cursor.getDate() + 7);
+      }
+
+      // Las 8 columnas corresponden a: Viernes, Sábado, Viernes, Sábado... (los 8 días de las 4 semanas)
+      const allDays = [];
+      weekends.forEach((wk, wkIdx) => {
+        allDays.push({
+          date: wk.friday,
+          dateStr: formatDateKey(wk.friday),
+          dayName: 'Viernes',
+          weekNum: wkIdx + 1,
+          isInCurrentMonth: wk.friday.getMonth() === currentMonth
+        });
+        allDays.push({
+          date: wk.saturday,
+          dateStr: formatDateKey(wk.saturday),
+          dayName: 'Sábado',
+          weekNum: wkIdx + 1,
+          isInCurrentMonth: wk.saturday.getMonth() === currentMonth
+        });
+      });
+
+      const gridTemplate = 'repeat(8, minmax(135px, 1fr))';
+
+      const scrollContainer = document.createElement('div');
+      scrollContainer.className = 'calendar-8days-container';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'calendar-8days-wrapper';
+
+      // 1. Fila de Cabeceras: 8 Columnas (Viernes, Sábado, Viernes, Sábado...)
+      const headerRow = document.createElement('div');
+      headerRow.className = 'calendar-8days-header-row';
+      headerRow.style.gridTemplateColumns = gridTemplate;
+
+      allDays.forEach((d, idx) => {
+        const isFri = d.dayName === 'Viernes';
+        const colHeader = document.createElement('div');
+        colHeader.className = `col-8days-header ${isFri ? 'is-friday' : 'is-saturday'}`;
+        colHeader.innerHTML = `
+          <div class="col-8days-day-name">${isFri ? '🌟 VIERNES' : '🌟 SÁBADO'}</div>
+          <div class="col-8days-week-label">Semana ${d.weekNum} &bull; Columna ${idx + 1}</div>
+          <div class="col-8days-date-badge">${d.date.getDate()} de ${MONTH_NAMES[d.date.getMonth()]}</div>
+        `;
+        headerRow.appendChild(colHeader);
+      });
+      wrapper.appendChild(headerRow);
+
+      // 2. Fila de Tarjetas: 8 Columnas con las responsabilidades de cada día
+      const cardsGrid = document.createElement('div');
+      cardsGrid.className = 'calendar-8days-grid';
+      cardsGrid.style.gridTemplateColumns = gridTemplate;
+
+      allDays.forEach((d, idx) => {
+        const card = create8DayColumnCard(d, todayStr, deptFilter, idx + 1);
+        cardsGrid.appendChild(card);
+      });
+      wrapper.appendChild(cardsGrid);
+
+      scrollContainer.appendChild(wrapper);
+      container.appendChild(scrollContainer);
+    }
+
+    function create8DayColumnCard(d, todayStr, deptFilter, dayIndex) {
+      const card = document.createElement('div');
+      const isFri = d.dayName === 'Viernes';
+      const isToday = (d.dateStr === todayStr);
+
+      let cardClasses = ['col-8days-card'];
+      cardClasses.push(isFri ? 'is-friday' : 'is-saturday');
+      if (isToday) cardClasses.push('is-today');
+      if (!d.isInCurrentMonth) cardClasses.push('other-month');
+      card.className = cardClasses.join(' ');
+
+      let dayShifts = shifts.filter(s => s.date === d.dateStr);
+      if (deptFilter !== 'ALL') {
+        dayShifts = dayShifts.filter(s => s.departmentId === deptFilter);
+      }
+
+      const dayColor = isFri ? '#1e40af' : '#9a3412';
+      const todayBadge = isToday ? `<span style="background: var(--primary); color: white; padding: 1px 6px; border-radius: 999px; font-size: 0.65rem; font-weight: 800;">HOY</span>` : '';
+
+      let topHTML = `
+        <div class="col-top-bar">
+          <div style="display: flex; align-items: baseline; gap: 4px;">
+            <span class="col-big-day" style="color: ${dayColor};">${d.date.getDate()}</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">${d.dayName}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            ${todayBadge}
+            <span class="badge-day ${isFri ? 'badge-viernes' : 'badge-sabado'}">${dayShifts.length} turno(s)</span>
+          </div>
+        </div>
+      `;
+
+      let slotsHTML = '<div class="col-ministry-slots">';
+
+      // Mostramos los 4 ministerios para cada día
+      DEPT_ORDER.forEach(deptKey => {
+        const dept = DEPARTMENTS[deptKey];
+        if (!dept) return;
+
+        if (deptFilter !== 'ALL' && deptFilter !== deptKey) {
+          return;
+        }
+
+        const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+
+        if (deptShifts.length > 0) {
+          deptShifts.forEach(shift => {
+            const colab = collaborators.find(c => c.id === shift.collaboratorId);
+            const colabName = colab ? colab.name : 'Responsable';
+
+            slotsHTML += `
+              <div class="slot-item slot-${deptKey}">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2px;">
+                  <span style="font-weight: 800; font-size: 0.72rem;">${dept.icon} ${dept.name}</span>
+                  <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); deleteShift('${shift.id}')" style="padding: 1px 4px; font-size: 0.65rem; line-height: 1; border-radius: 3px;" title="Eliminar responsabilidad">✕</button>
+                </div>
+                <div style="font-weight: 700; font-size: 0.78rem; color: #0f172a; margin-top: 2px;">👤 ${colabName}</div>
+                ${shift.notes ? `<div style="font-size: 0.68rem; color: #475569; margin-top: 1px;">📝 ${shift.notes}</div>` : ''}
+              </div>
+            `;
+          });
+        } else {
+          // Ranura disponible para asignar directamente con 1 clic (requiere autenticación)
+          slotsHTML += `
+            <button class="btn-slot-empty" onclick="event.stopPropagation(); ensureAuth(() => quickAssignDate('${d.dateStr}', '${deptKey}'))" title="Asignar ${dept.name} para este ${d.dayName}">
+              <span>${dept.icon}</span>
+              <span>+ ${dept.name}</span>
+            </button>
+          `;
+        }
+      });
+
+      slotsHTML += '</div>';
+
+      const addBtn = `
+        <button class="btn-col-add-more admin-only" onclick="event.stopPropagation(); quickAssignDate('${d.dateStr}')">
+          ➕ Asignar turno
+        </button>
+      `;
+
+      card.innerHTML = topHTML + slotsHTML + addBtn;
+      card.onclick = () => openDayModal(d.dateStr, true, dayShifts);
+
+      return card;
+    }
+
+    function createDayCard(dateObj, dateStr, dayName, isInCurrentMonth, todayStr, deptFilter) {
+      const card = document.createElement('div');
+      const isFriday = dayName === 'Viernes';
+      const isToday = (dateStr === todayStr);
+
+      let cardClasses = ['calendar-cell-card'];
+      cardClasses.push(isFriday ? 'is-friday' : 'is-saturday');
+      if (isToday) cardClasses.push('is-today');
+      if (!isInCurrentMonth) cardClasses.push('other-month');
+      card.className = cardClasses.join(' ');
+
+      let dayShifts = shifts.filter(s => s.date === dateStr);
+      if (deptFilter !== 'ALL') {
+        dayShifts = dayShifts.filter(s => s.departmentId === deptFilter);
+      }
+
+      const dayColor = isFriday ? '#1e40af' : '#9a3412';
+      const dayBadgeClass = isFriday ? 'badge-viernes' : 'badge-sabado';
+      const monthLabel = MONTH_NAMES[dateObj.getMonth()];
+
+      let todayBadge = isToday ? `<span style="background: var(--primary); color: white; padding: 1px 6px; border-radius: 999px; font-size: 0.68rem; font-weight: 700;">HOY</span>` : '';
+      let monthNotice = !isInCurrentMonth ? `<span style="font-size: 0.7rem; color: var(--text-muted);">(${monthLabel})</span>` : '';
+
+      let topBarHTML = `
+        <div class="cell-top-bar">
+          <div class="cell-date-info">
+            <span class="cell-big-num" style="color: ${dayColor};">${dateObj.getDate()}</span>
+            <div>
+              <div class="cell-day-text" style="color: ${dayColor};">${dayName} ${monthNotice}</div>
+              <div class="cell-month-label">${monthLabel} ${dateObj.getFullYear()}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            ${todayBadge}
+            <span class="badge-day ${dayBadgeClass}">${dayShifts.length} turno(s)</span>
+          </div>
+        </div>
+      `;
+
+      let shiftsListHTML = '';
+      if (dayShifts.length === 0) {
+        shiftsListHTML = `<div class="cell-empty-state">Sin responsabilidades asignadas</div>`;
+      } else {
+        shiftsListHTML = '<div class="cell-shifts-list">';
+        dayShifts.forEach(shift => {
+          const colab = collaborators.find(c => c.id === shift.collaboratorId);
+          const colabName = colab ? colab.name : 'Responsable';
+          const area = DEPARTMENTS[shift.departmentId] || { name: shift.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
+
+          shiftsListHTML += `
+            <div class="shift-item-card ${area.badgeClass}">
+              <div class="shift-info-main">
+                <span class="shift-colab-name">👤 ${colabName}</span>
+                <span style="font-size: 0.68rem; font-weight: 700;">${area.icon} ${area.name}</span>
+                ${shift.notes ? `<span style="font-size: 0.72rem; color: #475569;">📝 ${shift.notes}</span>` : ''}
+              </div>
+              <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); deleteShift('${shift.id}')" style="padding: 2px 6px; font-size: 0.72rem;">✕</button>
+            </div>
+          `;
+        });
+        shiftsListHTML += '</div>';
+      }
+
+      const quickAddBtn = `
+        <button class="btn-quick-add admin-only" onclick="event.stopPropagation(); quickAssignDate('${dateStr}')">
+          ➕ Asignar para este ${dayName}
+        </button>
+      `;
+
+      card.innerHTML = topBarHTML + shiftsListHTML + quickAddBtn;
+      card.onclick = () => openDayModal(dateStr, true, dayShifts);
+
+      return card;
+    }
+
+    function quickAssignDate(dateStr, departmentId = null) {
+      if (!ensureAuth(() => quickAssignDate(dateStr, departmentId))) return;
+      switchTab('assignTab');
+      if (departmentId) {
+        const deptSelect = document.getElementById('assignDepartment');
+        if (deptSelect) {
+          deptSelect.value = departmentId;
+        }
+      }
+      const dateInput = document.getElementById('assignDate');
+      if (dateInput) {
+        dateInput.value = dateStr;
+        onDateSelected(dateStr);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openDayModal(dateStr, isTurnDay, dayShifts) {
+      const modal = document.getElementById('dayDetailModal');
+      const title = document.getElementById('modalDayTitle');
+      const content = document.getElementById('modalDayContent');
+      const btnAdd = document.getElementById('btnModalAddShift');
+
+      const dayName = getDayOfWeekName(dateStr);
+      title.innerText = `Responsabilidades del ${dayName} ${dateStr}`;
+
+      btnAdd.style.display = 'inline-block';
+      btnAdd.onclick = () => {
+        closeDayModal();
+        ensureAuth(() => quickAssignDate(dateStr));
+      };
+
+      if (dayShifts.length === 0) {
+        content.innerHTML = `
+          <div style="text-align: center; padding: 16px; color: var(--text-muted);">
+            <div style="font-size: 1.8rem; margin-bottom: 6px;">🗓️</div>
+            <p><strong>No hay ninguna responsabilidad asignada para este ${dayName} ${dateStr}.</strong></p>
+          </div>
+        `;
+      } else {
+        let listHtml = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+        dayShifts.forEach(s => {
+          const colab = collaborators.find(c => c.id === s.collaboratorId);
+          const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
+          listHtml += `
+            <div style="border: 1px solid var(--border); border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 700; font-size: 0.95rem;">👤 ${colab ? colab.name : 'Hermano(a)'}</div>
+                <div><span class="badge-area ${area.badgeClass}">${area.icon} ${area.name}</span></div>
+                ${s.notes ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 3px;">📝 ${s.notes}</div>` : ''}
+              </div>
+              <button class="btn btn-danger btn-sm admin-only" onclick="deleteShift('${s.id}'); closeDayModal();">Eliminar</button>
+            </div>
+          `;
+        });
+        listHtml += '</div>';
+        content.innerHTML = listHtml;
+      }
+      modal.classList.add('open');
+    }
+
+    function closeDayModal() {
+      document.getElementById('dayDetailModal').classList.remove('open');
+    }
+
+    function renderShiftsTable() {
+      const tbody = document.getElementById('shiftsTableBody');
+      tbody.innerHTML = '';
+      shifts.forEach(s => {
+        const colab = collaborators.find(c => c.id === s.collaboratorId);
+        const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
+        const dayBadge = s.dayOfWeek === 'Viernes' ? 'badge-viernes' : 'badge-sabado';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${s.date}</strong></td>
+          <td><span class="badge-day ${dayBadge}">${s.dayOfWeek}</span></td>
+          <td><strong>${colab ? colab.name : 'Desconocido'}</strong></td>
+          <td><span class="badge-area ${area.badgeClass}">${area.icon} ${area.name}</span></td>
+          <td style="color: var(--text-muted); font-size: 0.8rem;">${s.notes || '-'}</td>
+          <td class="admin-only"><button class="btn btn-danger btn-sm" onclick="deleteShift('${s.id}')">Eliminar</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function updateStats() {
+      document.getElementById('statColabs').innerText = collaborators.length;
+      document.getElementById('statPredicaciones').innerText = shifts.filter(s => s.departmentId === 'predicaciones').length;
+      document.getElementById('statAlabanza').innerText = shifts.filter(s => s.departmentId === 'alabanza').length;
+      document.getElementById('statDiaconisas').innerText = shifts.filter(s => s.departmentId === 'diaconisas').length;
+      document.getElementById('statDiaconos').innerText = shifts.filter(s => s.departmentId === 'diaconos').length;
+      const statAudio = document.getElementById('statAudiovisual');
+      if (statAudio) {
+        statAudio.innerText = shifts.filter(s => s.departmentId === 'audiovisual').length;
+      }
+    }
+
+    function exportDataJSON() {
+      const data = { collaborators, shifts };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `responsabilidades_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // --- EXPORTACIÓN DE INFORME MENSUAL (EXCEL Y PDF) ---
+    function getScheduleDaysForMonth(year, month) {
+      let cursor = new Date(year, month, 1);
+      if (cursor.getDay() === 6) {
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        while (cursor.getDay() !== 5) {
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      }
+
+      const weekends = [];
+      while (weekends.length < 4) {
+        const fri = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+        const sat = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
+        weekends.push({ friday: fri, saturday: sat });
+        cursor.setDate(cursor.getDate() + 7);
+      }
+      return weekends;
+    }
+
+    function exportMonthExcelCSV() {
+      const monthName = MONTH_NAMES[currentMonth];
+      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
+
+      const rows = [];
+      // Encabezado del reporte
+      rows.push(['Mes', 'Semana', 'Fecha', 'Día', 'Área / Ministerio', 'Hermano(a) Responsable', 'Teléfono Contacto', 'Notas / Observaciones']);
+
+      weekends.forEach((wk, wkIdx) => {
+        const days = [
+          { date: wk.friday, name: 'Viernes' },
+          { date: wk.saturday, name: 'Sábado' }
+        ];
+
+        days.forEach(d => {
+          const dateStr = formatDateKey(d.date);
+          const dayShifts = shifts.filter(s => s.date === dateStr);
+
+          DEPT_ORDER.forEach(deptKey => {
+            const dept = DEPARTMENTS[deptKey];
+            const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+
+            if (deptShifts.length > 0) {
+              deptShifts.forEach(shift => {
+                const colab = collaborators.find(c => c.id === shift.collaboratorId);
+                rows.push([
+                  `${monthName} ${currentYear}`,
+                  `Semana ${wkIdx + 1}`,
+                  dateStr,
+                  d.name,
+                  dept.name,
+                  colab ? colab.name : 'Responsable',
+                  colab ? colab.phone : '',
+                  shift.notes || ''
+                ]);
+              });
+            } else {
+              rows.push([
+                `${monthName} ${currentYear}`,
+                `Semana ${wkIdx + 1}`,
+                dateStr,
+                d.name,
+                dept.name,
+                '(Sin asignar)',
+                '',
+                ''
+              ]);
+            }
+          });
+        });
+      });
+
+      // Formato CSV con delimitador ';' compatible directamente con Microsoft Excel
+      const csvString = rows.map(r => r.map(field => {
+        const str = String(field || '').replace(/"/g, '""');
+        return `"${str}"`;
+      }).join(';')).join('\r\n');
+
+      // BOM UTF-8 (\uFEFF) para que Excel reconozca tildes y caracteres en español
+      const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Informe_Turnos_${monthName}_${currentYear}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Informe de ${monthName} descargado para Excel (.csv)`, 'success');
+    }
+
+    function exportMonthPrintPDF() {
+      const monthName = MONTH_NAMES[currentMonth];
+      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
+
+      let weeksHtml = '';
+      weekends.forEach((wk, wkIdx) => {
+        const days = [
+          { date: wk.friday, name: 'Viernes', isFri: true },
+          { date: wk.saturday, name: 'Sábado', isFri: false }
+        ];
+
+        let daysTableHtml = '';
+        days.forEach(d => {
+          const dateStr = formatDateKey(d.date);
+          const dayShifts = shifts.filter(s => s.date === dateStr);
+          const formattedDate = `${d.date.getDate()} de ${MONTH_NAMES[d.date.getMonth()]}`;
+
+          let slotsRowsHtml = '';
+          DEPT_ORDER.forEach(deptKey => {
+            const dept = DEPARTMENTS[deptKey];
+            const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+
+            let assignedText = '<span style="color: #94a3b8; font-style: italic;">Sin asignar</span>';
+            let notesText = '';
+
+            if (deptShifts.length > 0) {
+              assignedText = deptShifts.map(s => {
+                const colab = collaborators.find(c => c.id === s.collaboratorId);
+                const colabName = colab ? colab.name : 'Responsable';
+                const phone = (colab && colab.phone && colab.phone !== 'Sin teléfono') ? ` <small style="color: #64748b;">(${colab.phone})</small>` : '';
+                return `<strong>${colabName}</strong>${phone}`;
+              }).join(', ');
+
+              notesText = deptShifts.map(s => s.notes ? `<em>${s.notes}</em>` : '').filter(Boolean).join(' | ');
+            }
+
+            slotsRowsHtml += `
+              <tr>
+                <td style="padding: 7px 10px; font-weight: 700; width: 28%; border-bottom: 1px solid #e2e8f0; color: ${dept.color};">
+                  ${dept.icon} ${dept.name}
+                </td>
+                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #0f172a;">
+                  ${assignedText}
+                </td>
+                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 0.85em;">
+                  ${notesText || '-'}
+                </td>
+              </tr>
+            `;
+          });
+
+          const dayHeaderColor = d.isFri ? '#1e40af' : '#c2410c';
+          const dayBgColor = d.isFri ? '#eff6ff' : '#fff7ed';
+
+          daysTableHtml += `
+            <div style="flex: 1; min-width: 320px; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;">
+              <div style="background: ${dayBgColor}; padding: 10px 14px; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 800; font-size: 1.05rem; color: ${dayHeaderColor};">${d.name.toUpperCase()}</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #334155; background: #ffffff; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">${formattedDate}</span>
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <tbody>
+                  ${slotsRowsHtml}
+                </tbody>
+              </table>
+            </div>
+          `;
+        });
+
+        weeksHtml += `
+          <div style="margin-bottom: 20px; page-break-inside: avoid;">
+            <div style="background: #1e293b; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">
+              SEMANA ${wkIdx + 1}
+            </div>
+            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+              ${daysTableHtml}
+            </div>
+          </div>
+        `;
+      });
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('Por favor permite abrir ventanas emergentes para ver el informe de impresión.');
+        return;
+      }
+
+      const printDoc = printWindow.document;
+      printDoc.title = `Informe de Responsabilidades - ${monthName} ${currentYear}`;
+
+      const styleEl = printDoc.createElement('style');
+      styleEl.textContent = `
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { padding: 24px; color: #0f172a; background: #f8fafc; font-size: 13px; line-height: 1.4; }
+        .print-container { max-width: 900px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .header-banner { border-bottom: 3px solid #2563eb; padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .header-title h1 { font-size: 1.4rem; font-weight: 800; color: #1e3a8a; margin-bottom: 4px; }
+        .header-title p { color: #64748b; font-size: 0.9rem; }
+        .badge-month { background: #2563eb; color: #ffffff; font-weight: 800; padding: 6px 14px; border-radius: 6px; font-size: 1.1rem; text-align: right; }
+        .toolbar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 18px; }
+        .btn { padding: 8px 16px; font-size: 0.9rem; font-weight: 700; border-radius: 6px; cursor: pointer; border: none; }
+        .btn-primary { background: #2563eb; color: #ffffff; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-outline { background: #ffffff; color: #475569; border: 1px solid #cbd5e1; }
+        @media print {
+          body { background: #ffffff; padding: 0; }
+          .print-container { box-shadow: none; padding: 0; max-width: 100%; }
+          .no-print { display: none !important; }
+        }
+      `;
+      printDoc.head.appendChild(styleEl);
+
+      printDoc.body.innerHTML = `
+        <div class="print-container">
+          <div class="toolbar no-print">
+            <button class="btn btn-outline" onclick="window.close()">✖ Cerrar</button>
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+          </div>
+
+          <div class="header-banner">
+            <div class="header-title">
+              <h1>⛪ Programación de Turnos y Responsabilidades</h1>
+              <p>Predicación, Alabanza, Diaconisas y Diáconos (Viernes y Sábados)</p>
+            </div>
+            <div class="badge-month">
+              ${monthName.toUpperCase()} ${currentYear}
+            </div>
+          </div>
+
+          ${weeksHtml}
+
+          <div style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
+            <span>Documento oficial de responsabilidades ministeriales</span>
+            <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+          </div>
+        </div>
+      `;
+      showToast(`Informe de ${monthName} listo para imprimir o guardar en PDF`, 'success');
+    }
+
+    function initApp() {
+      initAuth();
+      renderCalendar();
+      renderCollaboratorsTable();
+      populateCollaboratorsDropdown();
+      updateStats();
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
