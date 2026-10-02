@@ -970,18 +970,11 @@
     .toast-info { background-color: #2563eb; }
 
     /* Reglas de visibilidad según autenticación */
-    body.is-admin .admin-only {
-      display: initial !important;
-    }
     body:not(.is-admin) .admin-only {
       display: none !important;
     }
-
     body.is-admin .public-only {
       display: none !important;
-    }
-    body:not(.is-admin) .public-only {
-      display: block !important;
     }
 
     /* Header con barra de autenticación */
@@ -1705,7 +1698,6 @@
 
     function ensureAuth(callback) {
       if (isAuthenticated) {
-        if (callback) callback();
         return true;
       }
       openLoginModal(callback);
@@ -1762,18 +1754,24 @@
     }
 
     function handleCreateCollaborator(e) {
-      e.preventDefault();
-      if (!ensureAuth(() => handleCreateCollaborator(e))) return;
-      const name = document.getElementById('colabName').value.trim();
-      const email = document.getElementById('colabEmail').value.trim();
-      const phone = document.getElementById('colabPhone').value.trim();
+      if (e && e.preventDefault) e.preventDefault();
+      if (!ensureAuth(() => handleCreateCollaborator(null))) return;
+      const nameEl = document.getElementById('colabName');
+      const emailEl = document.getElementById('colabEmail');
+      const phoneEl = document.getElementById('colabPhone');
+      if (!nameEl) return;
+      const name = nameEl.value.trim();
+      const email = emailEl ? emailEl.value.trim() : '';
+      const phone = phoneEl ? phoneEl.value.trim() : '';
       if (!name) return;
 
       collaborators.push({ id: 'c_' + Date.now(), name, email: email || 'Sin correo', phone: phone || 'Sin teléfono' });
       saveData();
-      document.getElementById('colabForm').reset();
+      const form = document.getElementById('colabForm');
+      if (form) form.reset();
       renderCollaboratorsTable();
       populateCollaboratorsDropdown();
+      updateStats();
       showToast(`${name} registrado correctamente`, 'success');
     }
 
@@ -1788,7 +1786,9 @@
       saveData();
       renderCollaboratorsTable();
       renderCalendar();
+      renderShiftsTable();
       populateCollaboratorsDropdown();
+      updateStats();
       showToast(`Registro eliminado`, 'info');
     }
 
