@@ -44,9 +44,10 @@ Aplicación web interactiva para la gestión de colaboradores y asignación de t
    - **🖨️ Imprimir / PDF**: Genera una vista limpia y elegante de las 4 semanas del mes con sus 4 ministerios, lista para imprimir en papel o guardar como PDF.
    - **📊 Excel (.csv)**: Descarga inmediata de un archivo compatible con Microsoft Excel (con codificación UTF-8 para tildes y caracteres en español) con los turnos, fechas, ministerios y teléfonos de contacto.
 
-9. **Persistencia y Respaldo**:
-   - Guarda los cambios automáticamente en `localStorage` del navegador.
-   - Botón para descargar respaldo de datos completo en formato `.json`.
+9. **Sincronización en la Nube en Tiempo Real (Firebase)**:
+   - Conectado a **Firebase Realtime Database (Google)**.
+   - Cualquier cambio realizado por un administrador se sincroniza de inmediato en todas las pantallas de los usuarios y celulares en vivo.
+   - Respaldo dual: datos en la nube y persistencia en memoria local (`localStorage`), con opción de descarga en archivo `.json`.
 
 ---
 

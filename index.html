@@ -1029,6 +1029,18 @@
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
     }
 
+    .auth-badge.cloud-online {
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid #34d399;
+      color: #ffffff;
+    }
+
+    .auth-badge.cloud-offline {
+      background: rgba(245, 158, 11, 0.25);
+      border: 1px solid #fbbf24;
+      color: #ffffff;
+    }
+
     .btn-light-glow {
       background: #ffffff;
       color: #1e3a8a;
@@ -1475,7 +1487,36 @@
     </div>
   </div>
 
+  <!-- MODAL CONFIGURACIÓN NUBE FIREBASE -->
+  <div id="cloudModal" class="modal-backdrop" onclick="if (event.target === this) closeCloudModal()">
+    <div class="modal" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title">☁️ Sincronización en la Nube (Firebase)</h3>
+        <button class="modal-close" onclick="closeCloudModal()">&times;</button>
+      </div>
+      <form id="cloudConfigForm" onsubmit="handleSaveCloudConfig(event)">
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+          Permite que varios hermanos o administradores conectados al mismo tiempo desde celulares o computadoras vean y guarden los cambios <strong>en tiempo real</strong>.
+        </p>
+        <div id="cloudStatusAlert" style="padding: 10px 14px; border-radius: 6px; font-size: 0.82rem; margin-bottom: 14px; font-weight: 600;"></div>
+        <div class="form-group">
+          <label for="firebaseConfigInput">Pegar configuración <code>firebaseConfig</code> (JSON):</label>
+          <textarea id="firebaseConfigInput" class="form-control" rows="6" style="font-family: monospace; font-size: 0.8rem;" placeholder='{\n  "apiKey": "...",\n  "authDomain": "...",\n  "databaseURL": "https://...",\n  "projectId": "..."\n}'></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeCloudModal()">Cerrar</button>
+          <button type="button" class="btn btn-danger" onclick="handleClearCloudConfig()">Desconectar Nube</button>
+          <button type="submit" class="btn btn-primary">Conectar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="toastContainer"></div>
+
+  <!-- Firebase SDK Compat (Google CDN oficial) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <script>
     const DEPARTMENTS = {
@@ -1547,6 +1588,160 @@
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
 
+    // ==============================================================
+    // ☁️ CONFIGURACIÓN DE BASE DE DATOS EN LA NUBE (FIREBASE)
+    // ==============================================================
+    // Las credenciales configuradas aquí conectan a todos los usuarios automáticamente:
+    const DEFAULT_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyCKrqFlWRe9NNsHfIzDNcyEeR94mE0e8Xc",
+      authDomain: "control-turnos-81fcb.firebaseapp.com",
+      databaseURL: "https://control-turnos-81fcb-default-rtdb.firebaseio.com",
+      projectId: "control-turnos-81fcb",
+      storageBucket: "control-turnos-81fcb.firebasestorage.app",
+      messagingSenderId: "102150345004",
+      appId: "1:102150345004:web:abd660e10b12c8f9cc5c89"
+    };
+
+    let db = null;
+    let isCloudConnected = false;
+
+    function getActiveFirebaseConfig() {
+      try {
+        const local = localStorage.getItem('church_firebase_config');
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (parsed && parsed.apiKey) return parsed;
+        }
+      } catch (e) {}
+      if (DEFAULT_FIREBASE_CONFIG.apiKey && DEFAULT_FIREBASE_CONFIG.apiKey.trim() !== '') {
+        return DEFAULT_FIREBASE_CONFIG;
+      }
+      return null;
+    }
+
+    function initFirebase() {
+      const config = getActiveFirebaseConfig();
+      if (!config || !config.apiKey) {
+        isCloudConnected = false;
+        renderAuthBar();
+        return;
+      }
+
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(config);
+        }
+        db = firebase.database();
+        isCloudConnected = true;
+        renderAuthBar();
+
+        // Escuchar datos en tiempo real de toda la iglesia
+        db.ref('church_turnos').on('value', (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            if (Array.isArray(val.collaborators)) {
+              collaborators = val.collaborators;
+              try { localStorage.setItem('church_collaborators_v4', JSON.stringify(collaborators)); } catch(e){}
+            }
+            if (Array.isArray(val.shifts)) {
+              shifts = val.shifts;
+              try { localStorage.setItem('church_assignments_v4', JSON.stringify(shifts)); } catch(e){}
+            }
+            renderCalendar();
+            renderCollaboratorsTable();
+            renderShiftsTable();
+            populateCollaboratorsDropdown();
+            updateStats();
+          } else {
+            // Primera vez conectando base de datos vacía: subir los datos actuales
+            pushDataToCloud();
+          }
+        }, (err) => {
+          console.warn('Aviso de conexión Firebase:', err);
+          isCloudConnected = false;
+          renderAuthBar();
+        });
+      } catch (err) {
+        console.error('Error inicializando Firebase:', err);
+        isCloudConnected = false;
+        renderAuthBar();
+      }
+    }
+
+    function pushDataToCloud() {
+      if (!db) return;
+      db.ref('church_turnos').set({
+        collaborators: collaborators,
+        shifts: shifts,
+        updatedAt: Date.now()
+      }).catch(err => {
+        console.error('Error sincronizando con Firebase:', err);
+      });
+    }
+
+    function openCloudModal() {
+      const config = getActiveFirebaseConfig();
+      const textarea = document.getElementById('firebaseConfigInput');
+      const statusAlert = document.getElementById('cloudStatusAlert');
+      
+      if (config) {
+        textarea.value = JSON.stringify(config, null, 2);
+        statusAlert.style.background = '#d1fae5';
+        statusAlert.style.color = '#065f46';
+        statusAlert.style.border = '1px solid #6ee7b7';
+        statusAlert.innerHTML = '🟢 <strong>Conectado a Firebase:</strong> Todos los cambios se sincronizan en vivo entre computadoras y celulares.';
+      } else {
+        textarea.value = '';
+        statusAlert.style.background = '#fef3c7';
+        statusAlert.style.color = '#92400e';
+        statusAlert.style.border = '1px solid #fde68a';
+        statusAlert.innerHTML = '🟡 <strong>Modo Local:</strong> Los cambios solo se guardan en este dispositivo. Pega tu <code>firebaseConfig</code> para sincronizar entre todos los usuarios.';
+      }
+      document.getElementById('cloudModal').classList.add('open');
+    }
+
+    function closeCloudModal() {
+      document.getElementById('cloudModal').classList.remove('open');
+    }
+
+    function handleSaveCloudConfig(e) {
+      e.preventDefault();
+      const raw = document.getElementById('firebaseConfigInput').value.trim();
+      if (!raw) return;
+
+      try {
+        let jsonStr = raw;
+        if (jsonStr.includes('{') && jsonStr.includes('}')) {
+          const start = jsonStr.indexOf('{');
+          const end = jsonStr.lastIndexOf('}');
+          jsonStr = jsonStr.substring(start, end + 1);
+        }
+        const formatted = jsonStr.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":').replace(/'/g, '"');
+        const parsed = JSON.parse(formatted);
+
+        if (!parsed.apiKey) {
+          alert('⚠️ Falta el campo apiKey en la configuración.');
+          return;
+        }
+
+        localStorage.setItem('church_firebase_config', JSON.stringify(parsed));
+        closeCloudModal();
+        showToast('Configuración de nube guardada. Conectando...', 'info');
+        initFirebase();
+      } catch (err) {
+        alert('⛔ El formato ingresado no es válido. Pega el objeto firebaseConfig generado por Firebase.');
+      }
+    }
+
+    function handleClearCloudConfig() {
+      if (!confirm('¿Deseas desconectar la nube y volver al modo de almacenamiento local en este dispositivo?')) return;
+      localStorage.removeItem('church_firebase_config');
+      isCloudConnected = false;
+      closeCloudModal();
+      renderAuthBar();
+      showToast('Desconectado de la nube. Modo local activo.', 'info');
+    }
+
     // --- CONTROL DE ACCESO Y AUTENTICACIÓN ---
     let isAuthenticated = false;
     let pendingAuthCallback = null;
@@ -1574,12 +1769,21 @@
     function renderAuthBar() {
       const bar = document.getElementById('authBar');
       if (!bar) return;
+
+      const cloudStatusHtml = isCloudConnected
+        ? `<div class="auth-badge cloud-online" onclick="openCloudModal()" style="cursor: pointer;" title="Sincronizado en tiempo real con Firebase en la nube"><span>☁️</span><span>Nube Activa</span></div>`
+        : `<div class="auth-badge cloud-offline" onclick="openCloudModal()" style="cursor: pointer;" title="Datos guardados solo en este dispositivo. Haz clic para conectar Firebase."><span>💾</span><span>Solo Local</span></div>`;
+
       if (isAuthenticated) {
         bar.innerHTML = `
+          ${cloudStatusHtml}
           <div class="auth-badge admin">
             <span>🔓</span>
             <span>Modo Administrador</span>
           </div>
+          <button class="btn btn-white-outline btn-sm" onclick="openCloudModal()" title="Configuración de la Nube (Firebase)">
+            ☁️ Nube
+          </button>
           <button class="btn btn-white-outline btn-sm" onclick="openChangePasswordModal()" title="Cambiar clave de acceso">
             ⚙️ Clave
           </button>
@@ -1589,6 +1793,7 @@
         `;
       } else {
         bar.innerHTML = `
+          ${cloudStatusHtml}
           <div class="auth-badge public">
             <span>👁️</span>
             <span>Modo Lectura</span>
@@ -1714,6 +1919,9 @@
         localStorage.setItem('church_assignments', shiftsJson);
       } catch (err) {
         console.error('Error al guardar datos en el navegador:', err);
+      }
+      if (db) {
+        pushDataToCloud();
       }
       updateStats();
     }
@@ -2551,6 +2759,7 @@
 
     function initApp() {
       initAuth();
+      initFirebase();
       renderCalendar();
       renderCollaboratorsTable();
       populateCollaboratorsDropdown();
