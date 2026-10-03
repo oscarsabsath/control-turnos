@@ -9,49 +9,49 @@
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       
-      /* 1. PREDICACIÓN */
-      --pred-bg: #eff6ff;
-      --pred-border: #93c5fd;
-      --pred-text: #1e40af;
-      --pred-badge: #2563eb;
+      /* 1. PREDICACIÓN (Azul Zafiro Sólido) */
+      --pred-bg: #e0f2fe;
+      --pred-border: #7dd3fc;
+      --pred-text: #0369a1;
+      --pred-badge: #0284c7;
 
-      /* 2. ALABANZA */
-      --alab-bg: #fffbeb;
-      --alab-border: #fde68a;
-      --alab-text: #92400e;
+      /* 2. ALABANZA (Ámbar Dorado Sólido) */
+      --alab-bg: #fef3c7;
+      --alab-border: #fcd34d;
+      --alab-text: #b45309;
       --alab-badge: #d97706;
 
-      /* 3. DIACONISAS */
-      --diac-fem-bg: #fdf2f8;
-      --diac-fem-border: #fbcfe8;
-      --diac-fem-text: #9d174d;
+      /* 3. DIACONISAS (Rosa Fucsia Sólido) */
+      --diac-fem-bg: #fce7f3;
+      --diac-fem-border: #f9a8d4;
+      --diac-fem-text: #be185d;
       --diac-fem-badge: #db2777;
 
-      /* 4. DIÁCONOS */
-      --diac-masc-bg: #f0fdf4;
-      --diac-masc-border: #bbf7d0;
-      --diac-masc-text: #166534;
+      /* 4. DIÁCONOS (Verde Esmeralda Sólido) */
+      --diac-masc-bg: #dcfce7;
+      --diac-masc-border: #86efac;
+      --diac-masc-text: #15803d;
       --diac-masc-badge: #16a34a;
 
-      /* 5. AUDIOVISUAL */
-      --audio-bg: #f5f3ff;
-      --audio-border: #ddd6fe;
-      --audio-text: #5b21b6;
+      /* 5. AUDIOVISUAL (Violeta Eléctrico Sólido) */
+      --audio-bg: #ede9fe;
+      --audio-border: #c4b5fd;
+      --audio-text: #6d28d9;
       --audio-badge: #7c3aed;
 
       --danger: #ef4444;
-      --danger-bg: #fef2f2;
+      --danger-bg: #fee2e2;
       --danger-border: #fca5a5;
       --warning: #f59e0b;
-      --warning-bg: #fffbeb;
+      --warning-bg: #fef3c7;
       --success: #10b981;
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --card-bg: #ffffff;
       --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --text-muted: #475569;
+      --border: #cbd5e1;
       --radius: 8px;
-      --shadow: 0 2px 4px -1px rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+      --shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.08), 0 1px 3px -1px rgba(0, 0, 0, 0.05);
     }
 
     html {
@@ -108,7 +108,7 @@
       display: flex;
       gap: 6px;
       margin-bottom: 16px;
-      border-bottom: 2px solid var(--border);
+      border-bottom: 2.5px solid #cbd5e1;
       padding-bottom: 6px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -120,12 +120,12 @@
     }
 
     .tab-btn {
-      background: none;
-      border: none;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
       padding: 8px 14px;
       font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
+      font-weight: 700;
+      color: #475569;
       border-radius: 6px;
       cursor: pointer;
       display: flex;
@@ -137,13 +137,16 @@
     }
 
     .tab-btn:hover {
-      background-color: #e2e8f0;
-      color: var(--text);
+      background-color: #f8fafc;
+      color: #0f172a;
+      border-color: #94a3b8;
     }
 
     .tab-btn.active {
       background-color: var(--primary);
       color: white;
+      border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
     }
 
     .tab-content {
@@ -299,67 +302,67 @@
     .badge-area {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
+      gap: 5px;
+      padding: 4px 10px;
       border-radius: 9999px;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
     }
 
     .area-predicaciones {
       background-color: var(--pred-bg);
       color: var(--pred-text);
-      border: 1px solid var(--pred-border);
+      border: 1.5px solid var(--pred-border);
     }
 
     .area-alabanza {
       background-color: var(--alab-bg);
       color: var(--alab-text);
-      border: 1px solid var(--alab-border);
+      border: 1.5px solid var(--alab-border);
     }
 
     .area-diaconisas {
       background-color: var(--diac-fem-bg);
       color: var(--diac-fem-text);
-      border: 1px solid var(--diac-fem-border);
+      border: 1.5px solid var(--diac-fem-border);
     }
 
     .area-diaconos {
       background-color: var(--diac-masc-bg);
       color: var(--diac-masc-text);
-      border: 1px solid var(--diac-masc-border);
+      border: 1.5px solid var(--diac-masc-border);
     }
 
     .area-audiovisual {
       background-color: var(--audio-bg);
       color: var(--audio-text);
-      border: 1px solid var(--audio-border);
+      border: 1.5px solid var(--audio-border);
     }
 
     .badge-multidisciplinar {
-      background-color: #f0fdf4;
+      background-color: #dcfce7;
       color: #15803d;
-      border: 1px solid #bbf7d0;
+      border: 1.5px solid #86efac;
     }
 
     .badge-day {
       display: inline-block;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
     }
 
     .badge-viernes {
       background-color: #dbeafe;
       color: #1e40af;
-      border: 1px solid #bfdbfe;
+      border: 1.5px solid #93c5fd;
     }
 
     .badge-sabado {
       background-color: #ffedd5;
       color: #9a3412;
-      border: 1px solid #fed7aa;
+      border: 1.5px solid #fed7aa;
     }
 
     /* Tablas */
@@ -432,19 +435,6 @@
       gap: 8px;
     }
 
-    .calendar-grid-2cols {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    @media (max-width: 680px) {
-      .calendar-grid-2cols {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-    }
-
     /* =========================================================
        ALMANAQUE EN 8 COLUMNAS (LOS 8 DÍAS DE ASIGNACIÓN DEL MES)
        VIERNES - SÁBADO - VIERNES - SÁBADO - VIERNES - SÁBADO - VIERNES - SÁBADO
@@ -480,13 +470,15 @@
     .col-8days-header.is-friday {
       background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: #ffffff;
-      border: 1px solid #1d4ed8;
+      border: 1.5px solid #1d4ed8;
+      border-bottom: none;
     }
 
     .col-8days-header.is-saturday {
       background: linear-gradient(135deg, #9a3412 0%, #ea580c 100%);
       color: #ffffff;
-      border: 1px solid #c2410c;
+      border: 1.5px solid #c2410c;
+      border-bottom: none;
     }
 
     .col-8days-day-name {
@@ -497,17 +489,23 @@
 
     .col-8days-week-label {
       font-size: 0.72rem;
-      font-weight: 600;
-      opacity: 0.92;
+      font-weight: 700;
+      color: #e2e8f0;
     }
 
     .col-8days-date-badge {
-      font-size: 0.75rem;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.22);
-      padding: 2px 8px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: #ffffff;
+      color: #1e40af;
+      padding: 3px 10px;
       border-radius: 999px;
-      margin-top: 2px;
+      margin-top: 3px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .col-8days-header.is-saturday .col-8days-date-badge {
+      color: #c2410c;
     }
 
     .calendar-8days-grid {
@@ -518,41 +516,42 @@
 
     .col-8days-card {
       background: #ffffff;
-      border: 1px solid var(--border);
+      border: 1.5px solid #cbd5e1;
       border-radius: 0 0 8px 8px;
       padding: 10px 8px;
       display: flex;
       flex-direction: column;
       gap: 8px;
       min-height: 420px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
       transition: all 0.15s ease;
       cursor: pointer;
     }
 
     .col-8days-card:hover {
-      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      border-color: #94a3b8;
     }
 
     .col-8days-card.is-friday {
-      border-top: 3px solid #2563eb;
-      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 25%);
+      border-top: 4px solid #2563eb;
+      background: #ffffff;
     }
 
     .col-8days-card.is-saturday {
-      border-top: 3px solid #ea580c;
-      background: linear-gradient(180deg, #fffcf9 0%, #ffffff 25%);
+      border-top: 4px solid #ea580c;
+      background: #ffffff;
     }
 
     .col-8days-card.is-today {
-      border: 2px solid var(--primary) !important;
-      border-top: 3px solid var(--primary) !important;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      border: 2.5px solid #2563eb !important;
+      border-top: 4px solid #2563eb !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
     }
 
     .col-8days-card.other-month {
-      opacity: 0.55;
       background: #f8fafc;
+      border-color: #e2e8f0;
     }
 
     .col-top-bar {
@@ -560,7 +559,7 @@
       justify-content: space-between;
       align-items: center;
       padding-bottom: 6px;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1.5px solid #e2e8f0;
     }
 
     .col-big-day {
@@ -578,207 +577,91 @@
 
     .slot-item {
       border-radius: 6px;
-      padding: 6px 7px;
+      padding: 7px 8px;
       font-size: 0.74rem;
       display: flex;
       flex-direction: column;
       gap: 2px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-      border-left: 3px solid;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      border: 1px solid;
+      border-left: 4px solid;
     }
 
     .slot-predicaciones {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-left: 3px solid var(--pred-badge);
-      color: #1e40af;
+      background: #e0f2fe;
+      border-color: #bae6fd;
+      border-left-color: #0284c7;
+      color: #0369a1;
     }
 
     .slot-alabanza {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-left: 3px solid var(--alab-badge);
-      color: #9a3412;
+      background: #fef3c7;
+      border-color: #fde68a;
+      border-left-color: #d97706;
+      color: #b45309;
     }
 
     .slot-diaconisas {
-      background: #fdf2f8;
-      border: 1px solid #fbcfe8;
-      border-left: 3px solid var(--diac-fem-badge);
-      color: #9d174d;
+      background: #fce7f3;
+      border-color: #fbcfe8;
+      border-left-color: #db2777;
+      color: #be185d;
     }
 
     .slot-diaconos {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-left: 3px solid var(--diac-masc-badge);
-      color: #166534;
+      background: #dcfce7;
+      border-color: #bbf7d0;
+      border-left-color: #16a34a;
+      color: #15803d;
     }
 
     .slot-audiovisual {
-      background: #f5f3ff;
-      border: 1px solid #ddd6fe;
-      border-left: 3px solid var(--audio-badge);
-      color: #5b21b6;
+      background: #ede9fe;
+      border-color: #ddd6fe;
+      border-left-color: #7c3aed;
+      color: #6d28d9;
     }
 
     .btn-slot-empty {
       width: 100%;
-      padding: 6px 5px;
+      padding: 6px 7px;
       font-size: 0.72rem;
-      font-weight: 600;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1.5px dashed #94a3b8;
       border-radius: 6px;
-      color: #64748b;
+      color: #334155;
       cursor: pointer;
       text-align: left;
       display: flex;
       align-items: center;
-      gap: 4px;
-      transition: all 0.15s;
+      gap: 5px;
+      transition: all 0.15s ease;
     }
 
     .btn-slot-empty:hover {
-      background: #e2e8f0;
-      border-color: var(--primary);
-      color: var(--primary);
+      background: #f1f5f9;
+      border-color: #2563eb;
+      color: #2563eb;
     }
 
     .btn-col-add-more {
       margin-top: auto;
-      padding: 6px 8px;
-      font-size: 0.73rem;
-      font-weight: 700;
-      background: #ffffff;
-      border: 1px solid var(--border);
+      padding: 7px 8px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: #2563eb;
+      color: #ffffff;
+      border: 1px solid #1d4ed8;
       border-radius: 6px;
-      color: var(--primary);
       cursor: pointer;
       text-align: center;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
     }
 
     .btn-col-add-more:hover {
-      background: #eff6ff;
-      border-color: var(--primary);
-    }
-
-    .calendar-column-header {
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 0.88rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .header-friday {
-      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-      color: #1e40af;
-      border: 1px solid #bfdbfe;
-    }
-
-    .header-saturday {
-      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-      color: #9a3412;
-      border: 1px solid #fed7aa;
-    }
-
-    .weekend-row-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .weekend-block-title {
-      background: #f1f5f9;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #475569;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-left: 3px solid var(--primary);
-    }
-
-    .calendar-cell-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-height: 120px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-      transition: all 0.15s ease;
-      cursor: pointer;
-    }
-
-    .calendar-cell-card:hover {
-      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-      border-color: #cbd5e1;
-    }
-
-    .calendar-cell-card.is-friday {
-      border-color: #bfdbfe;
-      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 40%);
-    }
-
-    .calendar-cell-card.is-saturday {
-      border-color: #fed7aa;
-      background: linear-gradient(180deg, #fffdfb 0%, #ffffff 40%);
-    }
-
-    .calendar-cell-card.is-today {
-      border: 2px solid var(--primary) !important;
-    }
-
-    .calendar-cell-card.other-month {
-      opacity: 0.55;
-      background: #f8fafc;
-    }
-
-    .cell-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #f1f5f9;
-      padding-bottom: 6px;
-    }
-
-    .cell-date-info {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-
-    .cell-big-num {
-      font-size: 1.3rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .cell-day-text {
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    .cell-month-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    .cell-shifts-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex-grow: 1;
+      background: #1d4ed8;
+      transform: translateY(-1px);
     }
 
     .shift-item-card {
@@ -788,61 +671,8 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-    }
-
-    .shift-info-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .shift-colab-name {
-      font-weight: 700;
-      font-size: 0.82rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .shift-dept-tag {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .cell-empty-state {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      padding: 10px;
-      border: 1px dashed #cbd5e1;
-      border-radius: 6px;
-      background: #fafafa;
-    }
-
-    .btn-quick-add {
-      background: #f1f5f9;
-      color: var(--text);
-      border: 1px dashed #94a3b8;
-      border-radius: 5px;
-      padding: 5px 8px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: all 0.15s;
-      width: 100%;
-    }
-
-    .btn-quick-add:hover {
-      background: #e2e8f0;
-      border-color: var(--primary);
-      color: var(--primary);
+      border: 1px solid;
+      border-left: 4px solid;
     }
 
     /* Modal */
@@ -911,11 +741,12 @@
     }
 
     .stat-card {
-      background: white;
+      background: #ffffff;
       padding: 10px 12px;
       border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      border: 1.5px solid #cbd5e1;
+      border-top: 3.5px solid #64748b;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .stat-label {
@@ -1001,11 +832,10 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.14);
+      background: #0f2757;
       padding: 6px 12px;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      backdrop-filter: blur(4px);
+      border: 1.5px solid #3b82f6;
     }
 
     .auth-badge {
@@ -1019,25 +849,27 @@
     }
 
     .auth-badge.public {
-      background: rgba(255, 255, 255, 0.22);
+      background: #1e40af;
       color: #ffffff;
+      border: 1.5px solid #60a5fa;
     }
 
     .auth-badge.admin {
-      background: #10b981;
+      background: #059669;
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+      border: 1.5px solid #34d399;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
 
     .auth-badge.cloud-online {
-      background: rgba(16, 185, 129, 0.25);
-      border: 1px solid #34d399;
+      background: #065f46;
+      border: 1.5px solid #10b981;
       color: #ffffff;
     }
 
     .auth-badge.cloud-offline {
-      background: rgba(245, 158, 11, 0.25);
-      border: 1px solid #fbbf24;
+      background: #92400e;
+      border: 1.5px solid #f59e0b;
       color: #ffffff;
     }
 
@@ -1045,7 +877,7 @@
       background: #ffffff;
       color: #1e3a8a;
       font-weight: 700;
-      border: none;
+      border: 1.5px solid #cbd5e1;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
     }
 
@@ -1055,15 +887,15 @@
     }
 
     .btn-white-outline {
-      background: transparent;
+      background: #1e40af;
       color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1.5px solid #60a5fa;
       font-weight: 600;
     }
 
     .btn-white-outline:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: #ffffff;
+      background: #1d4ed8;
+      border-color: #93c5fd;
     }
 
     @media (max-width: 640px) {
@@ -1097,29 +929,29 @@
 
     <!-- Resumen / Estadísticas -->
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">👥 Total Hermanos</div>
-        <div class="stat-value" id="statColabs">0</div>
+      <div class="stat-card" style="border-top-color: #2563eb;">
+        <div class="stat-label" style="color: #1e40af;">👥 Total Hermanos</div>
+        <div class="stat-value" id="statColabs" style="color: #0f172a;">0</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label" style="color: var(--pred-badge);">📖 Predicación</div>
-        <div class="stat-value" id="statPredicaciones" style="color: var(--pred-badge);">0</div>
+      <div class="stat-card" style="border-top-color: var(--pred-badge);">
+        <div class="stat-label" style="color: var(--pred-text);">📖 Predicación</div>
+        <div class="stat-value" id="statPredicaciones" style="color: var(--pred-text);">0</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label" style="color: var(--alab-badge);">🎵 Alabanza</div>
-        <div class="stat-value" id="statAlabanza" style="color: var(--alab-badge);">0</div>
+      <div class="stat-card" style="border-top-color: var(--alab-badge);">
+        <div class="stat-label" style="color: var(--alab-text);">🎵 Alabanza</div>
+        <div class="stat-value" id="statAlabanza" style="color: var(--alab-text);">0</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label" style="color: var(--diac-fem-badge);">🌸 Diaconisas</div>
-        <div class="stat-value" id="statDiaconisas" style="color: var(--diac-fem-badge);">0</div>
+      <div class="stat-card" style="border-top-color: var(--diac-fem-badge);">
+        <div class="stat-label" style="color: var(--diac-fem-text);">🌸 Diaconisas</div>
+        <div class="stat-value" id="statDiaconisas" style="color: var(--diac-fem-text);">0</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label" style="color: var(--diac-masc-badge);">🤝 Diáconos</div>
-        <div class="stat-value" id="statDiaconos" style="color: var(--diac-masc-badge);">0</div>
+      <div class="stat-card" style="border-top-color: var(--diac-masc-badge);">
+        <div class="stat-label" style="color: var(--diac-masc-text);">🤝 Diáconos</div>
+        <div class="stat-value" id="statDiaconos" style="color: var(--diac-masc-text);">0</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label" style="color: var(--audio-badge);">🎥 Audiovisual</div>
-        <div class="stat-value" id="statAudiovisual" style="color: var(--audio-badge);">0</div>
+      <div class="stat-card" style="border-top-color: var(--audio-badge);">
+        <div class="stat-label" style="color: var(--audio-text);">🎥 Audiovisual</div>
+        <div class="stat-value" id="statAudiovisual" style="color: var(--audio-text);">0</div>
       </div>
     </div>
 
@@ -1131,7 +963,7 @@
       <button class="tab-btn" onclick="switchTab('assignTab', this)">
         ➕ Asignar Responsabilidad
       </button>
-      <button class="tab-btn" onclick="switchTab('collaboratorsTab', this)">
+      <button class="tab-btn admin-only" onclick="switchTab('collaboratorsTab', this)">
         👥 Directorio de Hermanos
       </button>
       <button class="tab-btn" onclick="switchTab('shiftsListTab', this)">
@@ -1173,30 +1005,30 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; font-size: 0.78rem; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); align-items: center; justify-content: space-between;">
+        <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; font-size: 0.78rem; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);">
           <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 4px;">
-              <span style="width: 10px; height: 10px; background: var(--pred-badge); border-radius: 2px; display: inline-block;"></span>
-              <span>Predicación</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--pred-badge); border: 1px solid var(--pred-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--pred-text);">Predicación</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 4px;">
-              <span style="width: 10px; height: 10px; background: var(--alab-badge); border-radius: 2px; display: inline-block;"></span>
-              <span>Alabanza</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--alab-badge); border: 1px solid var(--alab-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--alab-text);">Alabanza</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 4px;">
-              <span style="width: 10px; height: 10px; background: var(--diac-fem-badge); border-radius: 2px; display: inline-block;"></span>
-              <span>Diaconisas</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--diac-fem-badge); border: 1px solid var(--diac-fem-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--diac-fem-text);">Diaconisas</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 4px;">
-              <span style="width: 10px; height: 10px; background: var(--diac-masc-badge); border-radius: 2px; display: inline-block;"></span>
-              <span>Diáconos</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--diac-masc-badge); border: 1px solid var(--diac-masc-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--diac-masc-text);">Diáconos</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 4px;">
-              <span style="width: 10px; height: 10px; background: var(--audio-badge); border-radius: 2px; display: inline-block;"></span>
-              <span>Audiovisual</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--audio-badge); border: 1px solid var(--audio-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--audio-text);">Audiovisual</span>
             </div>
           </div>
-          <div style="color: #475569; font-size: 0.76rem; font-weight: 700;">
+          <div style="color: #1e3a8a; font-size: 0.76rem; font-weight: 700; background: #e0f2fe; padding: 4px 10px; border-radius: 6px; border: 1px solid #7dd3fc;">
             🗓️ 8 Columnas: Los 8 días de turno del mes (Viernes y Sábado)
           </div>
         </div>
@@ -1294,11 +1126,23 @@
       </div>
     </div>
 
-    <!-- PESTAÑA 3: DIRECTORIO DE HERMANOS -->
+    <!-- PESTAÑA 3: DIRECTORIO DE HERMANOS (EXCLUSIVO ADMINISTRADOR) -->
     <div id="collaboratorsTab" class="tab-content">
-      <div class="grid-2">
-        <!-- Registro solo para administradores -->
-        <div class="card admin-only">
+      <!-- Bloqueo para modo público / solo lectura -->
+      <div class="card public-only" style="background: #ffffff; text-align: center; padding: 36px 20px; border: 2px dashed #cbd5e1;">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">🔒</div>
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Directorio Restringido</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 480px; margin: 0 auto 16px;">
+          Por privacidad y protección de datos personales (teléfonos y correos), el directorio de hermanos solo es visible para el administrador.
+        </p>
+        <button class="btn btn-primary" onclick="openLoginModal(() => switchTab('collaboratorsTab'))" style="padding: 10px 22px; font-size: 0.9rem;">
+          🔑 Iniciar Sesión como Administrador
+        </button>
+      </div>
+
+      <!-- Contenido exclusivo para administradores -->
+      <div class="grid-2 admin-only">
+        <div class="card">
           <div class="card-title">➕ Registrar Hermano(a)</div>
           <form id="colabForm" onsubmit="handleCreateCollaborator(event)">
             <div class="form-group">
@@ -1316,8 +1160,8 @@
               <input type="tel" id="colabPhone" class="form-control" placeholder="+34 600 000 000">
             </div>
 
-            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 8px 12px; border-radius: 6px; font-size: 0.78rem; color: #1e40af; margin-bottom: 12px;">
-              🌟 <strong>Habilitación universal:</strong> Queda disponible de inmediato para cualquiera de las 4 áreas (Predicación, Alabanza, Diaconisas, Diáconos).
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 9px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
+              🌟 <strong>Habilitación universal:</strong> Queda disponible de inmediato para las 5 áreas (Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual).
             </div>
 
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 4px;">
@@ -1326,21 +1170,6 @@
           </form>
         </div>
 
-        <!-- Tarjeta informativa para visitantes en modo lectura -->
-        <div class="card public-only" style="background: #f8fafc;">
-          <div class="card-title">ℹ️ Directorio de Hermanos</div>
-          <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
-            Este directorio contiene los hermanos y hermanas disponibles para servir en las diferentes responsabilidades.
-          </p>
-          <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px 12px; border-radius: 6px; font-size: 0.8rem; color: #1e40af; margin-bottom: 14px;">
-            🔒 <strong>Gestión restringida:</strong> Para dar de alta nuevos colaboradores o eliminarlos, inicia sesión como administrador.
-          </div>
-          <button class="btn btn-primary" onclick="openLoginModal()" style="width: 100%;">
-            🔑 Iniciar Sesión para Gestionar
-          </button>
-        </div>
-
-        <!-- Directorio visible para todos -->
         <div class="card">
           <div class="card-title">
             <span>👥 Directorio de Hermanos (<span id="colabsCountHeader">0</span>)</span>
@@ -1352,7 +1181,7 @@
                   <th>Nombre</th>
                   <th>Disponibilidad</th>
                   <th>Contacto</th>
-                  <th class="admin-only">Acción</th>
+                  <th>Acción</th>
                 </tr>
               </thead>
               <tbody id="colabsTableBody"></tbody>
@@ -1955,6 +1784,11 @@
         content.classList.add('active');
       }
 
+      if (tabId === 'collaboratorsTab' && !isAuthenticated) {
+        openLoginModal(() => switchTab('collaboratorsTab'));
+        return;
+      }
+
       if (tabId === 'calendarTab') renderCalendar();
       if (tabId === 'shiftsListTab') renderShiftsTable();
       if (tabId === 'collaboratorsTab') renderCollaboratorsTable();
@@ -2462,11 +2296,11 @@
           const colab = collaborators.find(c => c.id === s.collaboratorId);
           const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
           listHtml += `
-            <div style="border: 1px solid var(--border); border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="border: 1.5px solid #cbd5e1; background: #ffffff; border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
               <div>
-                <div style="font-weight: 700; font-size: 0.95rem;">👤 ${colab ? colab.name : 'Hermano(a)'}</div>
-                <div><span class="badge-area ${area.badgeClass}">${area.icon} ${area.name}</span></div>
-                ${s.notes ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 3px;">📝 ${s.notes}</div>` : ''}
+                <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">👤 ${colab ? colab.name : 'Hermano(a)'}</div>
+                <div style="margin-top: 4px;"><span class="badge-area ${area.badgeClass}">${area.icon} ${area.name}</span></div>
+                ${s.notes ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 4px;">📝 ${s.notes}</div>` : ''}
               </div>
               <button class="btn btn-danger btn-sm admin-only" onclick="deleteShift('${s.id}'); closeDayModal();">Eliminar</button>
             </div>
