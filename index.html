@@ -1181,7 +1181,7 @@
                   <th>Nombre</th>
                   <th>Disponibilidad</th>
                   <th>Contacto</th>
-                  <th>Acción</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="colabsTableBody"></tbody>
@@ -1336,6 +1336,41 @@
           <button type="button" class="btn btn-outline" onclick="closeCloudModal()">Cerrar</button>
           <button type="button" class="btn btn-danger" onclick="handleClearCloudConfig()">Desconectar Nube</button>
           <button type="submit" class="btn btn-primary">Conectar</button>
+        </div>
+      </form>
+    </div>
+  <!-- MODAL EDITAR HERMANO / COLABORADOR -->
+  <div id="editCollaboratorModal" class="modal-backdrop" onclick="if (event.target === this) closeEditCollaboratorModal()">
+    <div class="modal" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ Editar Hermano(a)</h3>
+        <button class="modal-close" onclick="closeEditCollaboratorModal()">&times;</button>
+      </div>
+      <form id="editCollaboratorForm" onsubmit="handleSaveEditCollaborator(event)">
+        <input type="hidden" id="editColabId">
+        
+        <div class="form-group">
+          <label for="editColabName">Nombre Completo *</label>
+          <input type="text" id="editColabName" class="form-control" required placeholder="Ej: Hno. Carlos Mendoza">
+        </div>
+
+        <div class="form-group">
+          <label for="editColabEmail">Correo Electrónico (Opcional)</label>
+          <input type="email" id="editColabEmail" class="form-control" placeholder="carlos@iglesia.com">
+        </div>
+
+        <div class="form-group">
+          <label for="editColabPhone">Teléfono / WhatsApp (Opcional)</label>
+          <input type="tel" id="editColabPhone" class="form-control" placeholder="+34 600 000 000">
+        </div>
+
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 9px 12px; border-radius: 6px; font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
+          💡 Los cambios de nombre y teléfono se reflejarán automáticamente en todos sus turnos asignados.
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeEditCollaboratorModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </div>
       </form>
     </div>
@@ -1817,6 +1852,51 @@
       showToast(`${name} registrado correctamente`, 'success');
     }
 
+    function openEditCollaboratorModal(id) {
+      if (!ensureAuth(() => openEditCollaboratorModal(id))) return;
+      const colab = collaborators.find(c => c.id === id);
+      if (!colab) return;
+
+      document.getElementById('editColabId').value = colab.id;
+      document.getElementById('editColabName').value = colab.name || '';
+      document.getElementById('editColabEmail').value = (colab.email && colab.email !== 'Sin correo') ? colab.email : '';
+      document.getElementById('editColabPhone').value = (colab.phone && colab.phone !== 'Sin teléfono') ? colab.phone : '';
+      document.getElementById('editCollaboratorModal').classList.add('open');
+      setTimeout(() => document.getElementById('editColabName').focus(), 100);
+    }
+
+    function closeEditCollaboratorModal() {
+      const modal = document.getElementById('editCollaboratorModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function handleSaveEditCollaborator(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (!ensureAuth(() => handleSaveEditCollaborator(e))) return;
+
+      const id = document.getElementById('editColabId').value;
+      const name = document.getElementById('editColabName').value.trim();
+      const email = document.getElementById('editColabEmail').value.trim();
+      const phone = document.getElementById('editColabPhone').value.trim();
+
+      if (!id || !name) return;
+
+      const colabIndex = collaborators.findIndex(c => c.id === id);
+      if (colabIndex === -1) return;
+
+      collaborators[colabIndex].name = name;
+      collaborators[colabIndex].email = email || 'Sin correo';
+      collaborators[colabIndex].phone = phone || 'Sin teléfono';
+
+      saveData();
+      closeEditCollaboratorModal();
+      renderCollaboratorsTable();
+      renderCalendar();
+      renderShiftsTable();
+      populateCollaboratorsDropdown();
+      showToast(`Datos de ${name} actualizados correctamente`, 'success');
+    }
+
     function deleteCollaborator(id) {
       if (!ensureAuth(() => deleteCollaborator(id))) return;
       const colab = collaborators.find(c => c.id === id);
@@ -1844,7 +1924,12 @@
           <td><strong>${c.name}</strong></td>
           <td><span class="badge-area badge-multidisciplinar">🌟 Cualquier Área</span></td>
           <td style="font-size: 0.78rem;">${c.email}<br><span style="color:var(--text-muted);">${c.phone}</span></td>
-          <td class="admin-only"><button class="btn btn-danger btn-sm" onclick="deleteCollaborator('${c.id}')">Eliminar</button></td>
+          <td class="admin-only">
+            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+              <button class="btn btn-outline btn-sm" onclick="openEditCollaboratorModal('${c.id}')" title="Editar datos del hermano(a)">✏️ Editar</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteCollaborator('${c.id}')" title="Eliminar del directorio">🗑️ Eliminar</button>
+            </div>
+          </td>
         `;
         tbody.appendChild(row);
       });
