@@ -1830,6 +1830,16 @@
       if (tabId === 'assignTab') populateCollaboratorsDropdown();
     }
 
+    function normalizeName(str) {
+      if (!str) return '';
+      return str
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, ' ');
+    }
+
     function handleCreateCollaborator(e) {
       if (e && e.preventDefault) e.preventDefault();
       if (!ensureAuth(() => handleCreateCollaborator(null))) return;
@@ -1841,6 +1851,15 @@
       const email = emailEl ? emailEl.value.trim() : '';
       const phone = phoneEl ? phoneEl.value.trim() : '';
       if (!name) return;
+
+      const normName = normalizeName(name);
+      const duplicate = collaborators.find(c => normalizeName(c.name) === normName);
+      if (duplicate) {
+        showToast(`⛔ Ya existe un hermano(a) registrado como "${duplicate.name}". No se permiten nombres repetidos.`, 'error');
+        nameEl.focus();
+        nameEl.select();
+        return;
+      }
 
       collaborators.push({ id: 'c_' + Date.now(), name, email: email || 'Sin correo', phone: phone || 'Sin teléfono' });
       saveData();
@@ -1875,11 +1894,21 @@
       if (!ensureAuth(() => handleSaveEditCollaborator(e))) return;
 
       const id = document.getElementById('editColabId').value;
-      const name = document.getElementById('editColabName').value.trim();
+      const nameInput = document.getElementById('editColabName');
+      const name = nameInput.value.trim();
       const email = document.getElementById('editColabEmail').value.trim();
       const phone = document.getElementById('editColabPhone').value.trim();
 
       if (!id || !name) return;
+
+      const normName = normalizeName(name);
+      const duplicate = collaborators.find(c => c.id !== id && normalizeName(c.name) === normName);
+      if (duplicate) {
+        showToast(`⛔ Ya existe otro hermano(a) registrado como "${duplicate.name}". No se permiten nombres repetidos.`, 'error');
+        nameInput.focus();
+        nameInput.select();
+        return;
+      }
 
       const colabIndex = collaborators.findIndex(c => c.id === id);
       if (colabIndex === -1) return;
