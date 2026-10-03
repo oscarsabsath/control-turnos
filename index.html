@@ -622,6 +622,20 @@
       color: #6d28d9;
     }
 
+    .slot-ministerio-sabado {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-left: 4px solid #2563eb;
+      color: #1e40af;
+      box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .slot-ministerio-sabado:hover {
+      background: #dbeafe;
+    }
+
     .btn-slot-empty {
       width: 100%;
       padding: 6px 7px;
@@ -965,6 +979,9 @@
       </button>
       <button class="tab-btn admin-only" onclick="switchTab('collaboratorsTab', this)">
         👥 Directorio de Hermanos
+      </button>
+      <button class="tab-btn admin-only" onclick="openMinistriesModal()">
+        🏛️ Directorio de Ministerios
       </button>
       <button class="tab-btn" onclick="switchTab('shiftsListTab', this)">
         📋 Registro General
@@ -1374,6 +1391,101 @@
         </div>
       </form>
     </div>
+  <!-- MODAL DIRECTORIO DE MINISTERIOS -->
+  <div id="ministriesModal" class="modal-backdrop" onclick="if (event.target === this) closeMinistriesModal()">
+    <div class="modal" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🏛️ Directorio de Ministerios (<span id="ministriesCountHeader">0</span>)</h3>
+        <button class="modal-close" onclick="closeMinistriesModal()">&times;</button>
+      </div>
+
+      <form id="newMinistryForm" onsubmit="handleCreateMinistry(event)" style="margin-bottom: 14px;">
+        <label style="font-size: 0.82rem; font-weight: 700; color: var(--text); display: block; margin-bottom: 4px;">
+          ➕ Registrar Nuevo Ministerio:
+        </label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="newMinistryName" class="form-control" required placeholder="Nombre del ministerio (Ej: Ministerio Infantil)..." style="flex: 1;">
+          <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+            Agregar
+          </button>
+        </div>
+      </form>
+
+      <div style="max-height: 300px; overflow-y: auto; border: 1.5px solid #cbd5e1; border-radius: 6px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+          <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
+            <tr>
+              <th style="padding: 8px 12px; text-align: left;">Nombre del Ministerio</th>
+              <th style="padding: 8px 12px; text-align: right; width: 140px;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="ministriesTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeMinistriesModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ASIGNAR MINISTERIO A CARGO DEL SÁBADO -->
+  <div id="assignMinistryModal" class="modal-backdrop" onclick="if (event.target === this) closeAssignMinistryModal()">
+    <div class="modal" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🏛️ Asignar Ministerio del Sábado</h3>
+        <button class="modal-close" onclick="closeAssignMinistryModal()">&times;</button>
+      </div>
+      <form id="assignMinistryForm" onsubmit="handleSaveSaturdayMinistry(event)">
+        <input type="hidden" id="assignMinistryDateStr">
+        
+        <p style="font-size: 0.85rem; color: #1e40af; background: #eff6ff; border: 1.5px solid #bfdbfe; padding: 9px 12px; border-radius: 6px; margin-bottom: 14px;">
+          📅 <strong id="assignMinistryDateTitle">Sábado</strong>
+        </p>
+
+        <div class="form-group">
+          <label for="assignMinistrySelect">Seleccionar Ministerio a Cargo *</label>
+          <select id="assignMinistrySelect" class="form-control" required>
+            <option value="">-- Seleccionar Ministerio --</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 14px;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeAssignMinistryModal(); openMinistriesModal();" title="Gestionar o agregar más ministerios">
+            ➕ Crear / Editar Ministerios
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="removeCurrentSaturdayMinistry()" id="btnRemoveSatMin" style="display: none;">
+            Quitar Asignación
+          </button>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeAssignMinistryModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar Ministerio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR NOMBRE DE MINISTERIO -->
+  <div id="editMinistryModal" class="modal-backdrop" onclick="if (event.target === this) closeEditMinistryModal()">
+    <div class="modal" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ Editar Ministerio</h3>
+        <button class="modal-close" onclick="closeEditMinistryModal()">&times;</button>
+      </div>
+      <form id="editMinistryForm" onsubmit="handleSaveEditMinistry(event)">
+        <input type="hidden" id="editMinistryId">
+        <div class="form-group">
+          <label for="editMinistryName">Nombre del Ministerio *</label>
+          <input type="text" id="editMinistryName" class="form-control" required placeholder="Nombre del ministerio...">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeEditMinistryModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div id="toastContainer"></div>
@@ -1449,6 +1561,29 @@
       'shifts_data'
     ], getDemoShifts());
 
+    const INITIAL_MINISTRIES = [
+      { id: 'm1', name: 'Ministerio de Jóvenes' },
+      { id: 'm2', name: 'Ministerio de la Mujer' },
+      { id: 'm3', name: 'Ministerio Infantil' },
+      { id: 'm4', name: 'Ministerio de Mayordomía' },
+      { id: 'm5', name: 'Ministerio Personal' },
+      { id: 'm6', name: 'Ministerio de la Familia' },
+      { id: 'm7', name: 'Ministerio de Salud' }
+    ];
+
+    let ministries = loadSafeData([
+      'church_ministries_v1',
+      'church_ministries'
+    ], INITIAL_MINISTRIES);
+
+    let saturdayMinistries = (() => {
+      try {
+        const raw = localStorage.getItem('church_saturday_ministries');
+        if (raw) return JSON.parse(raw);
+      } catch(e) {}
+      return {};
+    })();
+
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
 
@@ -1511,10 +1646,19 @@
               shifts = val.shifts;
               try { localStorage.setItem('church_assignments_v4', JSON.stringify(shifts)); } catch(e){}
             }
+            if (Array.isArray(val.ministries) && val.ministries.length > 0) {
+              ministries = val.ministries;
+              try { localStorage.setItem('church_ministries_v1', JSON.stringify(ministries)); } catch(e){}
+            }
+            if (val.saturdayMinistries && typeof val.saturdayMinistries === 'object') {
+              saturdayMinistries = val.saturdayMinistries;
+              try { localStorage.setItem('church_saturday_ministries', JSON.stringify(saturdayMinistries)); } catch(e){}
+            }
             renderCalendar();
             renderCollaboratorsTable();
             renderShiftsTable();
             populateCollaboratorsDropdown();
+            renderMinistriesList();
             updateStats();
           } else {
             // Primera vez conectando base de datos vacía: subir los datos actuales
@@ -1537,6 +1681,8 @@
       db.ref('church_turnos').set({
         collaborators: collaborators,
         shifts: shifts,
+        ministries: ministries,
+        saturdayMinistries: saturdayMinistries,
         updatedAt: Date.now()
       }).catch(err => {
         console.error('Error sincronizando con Firebase:', err);
@@ -1781,6 +1927,8 @@
         localStorage.setItem('church_assignments_v4', shiftsJson);
         localStorage.setItem('church_collaborators', colabJson);
         localStorage.setItem('church_assignments', shiftsJson);
+        localStorage.setItem('church_ministries_v1', JSON.stringify(ministries));
+        localStorage.setItem('church_saturday_ministries', JSON.stringify(saturdayMinistries));
       } catch (err) {
         console.error('Error al guardar datos en el navegador:', err);
       }
@@ -1974,6 +2122,211 @@
         opt.innerText = c.name;
         select.appendChild(opt);
       });
+    }
+
+    // ==============================================================
+    // 🏛️ GESTIÓN DEL DIRECTORIO DE MINISTERIOS Y ASIGNACIÓN DE SÁBADO
+    // ==============================================================
+    function openMinistriesModal() {
+      if (!ensureAuth(() => openMinistriesModal())) return;
+      document.getElementById('newMinistryName').value = '';
+      renderMinistriesList();
+      document.getElementById('ministriesModal').classList.add('open');
+      setTimeout(() => document.getElementById('newMinistryName').focus(), 100);
+    }
+
+    function closeMinistriesModal() {
+      document.getElementById('ministriesModal').classList.remove('open');
+    }
+
+    function renderMinistriesList() {
+      const tbody = document.getElementById('ministriesTableBody');
+      const countEl = document.getElementById('ministriesCountHeader');
+      if (countEl) countEl.innerText = ministries.length;
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (ministries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 14px; color: var(--text-muted);">No hay ministerios registrados. Registra uno arriba.</td></tr>';
+        return;
+      }
+
+      ministries.forEach(m => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #e2e8f0';
+        tr.innerHTML = `
+          <td style="padding: 8px 12px; font-weight: 700; color: #1e293b;">
+            🏛️ ${m.name}
+          </td>
+          <td style="padding: 8px 12px; text-align: right;">
+            <div style="display: flex; gap: 6px; justify-content: flex-end;">
+              <button class="btn btn-outline btn-sm" onclick="openEditMinistryModal('${m.id}')" title="Editar nombre">✏️ Editar</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteMinistry('${m.id}')" title="Eliminar ministerio">🗑️</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleCreateMinistry(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (!ensureAuth(() => handleCreateMinistry(e))) return;
+      const input = document.getElementById('newMinistryName');
+      const name = input.value.trim();
+      if (!name) return;
+
+      const norm = normalizeName(name);
+      const dup = ministries.find(m => normalizeName(m.name) === norm);
+      if (dup) {
+        showToast(`⛔ Ya existe un ministerio registrado como "${dup.name}".`, 'error');
+        input.focus();
+        input.select();
+        return;
+      }
+
+      ministries.push({ id: 'm_' + Date.now(), name });
+      saveData();
+      input.value = '';
+      renderMinistriesList();
+      renderCalendar();
+      showToast(`Ministerio "${name}" registrado correctamente`, 'success');
+    }
+
+    function deleteMinistry(id) {
+      if (!ensureAuth(() => deleteMinistry(id))) return;
+      const min = ministries.find(m => m.id === id);
+      if (!min) return;
+      if (!confirm(`¿Eliminar el ministerio "${min.name}" del directorio?`)) return;
+
+      ministries = ministries.filter(m => m.id !== id);
+      saveData();
+      renderMinistriesList();
+      renderCalendar();
+      showToast(`Ministerio eliminado`, 'info');
+    }
+
+    function openEditMinistryModal(id) {
+      if (!ensureAuth(() => openEditMinistryModal(id))) return;
+      const min = ministries.find(m => m.id === id);
+      if (!min) return;
+
+      document.getElementById('editMinistryId').value = min.id;
+      const nameInput = document.getElementById('editMinistryName');
+      nameInput.value = min.name;
+      document.getElementById('editMinistryModal').classList.add('open');
+      setTimeout(() => nameInput.focus(), 100);
+    }
+
+    function closeEditMinistryModal() {
+      document.getElementById('editMinistryModal').classList.remove('open');
+    }
+
+    function handleSaveEditMinistry(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (!ensureAuth(() => handleSaveEditMinistry(e))) return;
+
+      const id = document.getElementById('editMinistryId').value;
+      const nameInput = document.getElementById('editMinistryName');
+      const name = nameInput.value.trim();
+      if (!id || !name) return;
+
+      const norm = normalizeName(name);
+      const dup = ministries.find(m => m.id !== id && normalizeName(m.name) === norm);
+      if (dup) {
+        showToast(`⛔ Ya existe otro ministerio con el nombre "${dup.name}".`, 'error');
+        nameInput.focus();
+        nameInput.select();
+        return;
+      }
+
+      const idx = ministries.findIndex(m => m.id === id);
+      if (idx !== -1) {
+        const oldName = ministries[idx].name;
+        ministries[idx].name = name;
+
+        // Actualizar asignaciones existentes de sábado si tenían el nombre antiguo
+        Object.keys(saturdayMinistries).forEach(dateKey => {
+          if (saturdayMinistries[dateKey] === oldName) {
+            saturdayMinistries[dateKey] = name;
+          }
+        });
+
+        saveData();
+        closeEditMinistryModal();
+        renderMinistriesList();
+        renderCalendar();
+        showToast(`Ministerio actualizado a "${name}"`, 'success');
+      }
+    }
+
+    function openAssignMinistryModal(dateStr) {
+      if (!ensureAuth(() => openAssignMinistryModal(dateStr))) return;
+
+      document.getElementById('assignMinistryDateStr').value = dateStr;
+      const parts = dateStr.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      const formatted = `${d.getDate()} de ${MONTH_NAMES[d.getMonth()]} de ${d.getFullYear()}`;
+      document.getElementById('assignMinistryDateTitle').innerText = `Sábado ${formatted}`;
+
+      const select = document.getElementById('assignMinistrySelect');
+      select.innerHTML = '<option value="">-- Seleccionar Ministerio a Cargo --</option>';
+
+      ministries.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.name;
+        opt.innerText = m.name;
+        select.appendChild(opt);
+      });
+
+      const current = saturdayMinistries[dateStr] || '';
+      select.value = current;
+
+      const btnRemove = document.getElementById('btnRemoveSatMin');
+      if (btnRemove) {
+        btnRemove.style.display = current ? 'inline-block' : 'none';
+      }
+
+      document.getElementById('assignMinistryModal').classList.add('open');
+    }
+
+    function closeAssignMinistryModal() {
+      document.getElementById('assignMinistryModal').classList.remove('open');
+    }
+
+    function handleSaveSaturdayMinistry(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (!ensureAuth(() => handleSaveSaturdayMinistry(e))) return;
+
+      const dateStr = document.getElementById('assignMinistryDateStr').value;
+      const select = document.getElementById('assignMinistrySelect');
+      const selectedMinistry = select.value.trim();
+
+      if (selectedMinistry) {
+        saturdayMinistries[dateStr] = selectedMinistry;
+        showToast(`Ministerio "${selectedMinistry}" asignado para el sábado`, 'success');
+      } else {
+        delete saturdayMinistries[dateStr];
+      }
+
+      saveData();
+      closeAssignMinistryModal();
+      renderCalendar();
+    }
+
+    function removeCurrentSaturdayMinistry() {
+      const dateStr = document.getElementById('assignMinistryDateStr').value;
+      if (!dateStr) return;
+      removeSaturdayMinistry(dateStr);
+      closeAssignMinistryModal();
+    }
+
+    function removeSaturdayMinistry(dateStr) {
+      if (!ensureAuth(() => removeSaturdayMinistry(dateStr))) return;
+      delete saturdayMinistries[dateStr];
+      saveData();
+      renderCalendar();
+      showToast('Ministerio retirado del sábado', 'info');
     }
 
     function isFridayOrSaturday(dateString) {
@@ -2274,6 +2627,29 @@
             </button>
           `;
         }
+
+        // Cada sábado, debajo del predicador, poder asignar un ministerio
+        if (!isFri && deptKey === 'predicaciones' && (deptFilter === 'ALL' || deptFilter === 'predicaciones')) {
+          const satMin = saturdayMinistries[d.dateStr];
+          if (satMin) {
+            slotsHTML += `
+              <div class="slot-item slot-ministerio-sabado" onclick="event.stopPropagation(); ensureAuth(() => openAssignMinistryModal('${d.dateStr}'))" title="Clic para cambiar el ministerio del sábado">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 2px;">
+                  <span style="font-weight: 800; font-size: 0.72rem; color: #1e40af;">🏛️ Ministerio a Cargo</span>
+                  <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); removeSaturdayMinistry('${d.dateStr}')" style="padding: 1px 4px; font-size: 0.65rem; line-height: 1; border-radius: 3px;" title="Quitar ministerio">✕</button>
+                </div>
+                <div style="font-weight: 800; font-size: 0.8rem; color: #1e3a8a; margin-top: 2px;">✨ ${satMin}</div>
+              </div>
+            `;
+          } else {
+            slotsHTML += `
+              <button class="btn-slot-empty" style="border-color: #93c5fd; color: #1e40af; margin-top: 2px; margin-bottom: 2px;" onclick="event.stopPropagation(); ensureAuth(() => openAssignMinistryModal('${d.dateStr}'))" title="Asignar ministerio a cargo para este Sábado">
+                <span>🏛️</span>
+                <span>+ Ministerio del Sábado</span>
+              </button>
+            `;
+          }
+        }
       });
 
       slotsHTML += '</div>';
@@ -2397,8 +2773,34 @@
         ensureAuth(() => quickAssignDate(dateStr));
       };
 
+      let satMinistryHtml = '';
+      if (dayName === 'Sábado') {
+        const satMin = saturdayMinistries[dateStr];
+        if (satMin) {
+          satMinistryHtml = `
+            <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 6px; padding: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 0.72rem; font-weight: 800; color: #1e40af; text-transform: uppercase;">🏛️ Ministerio a Cargo:</span>
+                <div style="font-weight: 800; font-size: 0.95rem; color: #1e3a8a; margin-top: 2px;">✨ ${satMin}</div>
+              </div>
+              <div class="admin-only" style="display: flex; gap: 6px;">
+                <button class="btn btn-outline btn-sm" onclick="closeDayModal(); openAssignMinistryModal('${dateStr}')">Cambiar</button>
+                <button class="btn btn-danger btn-sm" onclick="removeSaturdayMinistry('${dateStr}'); closeDayModal();">✕</button>
+              </div>
+            </div>
+          `;
+        } else {
+          satMinistryHtml = `
+            <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 8px 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">🏛️ Sin ministerio asignado para este sábado</span>
+              <button class="btn btn-outline btn-sm admin-only" onclick="closeDayModal(); openAssignMinistryModal('${dateStr}')">+ Asignar Ministerio</button>
+            </div>
+          `;
+        }
+      }
+
       if (dayShifts.length === 0) {
-        content.innerHTML = `
+        content.innerHTML = satMinistryHtml + `
           <div style="text-align: center; padding: 16px; color: var(--text-muted);">
             <div style="font-size: 1.8rem; margin-bottom: 6px;">🗓️</div>
             <p><strong>No hay ninguna responsabilidad asignada para este ${dayName} ${dateStr}.</strong></p>
@@ -2421,7 +2823,7 @@
           `;
         });
         listHtml += '</div>';
-        content.innerHTML = listHtml;
+        content.innerHTML = satMinistryHtml + listHtml;
       }
       modal.classList.add('open');
     }
@@ -2463,7 +2865,7 @@
     }
 
     function exportDataJSON() {
-      const data = { collaborators, shifts };
+      const data = { collaborators, shifts, ministries, saturdayMinistries };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -2511,6 +2913,19 @@
         days.forEach(d => {
           const dateStr = formatDateKey(d.date);
           const dayShifts = shifts.filter(s => s.date === dateStr);
+
+          if (d.name === 'Sábado' && saturdayMinistries[dateStr]) {
+            rows.push([
+              `${monthName} ${currentYear}`,
+              `Semana ${wkIdx + 1}`,
+              dateStr,
+              d.name,
+              '🏛️ Ministerio a Cargo',
+              saturdayMinistries[dateStr],
+              '',
+              'Ministerio encargado del sábado'
+            ]);
+          }
 
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
@@ -2615,6 +3030,19 @@
               </tr>
             `;
           });
+
+          if (!d.isFri && saturdayMinistries[dateStr]) {
+            slotsRowsHtml = `
+              <tr style="background: #eff6ff;">
+                <td style="padding: 7px 10px; font-weight: 800; width: 28%; border-bottom: 1.5px solid #bfdbfe; color: #1e40af;">
+                  🏛️ Ministerio
+                </td>
+                <td colspan="2" style="padding: 7px 10px; border-bottom: 1.5px solid #bfdbfe; font-weight: 800; color: #1e3a8a;">
+                  ✨ ${saturdayMinistries[dateStr]}
+                </td>
+              </tr>
+            ` + slotsRowsHtml;
+          }
 
           const dayHeaderColor = d.isFri ? '#1e40af' : '#c2410c';
           const dayBgColor = d.isFri ? '#eff6ff' : '#fff7ed';
