@@ -1393,7 +1393,7 @@
     </div>
   <!-- MODAL DIRECTORIO DE MINISTERIOS -->
   <div id="ministriesModal" class="modal-backdrop" onclick="if (event.target === this) closeMinistriesModal()">
-    <div class="modal" style="max-width: 480px;">
+    <div class="modal" style="max-width: 560px;">
       <div class="modal-header">
         <h3 class="modal-title">🏛️ Directorio de Ministerios (<span id="ministriesCountHeader">0</span>)</h3>
         <button class="modal-close" onclick="closeMinistriesModal()">&times;</button>
@@ -1411,12 +1411,12 @@
         </div>
       </form>
 
-      <div style="max-height: 300px; overflow-y: auto; border: 1.5px solid #cbd5e1; border-radius: 6px;">
+      <div style="max-height: 360px; overflow-y: auto; border: 1.5px solid #cbd5e1; border-radius: 6px;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
           <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
             <tr>
-              <th style="padding: 8px 12px; text-align: left;">Nombre del Ministerio</th>
-              <th style="padding: 8px 12px; text-align: right; width: 140px;">Acciones</th>
+              <th style="padding: 8px 12px; text-align: left;">Ministerio y Nombres Registrados</th>
+              <th style="padding: 8px 12px; text-align: right; width: 120px;">Acciones</th>
             </tr>
           </thead>
           <tbody id="ministriesTableBody"></tbody>
@@ -1431,7 +1431,7 @@
 
   <!-- MODAL ASIGNAR MINISTERIO A CARGO DEL SÁBADO -->
   <div id="assignMinistryModal" class="modal-backdrop" onclick="if (event.target === this) closeAssignMinistryModal()">
-    <div class="modal" style="max-width: 440px;">
+    <div class="modal" style="max-width: 460px;">
       <div class="modal-header">
         <h3 class="modal-title">🏛️ Asignar Ministerio del Sábado</h3>
         <button class="modal-close" onclick="closeAssignMinistryModal()">&times;</button>
@@ -1444,15 +1444,26 @@
         </p>
 
         <div class="form-group">
-          <label for="assignMinistrySelect">Seleccionar Ministerio a Cargo *</label>
-          <select id="assignMinistrySelect" class="form-control" required>
+          <label for="assignMinistrySelect">1. Seleccionar Ministerio a Cargo *</label>
+          <select id="assignMinistrySelect" class="form-control" required onchange="onAssignMinistryChange()">
             <option value="">-- Seleccionar Ministerio --</option>
           </select>
         </div>
 
+        <div class="form-group">
+          <label for="assignMinistryPersonSelect">2. Nombre(s) / Persona a Cargo para este Sábado</label>
+          <select id="assignMinistryPersonSelect" class="form-control" onchange="onAssignPersonSelectChange()">
+            <option value="">-- Seleccionar de la lista --</option>
+          </select>
+          <div style="margin-top: 6px;">
+            <input type="text" id="assignMinistryPersonInput" class="form-control" placeholder="O escribir nombre(s) directamente...">
+          </div>
+          <div class="hint">Puedes elegir de la lista o escribir uno o más nombres a cargo.</div>
+        </div>
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 14px;">
-          <button type="button" class="btn btn-outline btn-sm" onclick="closeAssignMinistryModal(); openMinistriesModal();" title="Gestionar o agregar más ministerios">
-            ➕ Crear / Editar Ministerios
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeAssignMinistryModal(); openMinistriesModal();" title="Gestionar ministerios y sus nombres">
+            ⚙️ Directorio de Ministerios
           </button>
           <button type="button" class="btn btn-danger btn-sm" onclick="removeCurrentSaturdayMinistry()" id="btnRemoveSatMin" style="display: none;">
             Quitar Asignación
@@ -1461,7 +1472,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeAssignMinistryModal()">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Confirmar Ministerio</button>
+          <button type="submit" class="btn btn-primary">Confirmar Asignación</button>
         </div>
       </form>
     </div>
@@ -1575,6 +1586,9 @@
       'church_ministries_v1',
       'church_ministries'
     ], INITIAL_MINISTRIES);
+    ministries.forEach(m => {
+      if (!Array.isArray(m.members)) m.members = [];
+    });
 
     let saturdayMinistries = (() => {
       try {
@@ -1583,6 +1597,15 @@
       } catch(e) {}
       return {};
     })();
+
+    function getSaturdayMinistryData(dateStr) {
+      const item = saturdayMinistries[dateStr];
+      if (!item) return null;
+      if (typeof item === 'string') {
+        return { ministry: item, person: '' };
+      }
+      return item;
+    }
 
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
@@ -2152,21 +2175,77 @@
       }
 
       ministries.forEach(m => {
+        if (!Array.isArray(m.members)) m.members = [];
         const tr = document.createElement('tr');
-        tr.style.borderBottom = '1px solid #e2e8f0';
+        tr.style.borderBottom = '1.5px solid #e2e8f0';
+
+        let membersChipsHtml = '';
+        if (m.members.length > 0) {
+          membersChipsHtml = m.members.map(mem => `
+            <span style="display: inline-flex; align-items: center; gap: 4px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 2px 8px; border-radius: 999px; font-size: 0.73rem; font-weight: 700; margin: 2px;">
+              👤 ${mem}
+              <button type="button" onclick="removeMinistryMember('${m.id}', '${mem}')" style="background: none; border: none; color: #0284c7; cursor: pointer; font-size: 0.8rem; line-height: 1; padding: 0 2px;" title="Quitar este nombre">✕</button>
+            </span>
+          `).join('');
+        } else {
+          membersChipsHtml = '<span style="color: #94a3b8; font-size: 0.74rem; font-style: italic;">Sin nombres asignados aún.</span>';
+        }
+
         tr.innerHTML = `
-          <td style="padding: 8px 12px; font-weight: 700; color: #1e293b;">
-            🏛️ ${m.name}
+          <td style="padding: 10px 12px; vertical-align: top;">
+            <div style="font-weight: 800; color: #1e293b; font-size: 0.9rem;">🏛️ ${m.name}</div>
+            <div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 2px; align-items: center;">
+              ${membersChipsHtml}
+            </div>
+            <div style="display: flex; gap: 4px; align-items: center; margin-top: 6px;">
+              <input type="text" id="addMemberInput_${m.id}" class="form-control" placeholder="+ Añadir nombre..." style="padding: 3px 8px; font-size: 0.75rem; width: 170px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addMinistryMember('${m.id}')}">
+              <button type="button" class="btn btn-outline btn-sm" onclick="addMinistryMember('${m.id}')" style="padding: 3px 8px; font-size: 0.75rem;">+ Agregar</button>
+            </div>
           </td>
-          <td style="padding: 8px 12px; text-align: right;">
+          <td style="padding: 10px 12px; text-align: right; vertical-align: top;">
             <div style="display: flex; gap: 6px; justify-content: flex-end;">
-              <button class="btn btn-outline btn-sm" onclick="openEditMinistryModal('${m.id}')" title="Editar nombre">✏️ Editar</button>
+              <button class="btn btn-outline btn-sm" onclick="openEditMinistryModal('${m.id}')" title="Editar nombre del ministerio">✏️</button>
               <button class="btn btn-danger btn-sm" onclick="deleteMinistry('${m.id}')" title="Eliminar ministerio">🗑️</button>
             </div>
           </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    function addMinistryMember(minId) {
+      if (!ensureAuth(() => addMinistryMember(minId))) return;
+      const input = document.getElementById(`addMemberInput_${minId}`);
+      if (!input) return;
+      const name = input.value.trim();
+      if (!name) return;
+
+      const min = ministries.find(m => m.id === minId);
+      if (!min) return;
+
+      if (!Array.isArray(min.members)) min.members = [];
+
+      const norm = normalizeName(name);
+      if (min.members.some(mem => normalizeName(mem) === norm)) {
+        showToast(`"${name}" ya está registrado en este ministerio`, 'info');
+        return;
+      }
+
+      min.members.push(name);
+      saveData();
+      renderMinistriesList();
+      showToast(`"${name}" añadido a ${min.name}`, 'success');
+    }
+
+    function removeMinistryMember(minId, memberName) {
+      if (!ensureAuth(() => removeMinistryMember(minId, memberName))) return;
+      const min = ministries.find(m => m.id === minId);
+      if (!min || !Array.isArray(min.members)) return;
+
+      min.members = min.members.filter(m => m !== memberName);
+      saveData();
+      renderMinistriesList();
+      showToast(`Nombre eliminado del ministerio`, 'info');
     }
 
     function handleCreateMinistry(e) {
@@ -2185,7 +2264,7 @@
         return;
       }
 
-      ministries.push({ id: 'm_' + Date.now(), name });
+      ministries.push({ id: 'm_' + Date.now(), name, members: [] });
       saveData();
       input.value = '';
       renderMinistriesList();
@@ -2247,8 +2326,12 @@
 
         // Actualizar asignaciones existentes de sábado si tenían el nombre antiguo
         Object.keys(saturdayMinistries).forEach(dateKey => {
-          if (saturdayMinistries[dateKey] === oldName) {
-            saturdayMinistries[dateKey] = name;
+          const item = getSaturdayMinistryData(dateKey);
+          if (item && item.ministry === oldName) {
+            saturdayMinistries[dateKey] = {
+              ministry: name,
+              person: item.person || ''
+            };
           }
         });
 
@@ -2279,8 +2362,15 @@
         select.appendChild(opt);
       });
 
-      const current = saturdayMinistries[dateStr] || '';
-      select.value = current;
+      const current = getSaturdayMinistryData(dateStr);
+      select.value = current ? current.ministry : '';
+
+      onAssignMinistryChange();
+
+      const personInput = document.getElementById('assignMinistryPersonInput');
+      if (personInput) {
+        personInput.value = current ? (current.person || '') : '';
+      }
 
       const btnRemove = document.getElementById('btnRemoveSatMin');
       if (btnRemove) {
@@ -2288,6 +2378,49 @@
       }
 
       document.getElementById('assignMinistryModal').classList.add('open');
+    }
+
+    function onAssignMinistryChange() {
+      const minSelect = document.getElementById('assignMinistrySelect');
+      const personSelect = document.getElementById('assignMinistryPersonSelect');
+      if (!personSelect) return;
+
+      const selectedMinName = minSelect ? minSelect.value : '';
+      personSelect.innerHTML = '<option value="">-- Seleccionar de la lista --</option>';
+
+      const minObj = ministries.find(m => m.name === selectedMinName);
+      if (minObj && Array.isArray(minObj.members) && minObj.members.length > 0) {
+        const grpMin = document.createElement('optgroup');
+        grpMin.label = `Integrantes de ${minObj.name}`;
+        minObj.members.forEach(mem => {
+          const opt = document.createElement('option');
+          opt.value = mem;
+          opt.innerText = `👤 ${mem}`;
+          grpMin.appendChild(opt);
+        });
+        personSelect.appendChild(grpMin);
+      }
+
+      if (collaborators.length > 0) {
+        const grpColabs = document.createElement('optgroup');
+        grpColabs.label = 'Directorio General de Hermanos';
+        const sorted = [...collaborators].sort((a, b) => a.name.localeCompare(b.name));
+        sorted.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.name;
+          opt.innerText = `👤 ${c.name}`;
+          grpColabs.appendChild(opt);
+        });
+        personSelect.appendChild(grpColabs);
+      }
+    }
+
+    function onAssignPersonSelectChange() {
+      const personSelect = document.getElementById('assignMinistryPersonSelect');
+      const personInput = document.getElementById('assignMinistryPersonInput');
+      if (personSelect && personInput && personSelect.value) {
+        personInput.value = personSelect.value;
+      }
     }
 
     function closeAssignMinistryModal() {
@@ -2301,10 +2434,14 @@
       const dateStr = document.getElementById('assignMinistryDateStr').value;
       const select = document.getElementById('assignMinistrySelect');
       const selectedMinistry = select.value.trim();
+      const person = document.getElementById('assignMinistryPersonInput').value.trim();
 
       if (selectedMinistry) {
-        saturdayMinistries[dateStr] = selectedMinistry;
-        showToast(`Ministerio "${selectedMinistry}" asignado para el sábado`, 'success');
+        saturdayMinistries[dateStr] = {
+          ministry: selectedMinistry,
+          person: person
+        };
+        showToast(`Ministerio "${selectedMinistry}" ${person ? `(${person})` : ''} asignado`, 'success');
       } else {
         delete saturdayMinistries[dateStr];
       }
