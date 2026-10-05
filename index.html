@@ -893,13 +893,199 @@
       font-weight: 600;
     }
 
-    .btn-white-outline:hover {
-      background: #1d4ed8;
-      border-color: #93c5fd;
+    /* ==========================================================
+       BARRA SUPERIOR MODERNA DE IDENTIDAD INSTITUCIONAL
+       (Iglesia Adventista + OneVoice27 • Misión Para Todos • Viva la Entrega)
+       ========================================================== */
+    .brand-top-bar {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      padding: 9px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    .brand-top-bar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background: linear-gradient(90deg, #db2777 0%, #7c3aed 28%, #2563eb 62%, #0d9488 100%);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .brand-left-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .brand-church-logo {
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease;
+      display: block;
+    }
+
+    .brand-church-logo:hover,
+    .brand-church-svg:hover {
+      transform: scale(1.06);
+    }
+
+    .brand-church-svg {
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease;
+      display: block;
+    }
+
+    .brand-divider {
+      width: 1px;
+      height: 26px;
+      background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.25), transparent);
+    }
+
+    .brand-onevoice-logo {
+      height: 34px;
+      width: auto;
+      max-width: 170px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.45));
+      transition: transform 0.2s ease;
+      display: block;
+    }
+
+    .brand-onevoice-logo:hover {
+      transform: scale(1.03);
+    }
+
+    .brand-onevoice-vector {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      font-family: 'Montserrat', 'Arial Black', -apple-system, sans-serif;
+      line-height: 1;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.45));
+    }
+
+    .brand-ov-text {
+      font-size: 1.35rem;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #d946ef 0%, #a855f7 26%, #3b82f6 56%, #06b6d4 82%, #14b8a6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-ov-sub {
+      font-size: 0.45rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: #ffffff;
+      margin-top: 1px;
+      text-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .brand-right-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .motto-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .motto-badge.mision {
+      background: rgba(30, 58, 138, 0.4);
+      color: #93c5fd;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+    }
+
+    .motto-badge.mision .motto-icon {
+      color: #38bdf8;
+      font-size: 0.85rem;
+    }
+
+    .motto-badge.entrega {
+      background: linear-gradient(135deg, rgba(219, 39, 119, 0.25) 0%, rgba(124, 58, 237, 0.25) 100%);
+      color: #f472b6;
+      border: 1px solid rgba(244, 114, 182, 0.4);
+      box-shadow: 0 0 10px rgba(219, 39, 119, 0.2);
+    }
+
+    .motto-badge.entrega .motto-icon {
+      color: #ec4899;
+      font-size: 0.85rem;
     }
 
     @media (max-width: 640px) {
       body { padding: 8px; }
+      .brand-top-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        text-align: center;
+      }
+      .brand-left-group {
+        justify-content: center;
+      }
+      .brand-right-group {
+        justify-content: center;
+        width: 100%;
+        gap: 8px;
+      }
+      .motto-badge {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+        letter-spacing: 0.1em;
+      }
+      .brand-church-logo,
+      .brand-church-svg {
+        height: 32px;
+        width: 32px;
+      }
+      .brand-onevoice-logo {
+        height: 28px;
+        max-width: 140px;
+      }
+      .brand-ov-text {
+        font-size: 1.15rem;
+      }
       header { padding: 12px 14px; flex-direction: column; align-items: stretch; }
       header h1 { font-size: 1.15rem; }
       .auth-bar { justify-content: space-between; }
@@ -911,11 +1097,64 @@
       input, select, textarea { font-size: 16px !important; }
       .btn { padding: 10px 14px; }
     }
+
+    @media print {
+      .brand-top-bar {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- ==========================================================
+         BARRA SUPERIOR MODERNA DE IDENTIDAD INSTITUCIONAL
+         ========================================================== -->
+    <div class="brand-top-bar">
+      <!-- Identidad Visual: Logo Iglesia Adventista + OneVoice27 -->
+      <div class="brand-left-group">
+        <div class="brand-church-badge" style="display: flex; align-items: center;" title="Iglesia Adventista del Séptimo Día">
+          <img src="logo-iasd.jpg" alt="Iglesia Adventista del Séptimo Día" class="brand-church-logo"
+               title="Iglesia Adventista del Séptimo Día"
+               onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='logo-iasd.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791234463495.jpg'; } else { this.style.display='none'; const fb = this.nextElementSibling; if (fb) fb.style.display='block'; }">
+          <svg class="brand-church-svg" viewBox="0 0 100 100" style="display: none;" width="38" height="38">
+            <circle cx="50" cy="50" r="46" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+            <path d="M 14 74 C 26 71 37 70 48 74 L 48 83 C 37 78 25 78 14 81 Z" fill="#000000"/>
+            <path d="M 86 74 C 74 71 63 70 52 74 L 52 83 C 63 78 75 78 86 81 Z" fill="#000000"/>
+            <path d="M 47.5 68 H 52.5 V 86 H 47.5 Z" fill="#000000"/>
+            <path d="M 43.5 73 H 56.5 V 77 H 43.5 Z" fill="#000000"/>
+            <path d="M 47 67 C 45 48 30 38 41 14 C 28 30 25 50 37 68 Z" fill="#000000"/>
+            <path d="M 41 68 C 34 52 30 42 38 24 C 26 38 23 53 32 68 Z" fill="#000000"/>
+            <path d="M 53 67 C 55 48 70 38 59 14 C 72 30 75 50 63 68 Z" fill="#000000"/>
+            <path d="M 59 68 C 66 52 70 42 62 24 C 74 38 77 53 68 68 Z" fill="#000000"/>
+          </svg>
+        </div>
+        
+        <div class="brand-divider"></div>
+
+        <img src="onevoice27.png" alt="OneVoice27" class="brand-onevoice-logo"
+             title="OneVoice27"
+             onerror="if (!this.dataset.tried) { this.dataset.tried='1'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791233312219.png'; } else { this.style.display='none'; const fb = this.parentElement.querySelector('.brand-onevoice-vector'); if (fb) fb.style.display='inline-flex'; }">
+        <div class="brand-onevoice-vector" style="display: none;">
+          <div class="brand-ov-text">One<span style="font-weight: 900;">VOICE</span><span style="font-weight: 900;">27</span></div>
+          <div class="brand-ov-sub">MISIÓN PARA TODOS</div>
+        </div>
+      </div>
+
+      <!-- Lemas Institucionales: Misión Para Todos y Viva la Entrega -->
+      <div class="brand-right-group">
+        <div class="motto-badge mision" title="Lema Oficial">
+          <span class="motto-icon">✦</span>
+          <span>MISIÓN PARA TODOS</span>
+        </div>
+        <div class="motto-badge entrega" title="Lema Oficial">
+          <span class="motto-icon">✨</span>
+          <span>VIVA LA ENTREGA</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Header con control de usuario -->
     <header>
       <div class="header-info">
@@ -1268,17 +1507,52 @@
             ⛔ Contraseña incorrecta. Inténtalo de nuevo.
           </div>
         </div>
-        <div style="margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" id="rememberAdmin" checked style="cursor: pointer; width: 16px; height: 16px;">
-          <label for="rememberAdmin" style="font-size: 0.82rem; cursor: pointer; color: var(--text);">Recordar sesión en este navegador</label>
+        <div style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="rememberAdmin" checked style="cursor: pointer; width: 16px; height: 16px;">
+            <label for="rememberAdmin" style="font-size: 0.82rem; cursor: pointer; color: var(--text);">Recordar sesión</label>
+          </div>
+          <a href="javascript:void(0)" onclick="openResetPasswordModal()" style="font-size: 0.78rem; color: #2563eb; text-decoration: underline; font-weight: 600;">¿Olvidaste tu clave?</a>
         </div>
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 9px 12px; font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
           🔑 <em>Contraseña inicial por defecto:</em> <strong>1234</strong><br>
-          <span style="font-size: 0.73rem; opacity: 0.9;">(Puedes cambiarla cuando quieras desde el botón "⚙️ Clave").</span>
+          <span style="font-size: 0.73rem; opacity: 0.9;">(Puedes cambiarla en cualquier momento desde "⚙️ Clave").</span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeLoginModal()">Cancelar</button>
           <button type="submit" class="btn btn-primary">Desbloquear Edición</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL RECUPERAR / CREAR CONTRASEÑA CON CÓDIGO MAESTRO -->
+  <div id="resetPasswordModal" class="modal-backdrop" onclick="if (event.target === this) closeResetPasswordModal()">
+    <div class="modal" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔑 Restablecer Contraseña</h3>
+        <button class="modal-close" onclick="closeResetPasswordModal()">&times;</button>
+      </div>
+      <form id="resetPasswordForm" onsubmit="handleResetPassword(event)">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.45;">
+          Ingresa el <strong>código maestro de seguridad</strong> para crear una nueva contraseña de administrador:
+        </p>
+        <div class="form-group">
+          <label for="masterCodeInput">Código Maestro de Seguridad *</label>
+          <input type="password" id="masterCodeInput" class="form-control" required placeholder="Ingresa el código maestro de seguridad...">
+        </div>
+        <div class="form-group">
+          <label for="resetNewPasswordInput">Nueva Contraseña *</label>
+          <input type="password" id="resetNewPasswordInput" class="form-control" required placeholder="Mínimo 3 caracteres..." minlength="3">
+        </div>
+        <div class="form-group">
+          <label for="resetConfirmPasswordInput">Confirmar Nueva Contraseña *</label>
+          <input type="password" id="resetConfirmPasswordInput" class="form-control" required placeholder="Repite la nueva contraseña...">
+        </div>
+        <div id="resetPwdErrorMsg" style="color: #dc2626; font-size: 0.82rem; font-weight: 700; margin-bottom: 10px; display: none;"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeResetPasswordModal(); openLoginModal();">Volver a Ingresar</button>
+          <button type="submit" class="btn btn-primary">Guardar Nueva Clave</button>
         </div>
       </form>
     </div>
@@ -1316,6 +1590,30 @@
     </div>
   </div>
 
+  <!-- MODAL SEGURIDAD NUBE GOOGLE (REQUERIDO CÓDIGO MAESTRO) -->
+  <div id="masterCloudUnlockModal" class="modal-backdrop" onclick="if (event.target === this) closeMasterCloudUnlockModal()">
+    <div class="modal" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔒 Seguridad Nube Google</h3>
+        <button class="modal-close" onclick="closeMasterCloudUnlockModal()">&times;</button>
+      </div>
+      <form id="masterCloudUnlockForm" onsubmit="handleMasterCloudUnlock(event)">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.45;">
+          Las opciones y credenciales de la <strong>Nube de Google (Firebase)</strong> están restringidas. Ingresa el <strong>código maestro de seguridad</strong> para acceder:
+        </p>
+        <div class="form-group">
+          <label for="masterCloudCodeInput">Código Maestro de Seguridad *</label>
+          <input type="password" id="masterCloudCodeInput" class="form-control" required placeholder="Ingresa el código maestro de seguridad...">
+        </div>
+        <div id="masterCloudErrorMsg" style="color: #dc2626; font-size: 0.82rem; font-weight: 700; margin-bottom: 10px; display: none;"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeMasterCloudUnlockModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Desbloquear Opciones de Nube</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL CONFIGURACIÓN NUBE FIREBASE -->
   <div id="cloudModal" class="modal-backdrop" onclick="if (event.target === this) closeCloudModal()">
     <div class="modal" style="max-width: 520px;">
@@ -1339,6 +1637,7 @@
         </div>
       </form>
     </div>
+  </div>
   <!-- MODAL EDITAR HERMANO / COLABORADOR -->
   <div id="editCollaboratorModal" class="modal-backdrop" onclick="if (event.target === this) closeEditCollaboratorModal()">
     <div class="modal" style="max-width: 440px;">
@@ -1544,6 +1843,11 @@
     }
 
     function openCloudModal() {
+      if (!isMasterAdmin) {
+        openMasterCloudUnlockModal();
+        return;
+      }
+
       const config = getActiveFirebaseConfig();
       const textarea = document.getElementById('firebaseConfigInput');
       const statusAlert = document.getElementById('cloudStatusAlert');
@@ -1568,8 +1872,42 @@
       document.getElementById('cloudModal').classList.remove('open');
     }
 
+    function openMasterCloudUnlockModal() {
+      document.getElementById('masterCloudUnlockForm').reset();
+      document.getElementById('masterCloudErrorMsg').style.display = 'none';
+      document.getElementById('masterCloudUnlockModal').classList.add('open');
+      setTimeout(() => document.getElementById('masterCloudCodeInput').focus(), 100);
+    }
+
+    function closeMasterCloudUnlockModal() {
+      document.getElementById('masterCloudUnlockModal').classList.remove('open');
+    }
+
+    function handleMasterCloudUnlock(e) {
+      e.preventDefault();
+      const code = document.getElementById('masterCloudCodeInput').value.trim();
+      if (code === '1844') {
+        isMasterAdmin = true;
+        sessionStorage.setItem('church_is_master_admin', 'true');
+        closeMasterCloudUnlockModal();
+        renderAuthBar();
+        showToast('🔓 Opciones de Nube Google desbloqueadas', 'success');
+        openCloudModal();
+      } else {
+        const errorMsg = document.getElementById('masterCloudErrorMsg');
+        errorMsg.innerText = '⛔ Código maestro incorrecto. Acceso denegado.';
+        errorMsg.style.display = 'block';
+        document.getElementById('masterCloudCodeInput').focus();
+      }
+    }
+
     function handleSaveCloudConfig(e) {
       e.preventDefault();
+      if (!isMasterAdmin) {
+        showToast('⛔ Acceso restringido. Solo el usuario con código maestro puede modificar la nube.', 'error');
+        return;
+      }
+
       const raw = document.getElementById('firebaseConfigInput').value.trim();
       if (!raw) return;
 
@@ -1598,6 +1936,11 @@
     }
 
     function handleClearCloudConfig() {
+      if (!isMasterAdmin) {
+        showToast('⛔ Acceso restringido. Solo el usuario con código maestro puede desconectar la nube.', 'error');
+        return;
+      }
+
       if (!confirm('¿Deseas desconectar la nube y volver al modo de almacenamiento local en este dispositivo?')) return;
       localStorage.removeItem('church_firebase_config');
       isCloudConnected = false;
@@ -1608,6 +1951,7 @@
 
     // --- CONTROL DE ACCESO Y AUTENTICACIÓN ---
     let isAuthenticated = false;
+    let isMasterAdmin = false;
     let pendingAuthCallback = null;
 
     function getAdminPassword() {
@@ -1617,7 +1961,9 @@
     function initAuth() {
       const savedLocal = localStorage.getItem('church_is_admin');
       const savedSession = sessionStorage.getItem('church_is_admin');
+      const savedMaster = sessionStorage.getItem('church_is_master_admin');
       isAuthenticated = (savedLocal === 'true' || savedSession === 'true');
+      isMasterAdmin = (isAuthenticated && savedMaster === 'true');
       updateAuthUI();
     }
 
@@ -1635,19 +1981,34 @@
       if (!bar) return;
 
       const cloudStatusHtml = isCloudConnected
-        ? `<div class="auth-badge cloud-online" onclick="openCloudModal()" style="cursor: pointer;" title="Sincronizado en tiempo real con Firebase en la nube"><span>☁️</span><span>Nube Activa</span></div>`
-        : `<div class="auth-badge cloud-offline" onclick="openCloudModal()" style="cursor: pointer;" title="Datos guardados solo en este dispositivo. Haz clic para conectar Firebase."><span>💾</span><span>Solo Local</span></div>`;
+        ? `<div class="auth-badge cloud-online" title="Sincronizado en tiempo real con Firebase en la nube"><span>☁️</span><span>Nube Activa</span></div>`
+        : `<div class="auth-badge cloud-offline" title="Datos guardados en este dispositivo."><span>💾</span><span>Solo Local</span></div>`;
 
       if (isAuthenticated) {
+        let masterControlsHtml = '';
+
+        if (isMasterAdmin) {
+          masterControlsHtml = `
+            <div class="auth-badge admin" style="background: #047857; border-color: #10b981;">
+              <span>👑</span>
+              <span>Acceso Maestro</span>
+            </div>
+            <button class="btn btn-white-outline btn-sm" onclick="openCloudModal()" title="Configuración de la Nube Google (Firebase)">
+              ☁️ Nube Google
+            </button>
+          `;
+        } else {
+          masterControlsHtml = `
+            <div class="auth-badge admin">
+              <span>🔓</span>
+              <span>Modo Administrador</span>
+            </div>
+          `;
+        }
+
         bar.innerHTML = `
           ${cloudStatusHtml}
-          <div class="auth-badge admin">
-            <span>🔓</span>
-            <span>Modo Administrador</span>
-          </div>
-          <button class="btn btn-white-outline btn-sm" onclick="openCloudModal()" title="Configuración de la Nube (Firebase)">
-            ☁️ Nube
-          </button>
+          ${masterControlsHtml}
           <button class="btn btn-white-outline btn-sm" onclick="openChangePasswordModal()" title="Cambiar clave de acceso">
             ⚙️ Clave
           </button>
@@ -1684,12 +2045,36 @@
 
     function handleLogin(e) {
       e.preventDefault();
-      const entered = document.getElementById('adminPasswordInput').value;
+      const entered = document.getElementById('adminPasswordInput').value.trim();
       const currentPwd = getAdminPassword();
 
-      if (entered === currentPwd) {
+      if (entered === '1844') {
         const remember = document.getElementById('rememberAdmin').checked;
         isAuthenticated = true;
+        isMasterAdmin = true;
+        sessionStorage.setItem('church_is_master_admin', 'true');
+        if (remember) {
+          localStorage.setItem('church_is_admin', 'true');
+        } else {
+          sessionStorage.setItem('church_is_admin', 'true');
+        }
+        document.getElementById('loginModal').classList.remove('open');
+        updateAuthUI();
+        renderCalendar();
+        renderCollaboratorsTable();
+        renderShiftsTable();
+        showToast('🔓 Acceso concedido con código maestro. Opciones de Nube Google habilitadas.', 'success');
+
+        if (pendingAuthCallback) {
+          const cb = pendingAuthCallback;
+          pendingAuthCallback = null;
+          cb();
+        }
+      } else if (entered === currentPwd) {
+        const remember = document.getElementById('rememberAdmin').checked;
+        isAuthenticated = true;
+        isMasterAdmin = false;
+        sessionStorage.removeItem('church_is_master_admin');
         if (remember) {
           localStorage.setItem('church_is_admin', 'true');
         } else {
@@ -1713,10 +2098,55 @@
       }
     }
 
+    function openResetPasswordModal() {
+      closeLoginModal();
+      document.getElementById('resetPasswordForm').reset();
+      document.getElementById('resetPwdErrorMsg').style.display = 'none';
+      document.getElementById('resetPasswordModal').classList.add('open');
+      setTimeout(() => document.getElementById('masterCodeInput').focus(), 100);
+    }
+
+    function closeResetPasswordModal() {
+      document.getElementById('resetPasswordModal').classList.remove('open');
+    }
+
+    function handleResetPassword(e) {
+      e.preventDefault();
+      const masterCode = document.getElementById('masterCodeInput').value.trim();
+      const newPwd = document.getElementById('resetNewPasswordInput').value;
+      const confirmPwd = document.getElementById('resetConfirmPasswordInput').value;
+      const errorMsg = document.getElementById('resetPwdErrorMsg');
+
+      if (masterCode !== '1844') {
+        errorMsg.innerText = '⛔ Código maestro de seguridad incorrecto.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (newPwd.length < 3) {
+        errorMsg.innerText = '⛔ La nueva contraseña debe tener al menos 3 caracteres.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (newPwd !== confirmPwd) {
+        errorMsg.innerText = '⛔ Las contraseñas nuevas no coinciden.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      localStorage.setItem('church_admin_pwd', newPwd);
+      closeResetPasswordModal();
+      showToast('✅ Contraseña restablecida con éxito. Puedes ingresar con tu nueva clave.', 'success');
+      openLoginModal();
+    }
+
     function handleLogout() {
       isAuthenticated = false;
+      isMasterAdmin = false;
       localStorage.removeItem('church_is_admin');
       sessionStorage.removeItem('church_is_admin');
+      sessionStorage.removeItem('church_is_master_admin');
       updateAuthUI();
       renderCalendar();
       renderCollaboratorsTable();
@@ -2588,29 +3018,39 @@
             const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
 
             let assignedText = '<span style="color: #94a3b8; font-style: italic;">Sin asignar</span>';
-            let notesText = '';
+            let notesText = '<span style="color: #94a3b8;">-</span>';
 
             if (deptShifts.length > 0) {
+              const isMulti = deptShifts.length > 1;
               assignedText = deptShifts.map(s => {
                 const colab = collaborators.find(c => c.id === s.collaboratorId);
                 const colabName = colab ? colab.name : 'Responsable';
-                const phone = (colab && colab.phone && colab.phone !== 'Sin teléfono') ? ` <small style="color: #64748b;">(${colab.phone})</small>` : '';
-                return `<strong>${colabName}</strong>${phone}`;
-              }).join(', ');
+                const phone = (colab && colab.phone && colab.phone !== 'Sin teléfono') ? ` <small style="color: #64748b; font-weight: normal;">(${colab.phone})</small>` : '';
+                const bullet = isMulti ? '<span style="color: #64748b; margin-right: 3px;">•</span>' : '';
+                return `<div style="line-height: 1.25; margin-bottom: ${isMulti ? '2px' : '0'}; display: block;">${bullet}<strong>${colabName}</strong>${phone}</div>`;
+              }).join('');
 
-              notesText = deptShifts.map(s => s.notes ? `<em>${s.notes}</em>` : '').filter(Boolean).join(' | ');
+              const hasAnyNotes = deptShifts.some(s => s.notes && s.notes.trim() !== '');
+              if (hasAnyNotes) {
+                notesText = deptShifts.map(s => {
+                  const noteContent = s.notes ? `<em>${s.notes}</em>` : '<span style="color: #cbd5e1;">-</span>';
+                  return `<div style="line-height: 1.25; margin-bottom: ${isMulti ? '2px' : '0'}; display: block;">${noteContent}</div>`;
+                }).join('');
+              } else {
+                notesText = '<span style="color: #94a3b8;">-</span>';
+              }
             }
 
             slotsRowsHtml += `
               <tr>
-                <td style="padding: 7px 10px; font-weight: 700; width: 28%; border-bottom: 1px solid #e2e8f0; color: ${dept.color};">
+                <td style="padding: 2px 5px; font-weight: 700; width: 25%; border-bottom: 1px solid #f1f5f9; color: ${dept.color}; white-space: nowrap; vertical-align: top;">
                   ${dept.icon} ${dept.name}
                 </td>
-                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #0f172a;">
+                <td style="padding: 2px 5px; border-bottom: 1px solid #f1f5f9; color: #0f172a; width: 45%; vertical-align: top;">
                   ${assignedText}
                 </td>
-                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 0.85em;">
-                  ${notesText || '-'}
+                <td style="padding: 2px 5px; border-bottom: 1px solid #f1f5f9; color: #475569; font-size: 0.88em; width: 30%; vertical-align: top;">
+                  ${notesText}
                 </td>
               </tr>
             `;
@@ -2620,12 +3060,12 @@
           const dayBgColor = d.isFri ? '#eff6ff' : '#fff7ed';
 
           daysTableHtml += `
-            <div style="flex: 1; min-width: 320px; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;">
-              <div style="background: ${dayBgColor}; padding: 10px 14px; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 800; font-size: 1.05rem; color: ${dayHeaderColor};">${d.name.toUpperCase()}</span>
-                <span style="font-weight: 700; font-size: 0.9rem; color: #334155; background: #ffffff; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">${formattedDate}</span>
+            <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; background: #ffffff;">
+              <div style="background: ${dayBgColor}; padding: 3px 6px; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 800; font-size: 0.82rem; color: ${dayHeaderColor};">${d.name.toUpperCase()}</span>
+                <span style="font-weight: 700; font-size: 0.72rem; color: #334155; background: #ffffff; padding: 1px 5px; border-radius: 3px; border: 1px solid #e2e8f0;">${formattedDate}</span>
               </div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; line-height: 1.15;">
                 <tbody>
                   ${slotsRowsHtml}
                 </tbody>
@@ -2635,11 +3075,11 @@
         });
 
         weeksHtml += `
-          <div style="margin-bottom: 20px; page-break-inside: avoid;">
-            <div style="background: #1e293b; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">
+          <div style="margin-bottom: 4px; page-break-inside: avoid; break-inside: avoid;">
+            <div style="background: #1e293b; color: #ffffff; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 800; margin-bottom: 2px; display: inline-block;">
               SEMANA ${wkIdx + 1}
             </div>
-            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 6px;">
               ${daysTableHtml}
             </div>
           </div>
@@ -2653,33 +3093,57 @@
       }
 
       const printDoc = printWindow.document;
-      printDoc.title = `Informe de Responsabilidades - ${monthName} ${currentYear}`;
+      printDoc.title = `Informe_${monthName}_${currentYear}_1Pagina`;
 
       const styleEl = printDoc.createElement('style');
       styleEl.textContent = `
+        @page {
+          size: portrait;
+          margin: 6mm 7mm;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { padding: 24px; color: #0f172a; background: #f8fafc; font-size: 13px; line-height: 1.4; }
-        .print-container { max-width: 900px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
-        .header-banner { border-bottom: 3px solid #2563eb; padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .header-title h1 { font-size: 1.4rem; font-weight: 800; color: #1e3a8a; margin-bottom: 4px; }
-        .header-title p { color: #64748b; font-size: 0.9rem; }
-        .badge-month { background: #2563eb; color: #ffffff; font-weight: 800; padding: 6px 14px; border-radius: 6px; font-size: 1.1rem; text-align: right; }
-        .toolbar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 18px; }
-        .btn { padding: 8px 16px; font-size: 0.9rem; font-weight: 700; border-radius: 6px; cursor: pointer; border: none; }
+        body { padding: 12px; color: #0f172a; background: #f8fafc; font-size: 11px; line-height: 1.25; }
+        .print-container { max-width: 860px; margin: 0 auto; background: #ffffff; padding: 14px 18px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); transform-origin: top center; transition: transform 0.15s ease; }
+        .header-banner { border-bottom: 2px solid #2563eb; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .header-title h1 { font-size: 1.1rem; font-weight: 800; color: #1e3a8a; line-height: 1.15; margin: 0; }
+        .header-title p { color: #64748b; font-size: 0.72rem; margin: 2px 0 0; }
+        .badge-month { background: #2563eb; color: #ffffff; font-weight: 800; padding: 3px 8px; border-radius: 4px; font-size: 0.9rem; text-align: right; white-space: nowrap; }
+        .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 8px; }
+        .btn { padding: 5px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; }
         .btn-primary { background: #2563eb; color: #ffffff; }
         .btn-primary:hover { background: #1d4ed8; }
         .btn-outline { background: #ffffff; color: #475569; border: 1px solid #cbd5e1; }
+        .btn-outline:hover { background: #f1f5f9; }
+        .footer-bar { margin-top: 4px; padding-top: 3px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.65rem; color: #94a3b8; }
         @media print {
-          body { background: #ffffff; padding: 0; }
-          .print-container { box-shadow: none; padding: 0; max-width: 100%; }
+          html, body {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            font-size: 10.5px !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .print-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            zoom: 0.94;
+          }
           .no-print { display: none !important; }
         }
       `;
       printDoc.head.appendChild(styleEl);
 
       printDoc.body.innerHTML = `
-        <div class="print-container">
+        <div class="print-container" id="printableArea">
           <div class="toolbar no-print">
+            <span style="font-size: 0.75rem; color: #64748b; margin-right: auto;">📄 Configurado para imprimir en <strong>1 sola página</strong></span>
+            <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #1e40af; background: #dbeafe; padding: 2px 7px; border-radius: 4px;">94%</span>
+            <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">🔍 Reducir</button>
+            <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">🔍 Ampliar</button>
             <button class="btn btn-outline" onclick="window.close()">✖ Cerrar</button>
             <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
           </div>
@@ -2687,7 +3151,7 @@
           <div class="header-banner">
             <div class="header-title">
               <h1>⛪ Programación de Turnos y Responsabilidades</h1>
-              <p>Predicación, Alabanza, Diaconisas y Diáconos (Viernes y Sábados)</p>
+              <p>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual (Viernes y Sábados)</p>
             </div>
             <div class="badge-month">
               ${monthName.toUpperCase()} ${currentYear}
@@ -2696,13 +3160,33 @@
 
           ${weeksHtml}
 
-          <div style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
-            <span>Documento oficial de responsabilidades ministeriales</span>
-            <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+          <div class="footer-bar">
+            <span>⛪ Documento oficial de turnos y responsabilidades ministeriales</span>
+            <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
           </div>
         </div>
+
+        <script>
+          let currentZoom = 0.94;
+          function zoomDoc(delta) {
+            currentZoom = Math.max(0.65, Math.min(1.2, parseFloat((currentZoom + delta).toFixed(2))));
+            const area = document.getElementById('printableArea');
+            if (area) {
+              area.style.zoom = currentZoom;
+            }
+            let printStyle = document.getElementById('dynamicPrintZoom');
+            if (!printStyle) {
+              printStyle = document.createElement('style');
+              printStyle.id = 'dynamicPrintZoom';
+              document.head.appendChild(printStyle);
+            }
+            printStyle.textContent = '@media print { .print-container { zoom: ' + currentZoom + ' !important; } }';
+            const badge = document.getElementById('zoomBadge');
+            if (badge) badge.innerText = Math.round(currentZoom * 100) + '%';
+          }
+        <\/script>
       `;
-      showToast(`Informe de ${monthName} listo para imprimir o guardar en PDF`, 'success');
+      showToast(`Informe de ${monthName} listo para imprimir en 1 página`, 'success');
     }
 
     function initApp() {
