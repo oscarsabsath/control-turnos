@@ -1678,7 +1678,7 @@
               </select>
             </div>
             <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-              <button class="btn btn-primary btn-sm master-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27 (Exclusivo Modo Maestro)" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
+              <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
                 🎨 Anuncio Semanal (Flyer PDF)
               </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
@@ -4823,11 +4823,7 @@
     let currentFlyerVerseIdx = 0;
 
     function openFlyerModal() {
-      if (!isMasterAdmin) {
-        showToast('🔒 El Anuncio Semanal requiere Acceso Maestro (código 1844)', 'info');
-        openMasterCloudUnlockModal(() => openFlyerModal());
-        return;
-      }
+      if (!ensureAuth(() => openFlyerModal())) return;
       populateFlyerWeekendDropdown();
       onFlyerWeekendChange();
       const savedHeader = localStorage.getItem('church_flyer_header_b64');
