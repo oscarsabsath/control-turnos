@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Sistema de Gestión de Turnos y Responsabilidades - Viernes y Sábado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #2563eb;
@@ -309,6 +312,12 @@
       font-weight: 700;
     }
 
+    .area-anciano {
+      background-color: #f1f5f9;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+    }
+
     .area-predicaciones {
       background-color: var(--pred-bg);
       color: var(--pred-text);
@@ -587,6 +596,13 @@
       border-left: 4px solid;
     }
 
+    .slot-anciano {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      border-left-color: #475569;
+      color: #334155;
+    }
+
     .slot-predicaciones {
       background: #e0f2fe;
       border-color: #bae6fd;
@@ -732,10 +748,234 @@
       margin-top: 16px;
     }
 
+    /* Modal Amplio para Flyer de Anuncio Semanal */
+    .modal-flyer-wide {
+      max-width: 1100px !important;
+      width: 95vw;
+      max-height: 94vh;
+      padding: 16px 20px;
+    }
+
+    .flyer-modal-grid {
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .flyer-modal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .flyer-controls-scroll {
+      max-height: 76vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .flyer-preview-stage {
+      background: #cbd5e1;
+      padding: 18px 12px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      max-height: 76vh;
+      overflow-y: auto;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    /* Tarjeta / Cartel Oficial del Flyer */
+    .flyer-poster {
+      width: 100%;
+      max-width: 490px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      color: #0f172a;
+      position: relative;
+    }
+
+    .flyer-poster-top {
+      width: 100%;
+      background: #05162e;
+      border-radius: 12px 12px 0 0;
+      line-height: 0;
+      overflow: hidden;
+    }
+
+    .flyer-top-banner-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .flyer-church-round {
+      width: 52px;
+      height: 52px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      padding: 3px;
+      z-index: 3;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .flyer-church-round img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .flyer-top-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      z-index: 3;
+      text-align: right;
+    }
+
+    .flyer-ov-title {
+      color: #ffffff;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .flyer-ov-title span.v27 {
+      font-weight: 900;
+      color: #38bdf8;
+    }
+
+    .flyer-ov-sub {
+      color: #e2e8f0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-top: 3px;
+    }
+
+    .flyer-poster-body {
+      display: grid;
+      grid-template-columns: 35% 65%;
+      min-height: 610px;
+    }
+
+    .flyer-col-left {
+      background: linear-gradient(180deg, #071933 0%, #030e1d 100%);
+      border-right: 3px solid #d4af37;
+      padding: 14px 10px;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .flyer-col-right {
+      background: #ffffff;
+      padding: 14px 16px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flyer-pill-badge {
+      background: linear-gradient(90deg, #fef08a 0%, #facc15 100%);
+      color: #0f172a;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.76rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      box-shadow: 0 2px 4px rgba(234, 179, 8, 0.25);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .flyer-row-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 2px;
+      border-bottom: 1px dashed #f1f5f9;
+      font-size: 0.75rem;
+    }
+
+    .flyer-tag-time {
+      background: #082142;
+      color: #ffffff;
+      font-size: 0.58rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Franja de División entre Mañana y Tarde */
+    .flyer-divider-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0 6px 0;
+      padding: 0 2px;
+    }
+
+    .flyer-divider-line {
+      flex: 1;
+      height: 1.5px;
+      background: linear-gradient(90deg, #cbd5e1, #d4af37, #cbd5e1);
+      border-radius: 1px;
+    }
+
+    .flyer-divider-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #082142;
+      color: #f6c84c;
+      border: 1px solid #d4af37;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 1px 3px rgba(8,33,66,0.18);
+      white-space: nowrap;
+    }
+
+    .flyer-elder-card {
+      background: #f1f5f9;
+      border-radius: 8px;
+      border-left: 4px solid #082142;
+      padding: 6px 10px;
+      margin-top: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
     /* Stats bar */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       gap: 8px;
       margin-bottom: 14px;
     }
@@ -1352,7 +1592,7 @@
     <header>
       <div class="header-info">
         <h1>📅 Gestión de Responsabilidades y Turnos</h1>
-        <p>Organización compartida para <strong>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual</strong> (Viernes y Sábado).</p>
+        <p>Organización compartida para <strong>Anciano de Turno (Sábados), Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual</strong>.</p>
       </div>
       <div class="auth-bar" id="authBar">
         <!-- Renderizado dinámico vía JavaScript -->
@@ -1364,6 +1604,10 @@
       <div class="stat-card" style="border-top-color: #2563eb;">
         <div class="stat-label" style="color: #1e40af;">👥 Total Hermanos</div>
         <div class="stat-value" id="statColabs" style="color: #0f172a;">0</div>
+      </div>
+      <div class="stat-card" style="border-top-color: #475569;">
+        <div class="stat-label" style="color: #334155;">🏛️ Anciano Turno</div>
+        <div class="stat-value" id="statAnciano" style="color: #334155;">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--pred-badge);">
         <div class="stat-label" style="color: var(--pred-text);">📖 Predicación</div>
@@ -1422,6 +1666,7 @@
               <label style="font-weight: 600; font-size: 0.8rem;">Filtrar Área:</label>
               <select id="filterDepartment" class="form-control" style="width: auto;" onchange="renderCalendar()">
                 <option value="ALL">Todas las Áreas</option>
+                <option value="anciano">🏛️ Anciano de Turno</option>
                 <option value="predicaciones">📖 Predicación</option>
                 <option value="alabanza">🎵 Alabanza</option>
                 <option value="diaconisas">🌸 Diaconisas</option>
@@ -1429,7 +1674,10 @@
                 <option value="audiovisual">🎥 Audiovisual</option>
               </select>
             </div>
-            <div style="display: flex; gap: 6px; align-items: center;">
+            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
+                🎨 Anuncio Semanal (Flyer PDF)
+              </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
                 🖨️ Imprimir / PDF
               </button>
@@ -1442,6 +1690,10 @@
 
         <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; font-size: 0.78rem; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);">
           <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: #f1f5f9; border: 1.5px solid #475569; border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: #334155;">Anciano (Sáb)</span>
+            </div>
             <div style="display: flex; align-items: center; gap: 6px;">
               <span style="width: 12px; height: 12px; background: var(--pred-badge); border: 1px solid var(--pred-border); border-radius: 3px; display: inline-block;"></span>
               <span style="font-weight: 700; color: var(--pred-text);">Predicación</span>
@@ -1512,6 +1764,9 @@
               🔑 Ingresar para Programar
             </button>
 
+            <button class="btn btn-primary btn-sm" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
+              🎨 Anuncio Semanal (Flyer PDF)
+            </button>
             <button class="btn btn-outline btn-sm" onclick="exportQuarterPrintPDF()" title="Imprimir o guardar en PDF el programa del trimestre">
               🖨️ Imprimir Trimestre / PDF
             </button>
@@ -1559,9 +1814,10 @@
 
           <form id="assignShiftForm" onsubmit="handleAssignShift(event)">
             <div class="form-group">
-              <label for="assignDepartment">Área / Ministerio a Asignar *</label>
-              <select id="assignDepartment" class="form-control" required onchange="checkRealtimeConflict()">
-                <option value="">-- Seleccionar Área --</option>
+              <label for="assignDepartment">Área / Responsabilidad a Asignar *</label>
+              <select id="assignDepartment" class="form-control" required onchange="onDepartmentSelected(); checkRealtimeConflict()">
+                <option value="">-- Seleccionar Área / Responsabilidad --</option>
+                <option value="anciano">🏛️ Anciano de Turno (Solo Sábados)</option>
                 <option value="predicaciones">📖 Predicación</option>
                 <option value="alabanza">🎵 Alabanza</option>
                 <option value="diaconisas">🌸 Diaconisas</option>
@@ -1694,6 +1950,7 @@
           <input type="text" id="searchShiftInput" class="form-control" style="max-width: 250px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
           <select id="filterShiftDept" class="form-control" style="max-width: 200px;" onchange="renderShiftsTable()">
             <option value="ALL">Todas las Áreas</option>
+            <option value="anciano">🏛️ Anciano de Turno</option>
             <option value="predicaciones">📖 Predicación</option>
             <option value="alabanza">🎵 Alabanza</option>
             <option value="diaconisas">🌸 Diaconisas</option>
@@ -1997,16 +2254,446 @@
     </div>
   </div>
 
+  <!-- ==========================================================
+       MODAL: GENERADOR DE ANUNCIO SEMANAL (FLYER PDF)
+       Diseño idéntico OneVoice27 / IASD Horeb
+       ========================================================== -->
+  <div id="weeklyFlyerModal" class="modal-backdrop" onclick="if (event.target === this) closeFlyerModal()">
+    <div class="modal modal-flyer-wide">
+      <div class="modal-header" style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.6rem;">🎨</span>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-size: 1.15rem; color: #0f172a;">Generador de Anuncio Semanal (Flyer PDF)</h3>
+            <div style="font-size: 0.76rem; color: #64748b;">Cartel oficial de actividades de fin de semana con diseño premium OneVoice27 &bull; Listo para imprimir o WhatsApp</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeFlyerModal()" title="Cerrar">&times;</button>
+      </div>
+
+      <div class="flyer-modal-grid">
+        <!-- PANEL IZQUIERDO: CONTROLES Y DATOS -->
+        <div class="flyer-controls-scroll">
+          <!-- Selector de Fin de Semana -->
+          <div class="form-group" style="background: #eff6ff; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #bfdbfe; margin-bottom: 12px;">
+            <label for="flyerWeekendSelect" style="font-weight: 800; color: #1e40af; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>📅</span> Elegir Fin de Semana:
+            </label>
+            <select id="flyerWeekendSelect" class="form-control" onchange="onFlyerWeekendChange()" style="font-weight: 700; border-color: #93c5fd;">
+              <!-- Llenado dinámicamente con los fines de semana -->
+            </select>
+            <div class="hint" style="color: #1e40af; font-size: 0.72rem; margin-top: 4px;">
+              💡 Al seleccionar una fecha se cargan automáticamente el <strong>Anciano de Turno</strong> y los <strong>Predicadores</strong> asignados en el sistema.
+            </div>
+          </div>
+
+          <!-- Selector / Carga de Imagen de Cabecera -->
+          <div class="form-group" style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label style="font-weight: 700; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 0;">🖼️ Imagen de Cabecera Oficial:</label>
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('flyerHeaderFileInput').click()" style="padding: 2px 8px; font-size: 0.72rem; border-color: #2563eb; color: #1e40af;">
+                📁 Subir / Cambiar Banner
+              </button>
+            </div>
+            <input type="file" id="flyerHeaderFileInput" accept="image/*" style="display: none;" onchange="handleHeaderFileChange(event)">
+            <div class="hint" style="font-size: 0.72rem; color: #64748b;">
+              💡 Selecciona cualquier archivo JPG o PNG de tu ordenador y se integrará al instante en el cartel y en el PDF.
+            </div>
+          </div>
+
+          <!-- Selector / Carga de Imagen Inferior Izquierda -->
+          <div class="form-group" style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label style="font-weight: 700; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 0;">📖 Imagen Inferior Izquierda:</label>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" class="btn btn-outline btn-sm" onclick="resetFlyerBibleImage()" style="padding: 2px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Restaurar imagen por defecto">
+                  ↺ Por defecto
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('flyerBibleFileInput').click()" style="padding: 2px 8px; font-size: 0.72rem; border-color: #2563eb; color: #1e40af;">
+                  📁 Cambiar Imagen
+                </button>
+              </div>
+            </div>
+            <input type="file" id="flyerBibleFileInput" accept="image/*" style="display: none;" onchange="handleBibleFileChange(event)">
+            
+            <!-- Control de Altura y Dimensión Personalizable -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 6px; border-top: 1px dashed #e2e8f0;">
+              <label for="flyerBibleHeightSlider" style="font-size: 0.72rem; font-weight: 600; color: #475569; margin-bottom: 0;">
+                📏 Altura / Dimensión:
+              </label>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="range" id="flyerBibleHeightSlider" min="140" max="320" value="240" step="5" oninput="onFlyerBibleHeightChange(this.value)" style="width: 100px; cursor: pointer;">
+                <span id="flyerBibleHeightVal" style="font-size: 0.74rem; font-weight: 800; color: #1e40af; min-width: 44px; text-align: right;">240px</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
+              <label style="font-size: 0.72rem; font-weight: 600; color: #475569; margin-bottom: 0;">🖼️ Ajuste de imagen:</label>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" id="btnFitCover" class="btn btn-sm btn-primary" onclick="setFlyerBibleFit('cover')" style="padding: 1px 7px; font-size: 0.68rem;">Rellenar (Cover)</button>
+                <button type="button" id="btnFitContain" class="btn btn-sm btn-outline" onclick="setFlyerBibleFit('contain')" style="padding: 1px 7px; font-size: 0.68rem;">Completa (Contain)</button>
+              </div>
+            </div>
+            <div class="hint" style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">
+              💡 Dimensión óptima: <strong>Vertical</strong> (proporción aprox. 150 &times; 240px como la Santa Biblia oficial).
+            </div>
+          </div>
+
+          <!-- Datos Institucionales y Versículo -->
+          <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 8px;">
+              <label for="flyerInputChurch">🏛️ Nombre de la Iglesia:</label>
+              <input type="text" id="flyerInputChurch" class="form-control" value="Horeb" placeholder="Ej: Horeb, Central, Betel..." oninput="updateFlyerPreview()">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label for="flyerInputVerse" style="margin-bottom: 0;">📖 Versículo Bíblico Inspirador:</label>
+                <button type="button" class="btn btn-outline btn-sm" onclick="rotateFlyerVerse()" style="padding: 1px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Rotar a otro versículo bíblico">
+                  🎲 Cambiar Versículo
+                </button>
+              </div>
+              <textarea id="flyerInputVerse" class="form-control" rows="2" style="font-size: 0.8rem; line-height: 1.3;" oninput="updateFlyerPreview()">En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.</textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="flyerInputRef">Cita / Libro y Versículo:</label>
+              <input type="text" id="flyerInputRef" class="form-control" value="Proverbios 17:17" oninput="updateFlyerPreview()">
+            </div>
+          </div>
+
+          <!-- Previsión del Clima para el Sábado -->
+          <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="font-weight: 800; font-size: 0.82rem; color: #1e40af; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <span>🌤️</span> Previsión del Clima (Sábado)
+            </div>
+            <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px; margin-bottom: 4px;">
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">🌡️ Temperatura:</label>
+                <input type="text" id="flyerInputWeatherTemp" class="form-control" value="22°C" placeholder="Ej: 22°C" oninput="updateFlyerPreview()">
+              </div>
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">🌧️ ¿Va a llover?:</label>
+                <select id="flyerInputWeatherRain" class="form-control" onchange="updateFlyerPreview()">
+                  <option value="no">☀️ No (Sin lluvia)</option>
+                  <option value="yes">🌧️ Sí (Lluvia prevista)</option>
+                  <option value="prob">🌦️ Lluvia probable</option>
+                  <option value="clouds">⛅ Nublado (Sin lluvia)</option>
+                </select>
+              </div>
+            </div>
+            <div class="hint" style="font-size: 0.7rem; color: #64748b;">
+              💡 Se muestra debajo del versículo: solo la temperatura y si va a llover o no.
+            </div>
+          </div>
+
+          <!-- Actividades del Viernes -->
+          <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="font-weight: 800; font-size: 0.82rem; color: #854d0e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <span>🌟</span> VIERNES - Culto de Apertura
+            </div>
+            <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
+              <div>
+                <label style="font-size: 0.72rem; font-weight: 600;">Horario:</label>
+                <input type="text" id="flyerInputFriTime" class="form-control" value="20:00 – 21:00" oninput="updateFlyerPreview()">
+              </div>
+              <div>
+                <label style="font-size: 0.72rem; font-weight: 600;">Lugar / Actividad:</label>
+                <input type="text" id="flyerInputFriAct" class="form-control" value="Iglesia" oninput="updateFlyerPreview()">
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 0.72rem; font-weight: 600;">Responsable / Predicador(a):</label>
+              <input type="text" id="flyerInputFriSpeaker" class="form-control" value="María Antonia Lopez" placeholder="Nombre del predicador o líder" oninput="updateFlyerPreview()">
+            </div>
+          </div>
+
+          <!-- Actividades del Sábado -->
+          <div style="background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="font-weight: 800; font-size: 0.82rem; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <span>☀️</span> SÁBADO - Cultos y Programación
+            </div>
+            
+            <!-- Mañana 1: Canto y Escuela Sabática -->
+            <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">Hora Mañana 1:</label>
+                <input type="text" id="flyerInputSatAct1Time" class="form-control" value="12:00 – 13:15" oninput="updateFlyerPreview()">
+              </div>
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">Actividad Mañana 1:</label>
+                <input type="text" id="flyerInputSatAct1Name" class="form-control" value="Canto y Escuela Sabática" oninput="updateFlyerPreview()">
+              </div>
+            </div>
+
+            <!-- Mañana 2: Predicación Central -->
+            <div style="background: #ffffff; border: 1px solid #fed7aa; border-radius: 6px; padding: 6px 8px; margin-bottom: 6px;">
+              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 0.7rem; font-weight: 600;">Hora Culto:</label>
+                  <input type="text" id="flyerInputSatAct2Time" class="form-control" value="13:15 – 14:30" oninput="updateFlyerPreview()">
+                </div>
+                <div>
+                  <label style="font-size: 0.7rem; font-weight: 600;">Título Culto:</label>
+                  <input type="text" id="flyerInputSatAct2Title" class="form-control" value="Predicación" oninput="updateFlyerPreview()">
+                </div>
+              </div>
+              <div style="margin-top: 4px;">
+                <label style="font-size: 0.7rem; font-weight: 600;">Predicador(a) / Pastor:</label>
+                <input type="text" id="flyerInputSatAct2Speaker" class="form-control" value="Pr. Igor Domingos" placeholder="Nombre del predicador del sábado" oninput="updateFlyerPreview()">
+              </div>
+            </div>
+
+            <!-- Franja de División: Personalización en Controles -->
+            <div style="background: #eff6ff; border: 1px dashed #93c5fd; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <label for="flyerInputDividerText" style="font-size: 0.72rem; font-weight: 700; color: #1e40af; margin-bottom: 0; display: flex; align-items: center; gap: 4px;">
+                <span>🌤️</span> Franja División (Tarde):
+              </label>
+              <input type="text" id="flyerInputDividerText" class="form-control" value="Actividades de la Tarde" style="font-size: 0.72rem; padding: 2px 6px; max-width: 175px;" oninput="updateFlyerPreview()">
+            </div>
+
+            <!-- Tarde 1: Junta de Iglesia u otra actividad -->
+            <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">☀️ Hora Tarde 1:</label>
+                <input type="text" id="flyerInputSatAct3Time" class="form-control" value="16:00 – 17:00" oninput="updateFlyerPreview()">
+              </div>
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">Actividad Tarde 1:</label>
+                <input type="text" id="flyerInputSatAct3Name" class="form-control" value="Junta de Iglesia" oninput="updateFlyerPreview()">
+              </div>
+            </div>
+
+            <!-- Tarde 2: JA -->
+            <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px;">
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">🌙 Hora Tarde 2:</label>
+                <input type="text" id="flyerInputSatAct4Time" class="form-control" value="17:00 – 18:00" oninput="updateFlyerPreview()">
+              </div>
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">Actividad Tarde 2:</label>
+                <input type="text" id="flyerInputSatAct4Name" class="form-control" value="JA" oninput="updateFlyerPreview()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Anciano de Turno y Lema -->
+          <div style="background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px; margin-bottom: 14px;">
+            <div style="font-weight: 800; font-size: 0.82rem; color: #334155; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <span>🏛️</span> Anciano de Turno (Pie del Anuncio)
+            </div>
+            <div class="form-group" style="margin-bottom: 6px;">
+              <label for="flyerInputElder">Nombre del Anciano de Turno:</label>
+              <input type="text" id="flyerInputElder" class="form-control" value="Jaime Zaragoza" placeholder="Nombre del anciano asignado" oninput="updateFlyerPreview()">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="flyerInputMotto">Lema Inferior:</label>
+              <input type="text" id="flyerInputMotto" class="form-control" value="Juntos en la obra de Dios" oninput="updateFlyerPreview()">
+            </div>
+          </div>
+
+          <!-- Botones de Acción -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" onclick="printFlyerPDF()" style="flex: 1; min-width: 190px; padding: 10px 14px; background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); font-size: 0.88rem; box-shadow: 0 4px 10px rgba(11,37,74,0.3);">
+              🖨️ Descargar / Imprimir Flyer PDF
+            </button>
+            <button type="button" class="btn btn-success" onclick="downloadFlyerPNG()" style="padding: 10px 14px; font-size: 0.88rem; background: #059669; border: 1px solid #047857; color: white;" title="Descargar como imagen PNG en alta definición para compartir">
+              📥 Guardar Imagen (PNG)
+            </button>
+            <button type="button" class="btn btn-outline" onclick="closeFlyerModal()">
+              Cerrar
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL DERECHO: VISTA PREVIA EN VIVO -->
+        <div class="flyer-preview-stage">
+          <div class="flyer-poster" id="flyerPosterCard">
+            <!-- 1. Cabecera Superior OneVoice27 Oficial -->
+            <div class="flyer-poster-top">
+              <img id="flyerTopBannerImg" src="cabecera-onevoice.jpg" alt="OneVoice27 - Misión Para Todos" class="flyer-top-banner-img"
+                   onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='cabecera-onevoice.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='cabecera-top.png'; } else if (this.dataset.t==='2') { this.dataset.t='3'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791412526544.jpg'; }">
+            </div>
+
+            <!-- 2. Cuerpo Dividido en 2 Columnas -->
+            <div class="flyer-poster-body">
+              <!-- Columna Lateral Izquierda (Azul Marino Oscuro) -->
+              <div class="flyer-col-left">
+                <div>
+                  <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center;">Iglesia Adventista</div>
+                  <div id="flyerPreviewChurchLeft" style="font-size: 1.15rem; font-weight: 900; color: #ffffff; text-align: center; margin-bottom: 6px; letter-spacing: -0.3px;">Horeb</div>
+
+                  <div style="font-family: 'Playfair Display', Georgia, cursive, serif; font-style: italic; color: #f6c84c; font-size: 1.35rem; font-weight: 700; text-align: center; line-height: 1; margin-top: 6px;">Programa</div>
+                  <div style="font-size: 0.65rem; font-weight: 900; color: #ffffff; letter-spacing: 1.5px; text-align: center; margin-top: 2px;">DE ACTIVIDADES</div>
+
+                  <!-- Badge de Fecha -->
+                  <div style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid #d4af37; border-radius: 8px; padding: 6px 4px; margin: 12px 0 10px 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+                    <div style="font-size: 0.65rem; color: #cbd5e1; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                      <span>📅</span> <span id="flyerPreviewMonthPill">OCTUBRE</span>
+                    </div>
+                    <div id="flyerPreviewDaysPill" style="font-size: 0.95rem; font-weight: 900; color: #f6c84c; margin-top: 1px;">— 9 y 10 —</div>
+                  </div>
+
+                  <!-- Versículo Bíblico -->
+                  <div style="font-style: italic; font-size: 0.7rem; line-height: 1.35; color: #e2e8f0; border-left: 2px solid #f6c84c; padding-left: 6px; margin: 8px 0;">
+                    "<span id="flyerPreviewVerse">En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.</span>"
+                  </div>
+                  <div id="flyerPreviewRef" style="font-style: italic; font-weight: 700; font-size: 0.68rem; color: #f6c84c; text-align: right; margin-bottom: 6px;">Proverbios 17:17</div>
+
+                  <!-- Previsión del Clima para el Sábado -->
+                  <div id="flyerPreviewWeatherBox" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 6px; padding: 5px 8px; margin: 4px 0 6px 0; display: flex; align-items: center; justify-content: space-between; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.25);">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <span id="flyerPreviewWeatherIcon" style="font-size: 1.15rem; line-height: 1;">☀️</span>
+                      <div>
+                        <div style="font-size: 0.55rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Clima Sábado</div>
+                        <div id="flyerPreviewWeatherRain" style="font-size: 0.66rem; font-weight: 700; color: #f1f5f9; white-space: nowrap;">Sin lluvia</div>
+                      </div>
+                    </div>
+                    <div id="flyerPreviewWeatherTemp" style="font-size: 1.05rem; font-weight: 900; color: #f6c84c; letter-spacing: -0.3px; white-space: nowrap;">22°C</div>
+                  </div>
+                </div>
+
+                <!-- Imagen Santa Biblia con Hojas Verdes (Inferior Izquierda) -->
+                <div style="margin-top: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); position: relative; cursor: pointer;" onclick="document.getElementById('flyerBibleFileInput').click()" title="Haz clic para cambiar la imagen inferior">
+                  <img id="flyerPreviewBibleImg" src="biblia-col-left.png" alt="Santa Biblia" style="width: 100%; height: 240px; object-fit: cover; object-position: center; display: block;" onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791413658534.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='https://images.unsplash.com/photo-1507692049790-de58290a4334?w=400&auto=format&fit=crop&q=80'; }">
+                  <div class="flyer-no-print" style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.72); color: #ffffff; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; pointer-events: none; border: 1px solid rgba(255,255,255,0.3);">📷 Cambiar</div>
+                </div>
+              </div>
+
+              <!-- Columna Principal Derecha (Blanca y Dorada) -->
+              <div class="flyer-col-right">
+                <!-- Cinta Azul de Título -->
+                <div>
+                  <div style="background: #082142; color: #ffffff; border-radius: 8px; padding: 6px 10px; text-align: center; box-shadow: 0 3px 8px rgba(8,33,66,0.25);">
+                    <div style="font-family: 'Playfair Display', Georgia, cursive, serif; font-style: italic; font-size: 1.35rem; font-weight: 700; color: #ffffff; line-height: 1.1;">Programación</div>
+                    <div style="font-family: 'Playfair Display', Georgia, cursive, serif; font-style: italic; font-size: 1.15rem; color: #f6c84c; line-height: 1;">de Actividades</div>
+                  </div>
+                  <div style="text-align: center; font-size: 0.68rem; color: #64748b; margin-top: 5px; font-weight: 600;">Iglesia Adventista</div>
+                  <div id="flyerPreviewChurchRight" style="text-align: center; font-size: 1.1rem; color: #082142; font-weight: 900; margin-top: -2px;">Horeb</div>
+
+                  <!-- Sección Viernes -->
+                  <div class="flyer-pill-badge">
+                    <span>📅</span> <span id="flyerPreviewFriBadge">VIERNES 9 DE OCTUBRE</span>
+                  </div>
+                  <div class="flyer-row-item">
+                    <span style="font-size: 0.95rem;">🕒</span>
+                    <span id="flyerPreviewFriTime" style="font-weight: 700; color: #0f172a; white-space: nowrap;">20:00 – 21:00</span>
+                    <span style="color: #cbd5e1;">|</span>
+                    <span style="font-size: 0.95rem;">⛪</span>
+                    <div style="line-height: 1.2;">
+                      <div id="flyerPreviewFriAct" style="font-size: 0.66rem; color: #64748b; font-weight: 600;">Iglesia</div>
+                      <div id="flyerPreviewFriSpeaker" style="font-weight: 800; color: #0f172a;">María Antonia Lopez</div>
+                    </div>
+                  </div>
+
+                  <!-- Sección Sábado -->
+                  <div class="flyer-pill-badge" style="margin-top: 10px;">
+                    <span>📅</span> <span id="flyerPreviewSatBadge">SÁBADO 10 DE OCTUBRE</span>
+                  </div>
+
+                  <!-- Actividad 1: Mañana Canto y Escuela Sabática -->
+                  <div class="flyer-row-item">
+                    <span style="font-size: 0.95rem;">☀️</span>
+                    <span class="flyer-tag-time">MAÑANA</span>
+                    <span id="flyerPreviewSatAct1Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">12:00 – 13:15</span>
+                    <span style="color: #cbd5e1;">|</span>
+                    <span style="font-size: 0.95rem;">⛪</span>
+                    <div id="flyerPreviewSatAct1Name" style="font-weight: 800; color: #0f172a;">Canto y Escuela Sabática</div>
+                  </div>
+
+                  <!-- Actividad 2: Mañana Predicación Central -->
+                  <div class="flyer-row-item">
+                    <span style="font-size: 0.95rem;">☀️</span>
+                    <span class="flyer-tag-time">MAÑANA</span>
+                    <span id="flyerPreviewSatAct2Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">13:15 – 14:30</span>
+                    <span style="color: #cbd5e1;">|</span>
+                    <span style="font-size: 0.95rem;">👤</span>
+                    <div style="line-height: 1.2;">
+                      <div id="flyerPreviewSatAct2Title" style="font-size: 0.66rem; color: #64748b; font-weight: 600;">Predicación</div>
+                      <div id="flyerPreviewSatAct2Speaker" style="font-weight: 900; color: #0f172a;">Pr. Igor Domingos</div>
+                    </div>
+                  </div>
+
+                  <!-- Franja de División: Mañana y Tarde -->
+                  <div class="flyer-divider-strip">
+                    <div class="flyer-divider-line"></div>
+                    <div class="flyer-divider-badge">
+                      <span>🌤️</span> <span id="flyerPreviewDividerText">ACTIVIDADES DE LA TARDE</span>
+                    </div>
+                    <div class="flyer-divider-line"></div>
+                  </div>
+
+                  <!-- Actividad 3: Tarde Junta de Iglesia -->
+                  <div class="flyer-row-item">
+                    <span style="font-size: 0.95rem;">☀️</span>
+                    <span class="flyer-tag-time">TARDE</span>
+                    <span id="flyerPreviewSatAct3Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">16:00 – 17:00</span>
+                    <span style="color: #cbd5e1;">|</span>
+                    <span style="font-size: 0.95rem;">📖</span>
+                    <div id="flyerPreviewSatAct3Name" style="font-weight: 800; color: #0f172a;">Junta de Iglesia</div>
+                  </div>
+
+                  <!-- Actividad 4: Tarde JA -->
+                  <div class="flyer-row-item" style="border-bottom: none;">
+                    <span style="font-size: 0.95rem;">🌙</span>
+                    <span class="flyer-tag-time">TARDE</span>
+                    <span id="flyerPreviewSatAct4Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">17:00 – 18:00</span>
+                    <span style="color: #cbd5e1;">|</span>
+                    <span style="font-size: 0.95rem;">👥</span>
+                    <div id="flyerPreviewSatAct4Name" style="font-weight: 800; color: #0f172a;">JA</div>
+                  </div>
+                </div>
+
+                <!-- Recuadro Inferior: Anciano de Turno -->
+                <div class="flyer-elder-card">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1.4rem;">🏛️</span>
+                    <div style="border-left: 1.5px solid #cbd5e1; padding-left: 8px; flex: 1;">
+                      <div style="font-size: 0.6rem; font-weight: 800; color: #475569; letter-spacing: 1px;">ANCIANO DE TURNO</div>
+                      <div id="flyerPreviewElder" style="font-family: 'Alex Brush', 'Playfair Display', cursive, serif; font-size: 1.55rem; font-weight: 700; color: #082142; line-height: 1.1;">Jaime Zaragoza</div>
+                    </div>
+                  </div>
+                  <div id="flyerPreviewMotto" style="text-align: center; margin-top: 4px; font-family: 'Playfair Display', Georgia, cursive, serif; font-style: italic; font-size: 0.78rem; color: #475569;">
+                    Juntos en la obra de Dios
+                  </div>
+                  <div style="text-align: center; color: #d4af37; font-size: 0.65rem; margin-top: -3px;">❧ ❦ ☙</div>
+                </div>
+
+                <!-- Follaje Dorado en Esquina Inferior Derecha -->
+                <svg class="flyer-gold-foliage bottom-right" viewBox="0 0 90 90" style="position: absolute; bottom: -2px; right: -2px; width: 75px; height: 75px; pointer-events: none; z-index: 1;">
+                  <path d="M90,90 C70,75 50,55 40,30 C50,48 70,68 85,78 Z" fill="url(#goldFoliageGrad2)" opacity="0.9"/>
+                  <path d="M90,68 C72,62 58,45 52,22 C62,38 75,52 88,60 Z" fill="#1e3a8a" opacity="0.8"/>
+                  <path d="M72,90 C62,72 45,58 28,48 C42,58 58,72 68,85 Z" fill="url(#goldFoliageGrad2)" opacity="0.85"/>
+                  <circle cx="75" cy="65" r="2" fill="#fef08a"/>
+                  <circle cx="60" cy="55" r="1.5" fill="#fef08a"/>
+                  <defs>
+                    <linearGradient id="goldFoliageGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#fef08a"/>
+                      <stop offset="50%" stop-color="#f59e0b"/>
+                      <stop offset="100%" stop-color="#b45309"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="toastContainer"></div>
 
   <!-- Firebase SDK Compat (Google CDN oficial) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <!-- Biblioteca para exportar flyers como imagen (PNG) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
     const DEPARTMENTS = {
+      'anciano': { id: 'anciano', name: 'Anciano de Turno', icon: '🏛️', badgeClass: 'area-anciano', color: '#475569', saturdayOnly: true },
       'predicaciones': { id: 'predicaciones', name: 'Predicación', icon: '📖', badgeClass: 'area-predicaciones', color: '#2563eb' },
       'alabanza': { id: 'alabanza', name: 'Alabanza', icon: '🎵', badgeClass: 'area-alabanza', color: '#d97706' },
       'diaconisas': { id: 'diaconisas', name: 'Diaconisas', icon: '🌸', badgeClass: 'area-diaconisas', color: '#db2777' },
@@ -2030,6 +2717,7 @@
       const y = now.getFullYear();
       const m = String(now.getMonth() + 1).padStart(2, '0');
       return [
+        { id: 's0', collaboratorId: 'c8', departmentId: 'anciano', date: `${y}-${m}-03`, dayOfWeek: 'Sábado', notes: 'Coordinación general del culto' },
         { id: 's1', collaboratorId: 'c2', departmentId: 'alabanza', date: `${y}-${m}-02`, dayOfWeek: 'Viernes', notes: 'Voz y guitarra' },
         { id: 's2', collaboratorId: 'c1', departmentId: 'predicaciones', date: `${y}-${m}-02`, dayOfWeek: 'Viernes', notes: 'Tema: Mensaje de apertura' },
         { id: 's3', collaboratorId: 'c2', departmentId: 'predicaciones', date: `${y}-${m}-03`, dayOfWeek: 'Sábado', notes: 'Tema: Predicación central' },
@@ -2794,19 +3482,61 @@
       return `${y}-${m}-${day}`;
     }
 
+    function isSaturday(dateString) {
+      if (!dateString) return false;
+      const parts = dateString.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      return d.getDay() === 6;
+    }
+
     function onDateSelected(dateVal) {
+      validateShiftDateAndDepartment();
+      checkRealtimeConflict();
+    }
+
+    function onDepartmentSelected() {
+      validateShiftDateAndDepartment();
+      checkRealtimeConflict();
+    }
+
+    function validateShiftDateAndDepartment() {
       const notice = document.getElementById('dateValidationNotice');
-      if (!dateVal) return;
+      const submitBtn = document.getElementById('btnSubmitShift');
+      const dateVal = document.getElementById('assignDate').value;
+      const deptVal = document.getElementById('assignDepartment').value;
+
+      if (!dateVal) {
+        notice.innerHTML = '⚠️ Seleccione una fecha (Viernes o Sábado).';
+        notice.style.color = 'var(--text-muted)';
+        if (submitBtn) submitBtn.disabled = false;
+        return true;
+      }
+
       if (!isFridayOrSaturday(dateVal)) {
         const dayName = getDayOfWeekName(dateVal);
         notice.innerHTML = `❌ El ${dateVal} es <strong>${dayName}</strong>. Solo se permite asignar en días <strong>Viernes o Sábado</strong>.`;
         notice.style.color = '#dc2626';
-      } else {
-        const dayName = getDayOfWeekName(dateVal);
-        notice.innerHTML = `✅ <strong>Fecha válida:</strong> Es <strong>${dayName}</strong>.`;
-        notice.style.color = '#059669';
+        if (submitBtn) submitBtn.disabled = true;
+        return false;
       }
-      checkRealtimeConflict();
+
+      const isSat = isSaturday(dateVal);
+      if (deptVal === 'anciano' && !isSat) {
+        notice.innerHTML = `⛔ <strong>Restricción:</strong> El <strong>Anciano de Turno</strong> solo se puede asignar los días <strong>SÁBADO</strong> (la fecha seleccionada es Viernes).`;
+        notice.style.color = '#dc2626';
+        if (submitBtn) submitBtn.disabled = true;
+        return false;
+      }
+
+      const dayName = getDayOfWeekName(dateVal);
+      if (deptVal === 'anciano') {
+        notice.innerHTML = `✅ <strong>Fecha válida:</strong> Es <strong>Sábado</strong> (permitido para Anciano de Turno).`;
+      } else {
+        notice.innerHTML = `✅ <strong>Fecha válida:</strong> Es <strong>${dayName}</strong>.`;
+      }
+      notice.style.color = '#059669';
+      if (submitBtn) submitBtn.disabled = false;
+      return true;
     }
 
     function checkRealtimeConflict() {
@@ -2817,6 +3547,14 @@
       const submitBtn = document.getElementById('btnSubmitShift');
 
       alertBox.style.display = 'none';
+
+      // Si ya hay error de validación de sábado para anciano, no reactivar botón
+      const deptVal = document.getElementById('assignDepartment').value;
+      if (deptVal === 'anciano' && dateVal && !isSaturday(dateVal)) {
+        submitBtn.disabled = true;
+        return false;
+      }
+
       submitBtn.disabled = false;
 
       if (!colabId || !dateVal) return false;
@@ -2850,6 +3588,11 @@
 
       if (!isFridayOrSaturday(date)) {
         alert('Solo se pueden asignar responsabilidades en días Viernes o Sábado.');
+        return;
+      }
+
+      if (DEPARTMENTS[departmentId] && DEPARTMENTS[departmentId].saturdayOnly && !isSaturday(date)) {
+        alert('⛔ ATENCIÓN: El cargo de "Anciano de Turno" solo se puede asignar para los días SÁBADO.');
         return;
       }
 
@@ -2908,7 +3651,7 @@
       renderCalendar();
     }
 
-    const DEPT_ORDER = ['predicaciones', 'alabanza', 'diaconisas', 'diaconos', 'audiovisual'];
+    const DEPT_ORDER = ['anciano', 'predicaciones', 'alabanza', 'diaconisas', 'diaconos', 'audiovisual'];
 
     function renderCalendar() {
       document.getElementById('calendarMonthTitle').innerText = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
@@ -3036,6 +3779,11 @@
       DEPT_ORDER.forEach(deptKey => {
         const dept = DEPARTMENTS[deptKey];
         if (!dept) return;
+
+        // "Anciano de Turno" es exclusivamente para los días Sábado
+        if (isFri && dept.saturdayOnly) {
+          return;
+        }
 
         if (deptFilter !== 'ALL' && deptFilter !== deptKey) {
           return;
@@ -3246,6 +3994,10 @@
 
     function updateStats() {
       document.getElementById('statColabs').innerText = collaborators.length;
+      const statAnciano = document.getElementById('statAnciano');
+      if (statAnciano) {
+        statAnciano.innerText = shifts.filter(s => s.departmentId === 'anciano').length;
+      }
       document.getElementById('statPredicaciones').innerText = shifts.filter(s => s.departmentId === 'predicaciones').length;
       document.getElementById('statAlabanza').innerText = shifts.filter(s => s.departmentId === 'alabanza').length;
       document.getElementById('statDiaconisas').innerText = shifts.filter(s => s.departmentId === 'diaconisas').length;
@@ -3308,6 +4060,9 @@
 
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
+            if (!dept) return;
+            if (d.name === 'Viernes' && dept.saturdayOnly) return;
+
             const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
 
             if (deptShifts.length > 0) {
@@ -3379,6 +4134,9 @@
           let slotsRowsHtml = '';
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
+            if (!dept) return;
+            if (d.isFri && dept.saturdayOnly) return;
+
             const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
 
             let assignedText = '<span style="color: #94a3b8; font-style: italic;">Sin asignar</span>';
@@ -4022,6 +4780,750 @@
       `;
 
       showToast(`Programa de ${qLabel} listo para imprimir o guardar en PDF`, 'success');
+    }
+
+    // ==============================================================
+    // 🎨 GENERADOR DE ANUNCIO SEMANAL (FLYER PDF) - ONEVOICE27
+    // ==============================================================
+
+    const BIBLE_VERSES_LIST = [
+      { verse: "En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.", ref: "Proverbios 17:17" },
+      { verse: "Yo me alegré con los que me decían: A la casa de Jehová iremos.", ref: "Salmos 122:1" },
+      { verse: "Mira que te mando que te esfuerces y seas valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo en dondequiera que vayas.", ref: "Josué 1:9" },
+      { verse: "Todo lo puedo en Cristo que me fortalece.", ref: "Filipenses 4:13" },
+      { verse: "Pero los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas; correrán, y no se cansarán; caminarán, y no se fatigarán.", ref: "Isaías 40:31" },
+      { verse: "Jehová es mi pastor; nada me faltará. En lugares de delicados pastos me hará descansar.", ref: "Salmos 23:1-2" },
+      { verse: "El Señor te bendiga y te guarde; haga resplandecer su rostro sobre ti y tenga de ti misericordia.", ref: "Números 6:24-25" }
+    ];
+    let currentFlyerVerseIdx = 0;
+
+    function openFlyerModal() {
+      populateFlyerWeekendDropdown();
+      onFlyerWeekendChange();
+      const savedHeader = localStorage.getItem('church_flyer_header_b64');
+      if (savedHeader) {
+        applyFlyerHeaderImage(savedHeader);
+      }
+      const savedBible = localStorage.getItem('church_flyer_bible_b64');
+      if (savedBible) {
+        applyFlyerBibleImage(savedBible);
+      }
+      const savedHeight = localStorage.getItem('church_flyer_bible_height') || '240';
+      onFlyerBibleHeightChange(savedHeight);
+      const savedFit = localStorage.getItem('church_flyer_bible_fit') || 'cover';
+      setFlyerBibleFit(savedFit);
+      const modal = document.getElementById('weeklyFlyerModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function handleHeaderFileChange(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const b64 = evt.target.result;
+        try {
+          localStorage.setItem('church_flyer_header_b64', b64);
+        } catch (err) {
+          console.warn('LocalStorage limit:', err);
+        }
+        applyFlyerHeaderImage(b64);
+        showToast('✅ Imagen de cabecera cargada con éxito', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function applyFlyerHeaderImage(imgSrc) {
+      const img = document.getElementById('flyerTopBannerImg');
+      if (img) {
+        img.src = imgSrc;
+        img.setAttribute('src', imgSrc);
+      }
+    }
+
+    function handleBibleFileChange(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const b64 = evt.target.result;
+        try {
+          localStorage.setItem('church_flyer_bible_b64', b64);
+        } catch (err) {
+          console.warn('LocalStorage limit:', err);
+        }
+        applyFlyerBibleImage(b64);
+        showToast('✅ Imagen inferior izquierda actualizada con éxito', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function applyFlyerBibleImage(imgSrc) {
+      const img = document.getElementById('flyerPreviewBibleImg');
+      if (img) {
+        img.src = imgSrc;
+        img.setAttribute('src', imgSrc);
+      }
+    }
+
+    function onFlyerBibleHeightChange(val) {
+      const img = document.getElementById('flyerPreviewBibleImg');
+      const label = document.getElementById('flyerBibleHeightVal');
+      const slider = document.getElementById('flyerBibleHeightSlider');
+      if (img) img.style.height = val + 'px';
+      if (label) label.innerText = val + 'px';
+      if (slider) slider.value = val;
+      try {
+        localStorage.setItem('church_flyer_bible_height', val);
+      } catch (err) {}
+    }
+
+    function setFlyerBibleFit(fit) {
+      const img = document.getElementById('flyerPreviewBibleImg');
+      if (img) {
+        img.style.objectFit = fit;
+        img.style.backgroundColor = fit === 'contain' ? '#041226' : 'transparent';
+      }
+      const btnCover = document.getElementById('btnFitCover');
+      const btnContain = document.getElementById('btnFitContain');
+      if (btnCover && btnContain) {
+        if (fit === 'cover') {
+          btnCover.className = 'btn btn-sm btn-primary';
+          btnContain.className = 'btn btn-sm btn-outline';
+        } else {
+          btnCover.className = 'btn btn-sm btn-outline';
+          btnContain.className = 'btn btn-sm btn-primary';
+        }
+      }
+      try {
+        localStorage.setItem('church_flyer_bible_fit', fit);
+      } catch (err) {}
+    }
+
+    function resetFlyerBibleImage() {
+      try {
+        localStorage.removeItem('church_flyer_bible_b64');
+        localStorage.removeItem('church_flyer_bible_height');
+        localStorage.removeItem('church_flyer_bible_fit');
+      } catch (err) {}
+      applyFlyerBibleImage('biblia-col-left.png');
+      onFlyerBibleHeightChange('240');
+      setFlyerBibleFit('cover');
+      showToast('Imagen inferior restaurada a la predeterminada', 'info');
+    }
+
+    function closeFlyerModal() {
+      const modal = document.getElementById('weeklyFlyerModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function populateFlyerWeekendDropdown() {
+      const select = document.getElementById('flyerWeekendSelect');
+      if (!select) return;
+
+      select.innerHTML = '';
+      
+      // Obtenemos los fines de semana del mes visible en el calendario
+      let cursor = new Date(currentYear, currentMonth, 1);
+      if (cursor.getDay() === 6) {
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        while (cursor.getDay() !== 5) {
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      }
+
+      const weekendsList = [];
+      while (weekendsList.length < 5) {
+        const fri = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+        const sat = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
+        weekendsList.push({ friday: fri, saturday: sat });
+        cursor.setDate(cursor.getDate() + 7);
+      }
+
+      const todayStr = formatDateKey(new Date());
+      let selectedIdx = 0;
+
+      weekendsList.forEach((wk, idx) => {
+        const friStr = formatDateKey(wk.friday);
+        const satStr = formatDateKey(wk.saturday);
+        const monthName = MONTH_NAMES[wk.saturday.getMonth()];
+
+        const opt = document.createElement('option');
+        opt.value = `${friStr}|${satStr}`;
+        opt.text = `Semana ${idx + 1}: Viernes ${wk.friday.getDate()} y Sábado ${wk.saturday.getDate()} de ${monthName}`;
+        
+        if (satStr >= todayStr && selectedIdx === 0) {
+          selectedIdx = idx;
+        }
+
+        select.appendChild(opt);
+      });
+
+      if (select.options.length > 0) {
+        select.selectedIndex = selectedIdx;
+      }
+    }
+
+    function onFlyerWeekendChange() {
+      const select = document.getElementById('flyerWeekendSelect');
+      if (!select || !select.value) return;
+
+      const [friStr, satStr] = select.value.split('|');
+      const friParts = friStr.split('-');
+      const satParts = satStr.split('-');
+      const friDate = new Date(parseInt(friParts[0]), parseInt(friParts[1]) - 1, parseInt(friParts[2]));
+      const satDate = new Date(parseInt(satParts[0]), parseInt(satParts[1]) - 1, parseInt(satParts[2]));
+
+      const monthName = MONTH_NAMES[satDate.getMonth()].toUpperCase();
+      const daysText = `— ${friDate.getDate()} y ${satDate.getDate()} —`;
+      const friBadgeText = `VIERNES ${friDate.getDate()} DE ${monthName}`;
+      const satBadgeText = `SÁBADO ${satDate.getDate()} DE ${monthName}`;
+
+      // Actualizar badges de fecha en el cartel
+      const monthPill = document.getElementById('flyerPreviewMonthPill');
+      const daysPill = document.getElementById('flyerPreviewDaysPill');
+      const friBadge = document.getElementById('flyerPreviewFriBadge');
+      const satBadge = document.getElementById('flyerPreviewSatBadge');
+
+      if (monthPill) monthPill.innerText = monthName;
+      if (daysPill) daysPill.innerText = daysText;
+      if (friBadge) friBadge.innerText = friBadgeText;
+      if (satBadge) satBadge.innerText = satBadgeText;
+
+      // 1. Anciano de Turno (exclusivo de Sábado)
+      const elderShift = shifts.find(s => s.date === satStr && s.departmentId === 'anciano');
+      const elderInput = document.getElementById('flyerInputElder');
+      if (elderShift && elderInput) {
+        const colab = collaborators.find(c => c.id === elderShift.collaboratorId);
+        if (colab) elderInput.value = colab.name;
+      }
+
+      // 2. Predicación del Sábado
+      const satPredShift = shifts.find(s => s.date === satStr && s.departmentId === 'predicaciones');
+      const satSpeakerInput = document.getElementById('flyerInputSatAct2Speaker');
+      if (satPredShift && satSpeakerInput) {
+        const colab = collaborators.find(c => c.id === satPredShift.collaboratorId);
+        if (colab) satSpeakerInput.value = colab.name;
+        if (satPredShift.notes) {
+          const titleInput = document.getElementById('flyerInputSatAct2Title');
+          if (titleInput) titleInput.value = satPredShift.notes;
+        }
+      }
+
+      // 3. Alabanza / Canto del Sábado
+      const satAlabShift = shifts.find(s => s.date === satStr && s.departmentId === 'alabanza');
+      const satAct1Input = document.getElementById('flyerInputSatAct1Name');
+      if (satAlabShift && satAct1Input) {
+        const colab = collaborators.find(c => c.id === satAlabShift.collaboratorId);
+        if (colab) {
+          satAct1Input.value = `Canto (${colab.name}) y Escuela Sabática`;
+        }
+      }
+
+      // 4. Culto del Viernes
+      const friPredShift = shifts.find(s => s.date === friStr && s.departmentId === 'predicaciones');
+      const friSpeakerInput = document.getElementById('flyerInputFriSpeaker');
+      if (friPredShift && friSpeakerInput) {
+        const colab = collaborators.find(c => c.id === friPredShift.collaboratorId);
+        if (colab) friSpeakerInput.value = colab.name;
+        if (friPredShift.notes) {
+          const actInput = document.getElementById('flyerInputFriAct');
+          if (actInput) actInput.value = friPredShift.notes;
+        }
+      }
+
+      // 5. Verificar actividades en el Programa Trimestral para ese sábado
+      if (typeof quarterlyActivities !== 'undefined' && Array.isArray(quarterlyActivities)) {
+        const satActs = quarterlyActivities.filter(a => a.date === satStr);
+        if (satActs.length > 0) {
+          if (satActs[0]) {
+            const time3 = document.getElementById('flyerInputSatAct3Time');
+            const name3 = document.getElementById('flyerInputSatAct3Name');
+            if (time3 && satActs[0].time) time3.value = satActs[0].time;
+            if (name3 && (satActs[0].notes || satActs[0].department)) {
+              name3.value = satActs[0].department ? `${satActs[0].department}: ${satActs[0].notes}` : satActs[0].notes;
+            }
+          }
+          if (satActs[1]) {
+            const time4 = document.getElementById('flyerInputSatAct4Time');
+            const name4 = document.getElementById('flyerInputSatAct4Name');
+            if (time4 && satActs[1].time) time4.value = satActs[1].time;
+            if (name4 && (satActs[1].notes || satActs[1].department)) {
+              name4.value = satActs[1].department ? `${satActs[1].department}: ${satActs[1].notes}` : satActs[1].notes;
+            }
+          }
+        }
+      }
+
+      updateFlyerPreview();
+    }
+
+    function updateFlyerPreview() {
+      const church = (document.getElementById('flyerInputChurch')?.value || 'Horeb').trim();
+      const leftChurch = document.getElementById('flyerPreviewChurchLeft');
+      const rightChurch = document.getElementById('flyerPreviewChurchRight');
+      if (leftChurch) leftChurch.innerText = church;
+      if (rightChurch) rightChurch.innerText = church;
+
+      // Versículo
+      const verseVal = document.getElementById('flyerInputVerse')?.value || '';
+      const refVal = document.getElementById('flyerInputRef')?.value || '';
+      const pVerse = document.getElementById('flyerPreviewVerse');
+      const pRef = document.getElementById('flyerPreviewRef');
+      if (pVerse) pVerse.innerText = verseVal;
+      if (pRef) pRef.innerText = refVal;
+
+      // Previsión del Clima para el Sábado
+      const weatherTemp = (document.getElementById('flyerInputWeatherTemp')?.value || '22°C').trim();
+      const weatherRain = document.getElementById('flyerInputWeatherRain')?.value || 'no';
+      const pWeatherTemp = document.getElementById('flyerPreviewWeatherTemp');
+      const pWeatherRain = document.getElementById('flyerPreviewWeatherRain');
+      const pWeatherIcon = document.getElementById('flyerPreviewWeatherIcon');
+
+      if (pWeatherTemp) pWeatherTemp.innerText = weatherTemp;
+      if (pWeatherRain && pWeatherIcon) {
+        if (weatherRain === 'yes') {
+          pWeatherIcon.innerText = '🌧️';
+          pWeatherRain.innerText = 'Lluvia prevista';
+        } else if (weatherRain === 'prob') {
+          pWeatherIcon.innerText = '🌦️';
+          pWeatherRain.innerText = 'Lluvia probable';
+        } else if (weatherRain === 'clouds') {
+          pWeatherIcon.innerText = '⛅';
+          pWeatherRain.innerText = 'Sin lluvia';
+        } else {
+          pWeatherIcon.innerText = '☀️';
+          pWeatherRain.innerText = 'Sin lluvia';
+        }
+      }
+
+      // Viernes
+      const fTime = document.getElementById('flyerInputFriTime')?.value || '';
+      const fAct = document.getElementById('flyerInputFriAct')?.value || '';
+      const fSpeaker = document.getElementById('flyerInputFriSpeaker')?.value || '';
+      const pFTime = document.getElementById('flyerPreviewFriTime');
+      const pFAct = document.getElementById('flyerPreviewFriAct');
+      const pFSpeaker = document.getElementById('flyerPreviewFriSpeaker');
+      if (pFTime) pFTime.innerText = fTime;
+      if (pFAct) pFAct.innerText = fAct;
+      if (pFSpeaker) pFSpeaker.innerText = fSpeaker;
+
+      // Sábado Act 1
+      const sA1Time = document.getElementById('flyerInputSatAct1Time')?.value || '';
+      const sA1Name = document.getElementById('flyerInputSatAct1Name')?.value || '';
+      const pSA1Time = document.getElementById('flyerPreviewSatAct1Time');
+      const pSA1Name = document.getElementById('flyerPreviewSatAct1Name');
+      if (pSA1Time) pSA1Time.innerText = sA1Time;
+      if (pSA1Name) pSA1Name.innerText = sA1Name;
+
+      // Sábado Act 2 (Predicación)
+      const sA2Time = document.getElementById('flyerInputSatAct2Time')?.value || '';
+      const sA2Title = document.getElementById('flyerInputSatAct2Title')?.value || '';
+      const sA2Speaker = document.getElementById('flyerInputSatAct2Speaker')?.value || '';
+      const pSA2Time = document.getElementById('flyerPreviewSatAct2Time');
+      const pSA2Title = document.getElementById('flyerPreviewSatAct2Title');
+      const pSA2Speaker = document.getElementById('flyerPreviewSatAct2Speaker');
+      if (pSA2Time) pSA2Time.innerText = sA2Time;
+      if (pSA2Title) pSA2Title.innerText = sA2Title;
+      if (pSA2Speaker) pSA2Speaker.innerText = sA2Speaker;
+
+      // Franja de División Mañana / Tarde
+      const divText = (document.getElementById('flyerInputDividerText')?.value || 'Actividades de la Tarde').trim();
+      const pDivText = document.getElementById('flyerPreviewDividerText');
+      if (pDivText) pDivText.innerText = divText.toUpperCase();
+
+      // Sábado Act 3
+      const sA3Time = document.getElementById('flyerInputSatAct3Time')?.value || '';
+      const sA3Name = document.getElementById('flyerInputSatAct3Name')?.value || '';
+      const pSA3Time = document.getElementById('flyerPreviewSatAct3Time');
+      const pSA3Name = document.getElementById('flyerPreviewSatAct3Name');
+      if (pSA3Time) pSA3Time.innerText = sA3Time;
+      if (pSA3Name) pSA3Name.innerText = sA3Name;
+
+      // Sábado Act 4
+      const sA4Time = document.getElementById('flyerInputSatAct4Time')?.value || '';
+      const sA4Name = document.getElementById('flyerInputSatAct4Name')?.value || '';
+      const pSA4Time = document.getElementById('flyerPreviewSatAct4Time');
+      const pSA4Name = document.getElementById('flyerPreviewSatAct4Name');
+      if (pSA4Time) pSA4Time.innerText = sA4Time;
+      if (pSA4Name) pSA4Name.innerText = sA4Name;
+
+      // Anciano y Lema
+      const elderVal = document.getElementById('flyerInputElder')?.value || '';
+      const mottoVal = document.getElementById('flyerInputMotto')?.value || '';
+      const pElder = document.getElementById('flyerPreviewElder');
+      const pMotto = document.getElementById('flyerPreviewMotto');
+      if (pElder) pElder.innerText = elderVal;
+      if (pMotto) pMotto.innerText = mottoVal;
+    }
+
+    function rotateFlyerVerse() {
+      currentFlyerVerseIdx = (currentFlyerVerseIdx + 1) % BIBLE_VERSES_LIST.length;
+      const item = BIBLE_VERSES_LIST[currentFlyerVerseIdx];
+      const vInput = document.getElementById('flyerInputVerse');
+      const rInput = document.getElementById('flyerInputRef');
+      if (vInput) vInput.value = item.verse;
+      if (rInput) rInput.value = item.ref;
+      updateFlyerPreview();
+      showToast(`Versículo bíblico cambiado: ${item.ref}`, 'info');
+    }
+
+    function printFlyerPDF() {
+      const flyerCard = document.getElementById('flyerPosterCard');
+      if (!flyerCard) {
+        showToast('⚠️ No se encontró el cartel para exportar', 'error');
+        return;
+      }
+
+      // Asegurar que las imágenes tengan el src actual como atributo en el DOM
+      const topImg = flyerCard.querySelector('#flyerTopBannerImg');
+      if (topImg && topImg.currentSrc) {
+        topImg.setAttribute('src', topImg.currentSrc);
+      } else if (topImg && topImg.src) {
+        topImg.setAttribute('src', topImg.src);
+      }
+      const bibleImg = flyerCard.querySelector('#flyerPreviewBibleImg');
+      if (bibleImg && bibleImg.currentSrc) {
+        bibleImg.setAttribute('src', bibleImg.currentSrc);
+      } else if (bibleImg && bibleImg.src) {
+        bibleImg.setAttribute('src', bibleImg.src);
+      }
+
+      // Abrir en nueva pestaña limpia (idéntico al generador trimestral)
+      const printWin = window.open('', '_blank');
+      if (!printWin) {
+        alert('Por favor habilita las ventanas emergentes (popups) en tu navegador para ver e imprimir el anuncio.');
+        return;
+      }
+
+      const weekendText = document.getElementById('flyerWeekendSelect')?.selectedOptions[0]?.text || 'Fin de Semana';
+      const printDoc = printWin.document;
+      printDoc.title = `Anuncio_Semanal_${weekendText.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+
+      // Insertar fuentes de Google
+      const fontLink = printDoc.createElement('link');
+      fontLink.rel = 'stylesheet';
+      fontLink.href = 'https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&display=swap';
+      printDoc.head.appendChild(fontLink);
+
+      // Estilos CSS completos para la presentación en pantalla e impresión en papel/PDF
+      const styleEl = printDoc.createElement('style');
+      styleEl.textContent = `
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        body {
+          margin: 0;
+          padding: 20px 12px;
+          background: #f1f5f9;
+          font-family: 'Montserrat', sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-height: 100vh;
+          color: #0f172a;
+        }
+
+        .print-actions-bar {
+          width: 100%;
+          max-width: 530px;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 14px;
+          background: #ffffff;
+          padding: 10px 16px;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          border: 1px solid #cbd5e1;
+        }
+
+        .print-actions-title {
+          font-weight: 800;
+          color: #082142;
+          font-size: 0.88rem;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .print-btn-main {
+          background: #082142;
+          color: #ffffff;
+          border: none;
+          padding: 9px 18px;
+          font-size: 0.86rem;
+          font-weight: 700;
+          border-radius: 6px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          box-shadow: 0 3px 8px rgba(8,33,66,0.25);
+          transition: background 0.15s;
+        }
+
+        .print-btn-main:hover {
+          background: #0d366b;
+        }
+
+        .print-btn-close {
+          background: #f8fafc;
+          color: #334155;
+          border: 1px solid #cbd5e1;
+          padding: 9px 14px;
+          font-size: 0.86rem;
+          font-weight: 700;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+        .print-btn-close:hover {
+          background: #e2e8f0;
+        }
+
+        .flyer-poster {
+          width: 100%;
+          max-width: 530px;
+          background: #ffffff;
+          border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          font-family: 'Montserrat', sans-serif;
+          color: #0f172a;
+          position: relative;
+        }
+
+        .flyer-poster-top {
+          width: 100%;
+          background: #05162e;
+          border-radius: 0;
+          line-height: 0;
+          overflow: hidden;
+        }
+
+        .flyer-top-banner-img {
+          width: 100% !important;
+          height: auto !important;
+          display: block !important;
+          border-radius: 0 !important;
+        }
+
+        .flyer-poster-body {
+          display: grid;
+          grid-template-columns: 35% 65%;
+          min-height: 620px;
+        }
+
+        .flyer-col-left {
+          background: linear-gradient(180deg, #071933 0%, #030e1d 100%);
+          border-right: 3px solid #d4af37;
+          padding: 14px 10px;
+          color: #ffffff;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          position: relative;
+        }
+
+        .flyer-col-right {
+          background: #ffffff;
+          padding: 14px 16px 12px 16px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .flyer-pill-badge {
+          background: linear-gradient(90deg, #fef08a 0%, #facc15 100%);
+          color: #0f172a;
+          padding: 5px 12px;
+          border-radius: 999px;
+          font-weight: 800;
+          font-size: 0.76rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 8px;
+          box-shadow: 0 2px 4px rgba(234, 179, 8, 0.25);
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .flyer-row-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 5px 2px;
+          border-bottom: 1px dashed #f1f5f9;
+          font-size: 0.75rem;
+        }
+
+        .flyer-tag-time {
+          background: #082142;
+          color: #ffffff;
+          font-size: 0.58rem;
+          font-weight: 800;
+          padding: 1px 5px;
+          border-radius: 3px;
+          letter-spacing: 0.5px;
+        }
+
+        .flyer-divider-strip {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 8px 0 6px 0;
+          padding: 0 2px;
+        }
+
+        .flyer-divider-line {
+          flex: 1;
+          height: 1.5px;
+          background: linear-gradient(90deg, #cbd5e1, #d4af37, #cbd5e1);
+          border-radius: 1px;
+        }
+
+        .flyer-divider-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          background: #082142;
+          color: #f6c84c;
+          border: 1px solid #d4af37;
+          border-radius: 999px;
+          padding: 2px 10px;
+          font-size: 0.62rem;
+          font-weight: 800;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+          box-shadow: 0 1px 3px rgba(8,33,66,0.18);
+          white-space: nowrap;
+        }
+
+        .flyer-elder-card {
+          background: #f1f5f9;
+          border-radius: 8px;
+          border-left: 4px solid #082142;
+          padding: 6px 10px;
+          margin-top: 10px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .flyer-no-print {
+          display: none !important;
+        }
+
+        @page {
+          size: portrait;
+          margin: 6mm;
+        }
+
+        @media print {
+          body {
+            background: #ffffff !important;
+            padding: 0 !important;
+            display: block !important;
+          }
+          .print-actions-bar {
+            display: none !important;
+          }
+          .flyer-no-print {
+            display: none !important;
+          }
+          .flyer-poster {
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+            page-break-inside: avoid !important;
+          }
+        }
+      `;
+      printDoc.head.appendChild(styleEl);
+
+      const flyerHtml = flyerCard.outerHTML;
+
+      printDoc.body.innerHTML = `
+        <div class="print-actions-bar flyer-no-print">
+          <div class="print-actions-title">
+            <span>🎨</span> Vista de Impresión / Guardar en PDF
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="print-btn-close" onclick="window.close()">✖ Cerrar</button>
+            <button class="print-btn-main" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+          </div>
+        </div>
+        ${flyerHtml}
+      `;
+
+      try {
+        printDoc.close();
+      } catch (err) {}
+
+      setTimeout(() => {
+        try {
+          printWin.focus();
+        } catch (e) {}
+      }, 300);
+
+      showToast('Cartel semanal listo para imprimir o guardar en PDF', 'success');
+    }
+
+    function downloadFlyerPNG() {
+      const flyerCard = document.getElementById('flyerPosterCard');
+      if (!flyerCard) {
+        showToast('⚠️ No se encontró el cartel', 'error');
+        return;
+      }
+
+      if (typeof html2canvas === 'undefined') {
+        showToast('Abriendo vista de impresión para guardar...', 'info');
+        printFlyerPDF();
+        return;
+      }
+
+      showToast('⏳ Generando imagen PNG en alta resolución...', 'info');
+
+      // Ocultar temporalmente elementos no imprimibles
+      const noPrintEls = flyerCard.querySelectorAll('.flyer-no-print');
+      noPrintEls.forEach(el => el.style.display = 'none');
+
+      html2canvas(flyerCard, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff'
+      }).then(canvas => {
+        noPrintEls.forEach(el => el.style.display = '');
+        const link = document.createElement('a');
+        const weekendText = document.getElementById('flyerWeekendSelect')?.selectedOptions[0]?.text || 'Flyer';
+        const safeName = weekendText.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 35);
+        link.download = `Anuncio_Semanal_${safeName}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('✅ Imagen PNG descargada correctamente', 'success');
+      }).catch(err => {
+        noPrintEls.forEach(el => el.style.display = '');
+        console.warn('html2canvas error:', err);
+        showToast('Abriendo vista de impresión para guardar...', 'info');
+        printFlyerPDF();
+      });
     }
 
     function initApp() {
