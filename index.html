@@ -1047,6 +1047,9 @@
     body.is-admin .public-only {
       display: none !important;
     }
+    body:not(.is-master-admin) .master-only {
+      display: none !important;
+    }
 
     /* Header con barra de autenticación */
     header {
@@ -1675,7 +1678,7 @@
               </select>
             </div>
             <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-              <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
+              <button class="btn btn-primary btn-sm master-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27 (Exclusivo Modo Maestro)" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
                 🎨 Anuncio Semanal (Flyer PDF)
               </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
@@ -2922,7 +2925,10 @@
       document.getElementById('cloudModal').classList.remove('open');
     }
 
-    function openMasterCloudUnlockModal() {
+    let pendingMasterCallback = null;
+
+    function openMasterCloudUnlockModal(callback = null) {
+      pendingMasterCallback = callback;
       document.getElementById('masterCloudUnlockForm').reset();
       document.getElementById('masterCloudErrorMsg').style.display = 'none';
       document.getElementById('masterCloudUnlockModal').classList.add('open');
@@ -2931,18 +2937,27 @@
 
     function closeMasterCloudUnlockModal() {
       document.getElementById('masterCloudUnlockModal').classList.remove('open');
+      pendingMasterCallback = null;
     }
 
     function handleMasterCloudUnlock(e) {
       e.preventDefault();
       const code = document.getElementById('masterCloudCodeInput').value.trim();
       if (code === '1844') {
+        isAuthenticated = true;
         isMasterAdmin = true;
+        sessionStorage.setItem('church_is_admin', 'true');
         sessionStorage.setItem('church_is_master_admin', 'true');
         closeMasterCloudUnlockModal();
-        renderAuthBar();
-        showToast('🔓 Opciones de Nube Google desbloqueadas', 'success');
-        openCloudModal();
+        updateAuthUI();
+        showToast('👑 Acceso Maestro desbloqueado con éxito', 'success');
+        if (pendingMasterCallback) {
+          const cb = pendingMasterCallback;
+          pendingMasterCallback = null;
+          cb();
+        } else {
+          openCloudModal();
+        }
       } else {
         const errorMsg = document.getElementById('masterCloudErrorMsg');
         errorMsg.innerText = '⛔ Código maestro incorrecto. Acceso denegado.';
@@ -3012,8 +3027,9 @@
       const savedLocal = localStorage.getItem('church_is_admin');
       const savedSession = sessionStorage.getItem('church_is_admin');
       const savedMaster = sessionStorage.getItem('church_is_master_admin');
+      const savedMasterLocal = localStorage.getItem('church_is_master_admin');
       isAuthenticated = (savedLocal === 'true' || savedSession === 'true');
-      isMasterAdmin = (isAuthenticated && savedMaster === 'true');
+      isMasterAdmin = (isAuthenticated && (savedMaster === 'true' || savedMasterLocal === 'true'));
       updateAuthUI();
     }
 
@@ -3022,6 +3038,11 @@
         document.body.classList.add('is-admin');
       } else {
         document.body.classList.remove('is-admin');
+      }
+      if (isMasterAdmin) {
+        document.body.classList.add('is-master-admin');
+      } else {
+        document.body.classList.remove('is-master-admin');
       }
       renderAuthBar();
     }
@@ -3105,8 +3126,10 @@
         sessionStorage.setItem('church_is_master_admin', 'true');
         if (remember) {
           localStorage.setItem('church_is_admin', 'true');
+          localStorage.setItem('church_is_master_admin', 'true');
         } else {
           sessionStorage.setItem('church_is_admin', 'true');
+          localStorage.removeItem('church_is_master_admin');
         }
         document.getElementById('loginModal').classList.remove('open');
         updateAuthUI();
@@ -3114,7 +3137,7 @@
         renderCollaboratorsTable();
         renderShiftsTable();
         renderQuarterlyActivities();
-        showToast('🔓 Acceso concedido con código maestro. Opciones de Nube Google habilitadas.', 'success');
+        showToast('👑 Acceso concedido en Modo Maestro. Anuncio Semanal desbloqueado.', 'success');
 
         if (pendingAuthCallback) {
           const cb = pendingAuthCallback;
@@ -3126,6 +3149,7 @@
         isAuthenticated = true;
         isMasterAdmin = false;
         sessionStorage.removeItem('church_is_master_admin');
+        localStorage.removeItem('church_is_master_admin');
         if (remember) {
           localStorage.setItem('church_is_admin', 'true');
         } else {
@@ -3198,6 +3222,7 @@
       isMasterAdmin = false;
       localStorage.removeItem('church_is_admin');
       sessionStorage.removeItem('church_is_admin');
+      localStorage.removeItem('church_is_master_admin');
       sessionStorage.removeItem('church_is_master_admin');
       updateAuthUI();
       renderCalendar();
@@ -4798,7 +4823,11 @@
     let currentFlyerVerseIdx = 0;
 
     function openFlyerModal() {
-      if (!ensureAuth(() => openFlyerModal())) return;
+      if (!isMasterAdmin) {
+        showToast('🔒 El Anuncio Semanal requiere Acceso Maestro (código 1844)', 'info');
+        openMasterCloudUnlockModal(() => openFlyerModal());
+        return;
+      }
       populateFlyerWeekendDropdown();
       onFlyerWeekendChange();
       const savedHeader = localStorage.getItem('church_flyer_header_b64');
