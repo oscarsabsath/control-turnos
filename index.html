@@ -1460,6 +1460,19 @@
       border: 1px solid #bae6fd;
     }
 
+    .activity-duration-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #0f766e;
+      background: #ccfbf1;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      border: 1px solid #99f6e4;
+    }
+
     .activity-dept-badge {
       font-size: 0.76rem;
       font-weight: 700;
@@ -1945,9 +1958,12 @@
       <div class="card">
         <div class="card-title">
           <span>📋 Registro General de Turnos</span>
-          <div>
-            <button class="btn btn-outline btn-sm" onclick="exportDataJSON()">
+          <div class="master-only" style="display: flex; gap: 6px;">
+            <button class="btn btn-outline btn-sm" onclick="exportDataJSON()" title="Descargar copia de seguridad en archivo JSON">
               📥 Descargar Respaldo JSON
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="triggerRestoreBackup()" title="Restaurar datos desde copia de seguridad">
+              🔄 Restaurar Respaldo
             </button>
           </div>
         </div>
@@ -2141,6 +2157,25 @@
           <label for="firebaseConfigInput">Pegar configuración <code>firebaseConfig</code> (JSON):</label>
           <textarea id="firebaseConfigInput" class="form-control" rows="6" style="font-family: monospace; font-size: 0.8rem;" placeholder='{\n  "apiKey": "...",\n  "authDomain": "...",\n  "databaseURL": "https://...",\n  "projectId": "..."\n}'></textarea>
         </div>
+
+        <!-- SECCIÓN RESPALDOS Y RESTAURACIÓN (EXCLUSIVO MODO MAESTRO) -->
+        <div style="margin-top: 18px; padding-top: 14px; border-top: 1.5px dashed #cbd5e1;">
+          <div style="font-weight: 800; font-size: 0.88rem; color: #1e3a8a; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <span>💾</span> Copia de Seguridad y Restauración (Exclusivo Maestro)
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+            Descarga un archivo con toda la base de datos (hermanos, turnos y programación trimestral) o restaura una copia guardada en tu equipo.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="exportDataJSON()" style="flex: 1; min-width: 170px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              📥 Descargar Respaldo JSON
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="triggerRestoreBackup()" style="flex: 1; min-width: 170px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #0f766e; border-color: #0d9488;">
+              🔄 Restaurar Respaldo JSON
+            </button>
+            <input type="file" id="restoreBackupFileInput" accept=".json,application/json" style="display: none;" onchange="handleRestoreBackupFile(event)">
+          </div>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeCloudModal()">Cerrar</button>
           <button type="button" class="btn btn-danger" onclick="handleClearCloudConfig()">Desconectar Nube</button>
@@ -2203,26 +2238,47 @@
           <div class="hint">Selecciona el día en que se realizará la actividad.</div>
         </div>
 
-        <div class="form-group">
-          <label for="actTime">Hora *</label>
-          <input type="text" id="actTime" class="form-control" list="actTimesList" placeholder="Ej: 09:30 AM o 17:00" required>
-          <datalist id="actTimesList">
-            <option value="09:00 AM">
-            <option value="09:15 AM">
-            <option value="09:30 AM">
-            <option value="10:00 AM">
-            <option value="10:30 AM">
-            <option value="11:00 AM">
-            <option value="11:30 AM">
-            <option value="12:00 PM">
-            <option value="04:00 PM">
-            <option value="04:30 PM">
-            <option value="05:00 PM">
-            <option value="06:00 PM">
-            <option value="07:00 PM">
-            <option value="07:30 PM">
-          </datalist>
-          <div class="hint">Selecciona una hora de la lista o escribe la que prefieras.</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="actTime">Hora *</label>
+            <input type="text" id="actTime" class="form-control" list="actTimesList" placeholder="Ej: 09:30 AM o 17:00" required>
+            <datalist id="actTimesList">
+              <option value="09:00 AM">
+              <option value="09:15 AM">
+              <option value="09:30 AM">
+              <option value="10:00 AM">
+              <option value="10:30 AM">
+              <option value="11:00 AM">
+              <option value="11:30 AM">
+              <option value="12:00 PM">
+              <option value="04:00 PM">
+              <option value="04:30 PM">
+              <option value="05:00 PM">
+              <option value="06:00 PM">
+              <option value="07:00 PM">
+              <option value="07:30 PM">
+            </datalist>
+            <div class="hint">Hora de inicio.</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="actDuration">Duración <span style="font-weight: normal; color: var(--text-muted);">(Opcional)</span></label>
+            <input type="text" id="actDuration" class="form-control" list="actDurationsList" placeholder="Ej: 1h, 1h 30m, 45 min...">
+            <datalist id="actDurationsList">
+              <option value="30 min">
+              <option value="45 min">
+              <option value="1 hora">
+              <option value="1h 15m">
+              <option value="1h 30m">
+              <option value="1h 45m">
+              <option value="2 horas">
+              <option value="2h 30m">
+              <option value="3 horas">
+              <option value="Medio día">
+              <option value="Todo el día">
+            </datalist>
+            <div class="hint">Duración estimada del evento.</div>
+          </div>
         </div>
 
         <div class="form-group">
@@ -2771,12 +2827,12 @@
     function getDemoQuarterlyActivities() {
       const yr = new Date().getFullYear();
       return [
-        { id: 'act_1', date: `${yr}-10-10`, time: '09:30 AM', department: 'Escuela Sabática', notes: 'Día de la Educación Adventista y énfasis en Grupos Pequeños' },
-        { id: 'act_2', date: `${yr}-10-17`, time: '11:00 AM', department: 'Ministerio Personal', notes: 'Lanzamiento de Campaña Misionera Distrital' },
-        { id: 'act_3', date: `${yr}-10-24`, time: '04:30 PM', department: 'Jóvenes (JA)', notes: 'Culto Joven Especial y Confraternidad Espiritual' },
-        { id: 'act_4', date: `${yr}-11-07`, time: '11:00 AM', department: 'Mayordomía Cristiana', notes: 'Semana de Mayordomía: ¡Viva la Entrega!' },
-        { id: 'act_5', date: `${yr}-11-21`, time: '09:30 AM', department: 'Ministerio Infantil', notes: 'Día del Niño Adventista y Ceremonia de Aventureros' },
-        { id: 'act_6', date: `${yr}-12-12`, time: '10:30 AM', department: 'Alabanza y Música', notes: 'Concierto Especial de Gratitud y Alabanza de Fin de Año' }
+        { id: 'act_1', date: `${yr}-10-10`, time: '09:30 AM', duration: '1h 30m', department: 'Escuela Sabática', notes: 'Día de la Educación Adventista y énfasis en Grupos Pequeños' },
+        { id: 'act_2', date: `${yr}-10-17`, time: '11:00 AM', duration: '1h 15m', department: 'Ministerio Personal', notes: 'Lanzamiento de Campaña Misionera Distrital' },
+        { id: 'act_3', date: `${yr}-10-24`, time: '04:30 PM', duration: '1h 30m', department: 'Jóvenes (JA)', notes: 'Culto Joven Especial y Confraternidad Espiritual' },
+        { id: 'act_4', date: `${yr}-11-07`, time: '11:00 AM', duration: '1h 30m', department: 'Mayordomía Cristiana', notes: 'Semana de Mayordomía: ¡Viva la Entrega!' },
+        { id: 'act_5', date: `${yr}-11-21`, time: '09:30 AM', duration: '2 horas', department: 'Ministerio Infantil', notes: 'Día del Niño Adventista y Ceremonia de Aventureros' },
+        { id: 'act_6', date: `${yr}-12-12`, time: '10:30 AM', duration: '2 horas', department: 'Alabanza y Música', notes: 'Concierto Especial de Gratitud y Alabanza de Fin de Año' }
       ];
     }
 
@@ -3078,8 +3134,8 @@
               <span>👑</span>
               <span>Acceso Maestro</span>
             </div>
-            <button class="btn btn-white-outline btn-sm" onclick="openCloudModal()" title="Configuración de la Nube Google (Firebase)">
-              ☁️ Nube Google
+            <button class="btn btn-white-outline btn-sm" onclick="openCloudModal()" title="Configuración de la Nube Google y Copias de Seguridad">
+              ☁️ Nube y Respaldos
             </button>
           `;
         } else {
@@ -4048,14 +4104,118 @@
     }
 
     function exportDataJSON() {
-      const data = { collaborators, shifts, ministries, saturdayMinistries, quarterlyActivities };
+      if (!isMasterAdmin) {
+        showToast('⛔ Solo el administrador en Modo Maestro puede exportar copias de seguridad.', 'error');
+        return;
+      }
+      const data = {
+        app: 'control-turnos-iasd',
+        version: '4.0',
+        exportedAt: new Date().toISOString(),
+        collaborators,
+        shifts,
+        quarterlyActivities
+      };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `responsabilidades_${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `respaldo_iglesia_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      showToast('📥 Copia de seguridad descargada con éxito', 'success');
+    }
+
+    function triggerRestoreBackup() {
+      if (!isMasterAdmin) {
+        showToast('⛔ Solo el administrador en Modo Maestro puede restaurar copias de seguridad.', 'error');
+        return;
+      }
+      let input = document.getElementById('restoreBackupFileInput');
+      if (!input) {
+        input = document.createElement('input');
+        input.type = 'file';
+        input.id = 'restoreBackupFileInput';
+        input.accept = '.json,application/json';
+        input.style.display = 'none';
+        input.onchange = handleRestoreBackupFile;
+        document.body.appendChild(input);
+      }
+      input.value = '';
+      input.click();
+    }
+
+    function handleRestoreBackupFile(e) {
+      if (!isMasterAdmin) {
+        showToast('⛔ Solo el administrador en Modo Maestro puede restaurar copias de seguridad.', 'error');
+        return;
+      }
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const raw = evt.target.result;
+          const data = JSON.parse(raw);
+
+          if (!data || typeof data !== 'object') {
+            showToast('⛔ El archivo de respaldo no tiene un formato válido.', 'error');
+            return;
+          }
+
+          const hasColabs = Array.isArray(data.collaborators);
+          const hasShifts = Array.isArray(data.shifts);
+          const hasQuarterly = Array.isArray(data.quarterlyActivities);
+
+          if (!hasColabs && !hasShifts && !hasQuarterly) {
+            showToast('⛔ El archivo no contiene datos compatibles de la iglesia.', 'error');
+            return;
+          }
+
+          const colabCount = hasColabs ? data.collaborators.length : 0;
+          const shiftCount = hasShifts ? data.shifts.length : 0;
+          const qCount = hasQuarterly ? data.quarterlyActivities.length : 0;
+
+          const msg = `¿Confirmas que deseas restaurar este respaldo?\n\n` +
+            `• Hermanos en directorio: ${colabCount}\n` +
+            `• Turnos y responsabilidades: ${shiftCount}\n` +
+            `• Actividades trimestrales: ${qCount}\n\n` +
+            `⚠️ Se reemplazarán los datos actuales y se sincronizará automáticamente con la nube Firebase.`;
+
+          if (!confirm(msg)) {
+            return;
+          }
+
+          if (hasColabs) {
+            collaborators = data.collaborators;
+          }
+          if (hasShifts) {
+            shifts = data.shifts;
+          }
+          if (hasQuarterly) {
+            quarterlyActivities = data.quarterlyActivities;
+          }
+
+          saveData();
+          saveQuarterlyData();
+
+          renderCalendar();
+          renderCollaboratorsTable();
+          renderShiftsTable();
+          populateCollaboratorsDropdown();
+          renderQuarterlyActivities();
+          updateStats();
+
+          showToast('✅ ¡Respaldo restaurado con éxito y sincronizado con la nube!', 'success');
+        } catch (err) {
+          console.error('Error al restaurar respaldo:', err);
+          showToast('⛔ Error al procesar el archivo JSON de respaldo.', 'error');
+        }
+      };
+      reader.readAsText(file);
     }
 
     // --- EXPORTACIÓN DE INFORME MENSUAL (EXCEL Y PDF) ---
@@ -4524,6 +4684,7 @@
                   <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                     <span class="activity-date-badge">📅 ${dayName} ${dayNum}</span>
                     <span class="activity-time-badge">⏰ ${escapeHtml(act.time || 'Hora por definir')}</span>
+                    ${act.duration ? `<span class="activity-duration-badge">⏱️ ${escapeHtml(act.duration)}</span>` : ''}
                   </div>
                   <div class="activity-dept-badge" style="background: ${style.bg}; color: ${style.color}; border: 1px solid ${style.border};">
                     <span>${style.icon}</span>
@@ -4596,6 +4757,8 @@
       }
       document.getElementById('actDate').value = `${targetYear}-${mStr}-${sampleDay}`;
       document.getElementById('actTime').value = '09:30 AM';
+      const durEl = document.getElementById('actDuration');
+      if (durEl) durEl.value = '1h 30m';
       document.getElementById('activityModal').classList.add('open');
       setTimeout(() => document.getElementById('actDept').focus(), 100);
     }
@@ -4610,6 +4773,8 @@
       document.getElementById('activityEditId').value = act.id;
       document.getElementById('actDate').value = act.date;
       document.getElementById('actTime').value = act.time;
+      const durEl = document.getElementById('actDuration');
+      if (durEl) durEl.value = act.duration || '';
       document.getElementById('actDept').value = act.department;
       document.getElementById('actNotes').value = act.notes;
       document.getElementById('activityModalTitle').innerText = '✏️ Editar Actividad Trimestral';
@@ -4629,6 +4794,7 @@
       const editId = document.getElementById('activityEditId').value.trim();
       const date = document.getElementById('actDate').value;
       const time = document.getElementById('actTime').value.trim();
+      const duration = (document.getElementById('actDuration')?.value || '').trim();
       const department = document.getElementById('actDept').value.trim();
       const notes = document.getElementById('actNotes').value.trim();
 
@@ -4644,6 +4810,7 @@
             ...quarterlyActivities[idx],
             date,
             time,
+            duration,
             department,
             notes
           };
@@ -4654,6 +4821,7 @@
           id: 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
           date,
           time,
+          duration,
           department,
           notes
         };
@@ -4743,7 +4911,8 @@
                 📅 ${dayName} ${dayNum} de ${monthName}
               </td>
               <td style="padding: 10px; font-weight: 700; white-space: nowrap; color: #0284c7;">
-                ⏰ ${escapeHtml(act.time)}
+                <div>⏰ ${escapeHtml(act.time || 'Por definir')}</div>
+                ${act.duration ? `<div style="font-size: 0.75rem; color: #0f766e; margin-top: 3px; font-weight: 700;">⏱️ ${escapeHtml(act.duration)}</div>` : ''}
               </td>
               <td style="padding: 10px; font-weight: 700; color: ${style.color}; white-space: nowrap;">
                 <span>${style.icon}</span> ${escapeHtml(act.department)}
@@ -4818,10 +4987,10 @@
             <table>
               <thead>
                 <tr>
-                  <th style="width: 28%;">Fecha</th>
-                  <th style="width: 15%;">Hora</th>
+                  <th style="width: 27%;">Fecha</th>
+                  <th style="width: 17%;">Hora / Duración</th>
                   <th style="width: 25%;">Departamento / Ministerio</th>
-                  <th style="width: 32%;">Actividad / Observaciones</th>
+                  <th style="width: 31%;">Actividad / Observaciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -5101,7 +5270,9 @@
           if (satActs[0]) {
             const time3 = document.getElementById('flyerInputSatAct3Time');
             const name3 = document.getElementById('flyerInputSatAct3Name');
-            if (time3 && satActs[0].time) time3.value = satActs[0].time;
+            if (time3 && satActs[0].time) {
+              time3.value = satActs[0].duration ? `${satActs[0].time} (${satActs[0].duration})` : satActs[0].time;
+            }
             if (name3 && (satActs[0].notes || satActs[0].department)) {
               name3.value = satActs[0].department ? `${satActs[0].department}: ${satActs[0].notes}` : satActs[0].notes;
             }
@@ -5109,7 +5280,9 @@
           if (satActs[1]) {
             const time4 = document.getElementById('flyerInputSatAct4Time');
             const name4 = document.getElementById('flyerInputSatAct4Name');
-            if (time4 && satActs[1].time) time4.value = satActs[1].time;
+            if (time4 && satActs[1].time) {
+              time4.value = satActs[1].duration ? `${satActs[1].time} (${satActs[1].duration})` : satActs[1].time;
+            }
             if (name4 && (satActs[1].notes || satActs[1].department)) {
               name4.value = satActs[1].department ? `${satActs[1].department}: ${satActs[1].notes}` : satActs[1].notes;
             }
