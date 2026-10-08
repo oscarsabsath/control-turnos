@@ -1767,11 +1767,14 @@
               🔑 Ingresar para Programar
             </button>
 
-            <button class="btn btn-primary btn-sm" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
+            <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
               🎨 Anuncio Semanal (Flyer PDF)
             </button>
             <button class="btn btn-outline btn-sm" onclick="exportQuarterPrintPDF()" title="Imprimir o guardar en PDF el programa del trimestre">
               🖨️ Imprimir Trimestre / PDF
+            </button>
+            <button class="btn btn-outline btn-sm admin-only" onclick="clearQuarterActivities()" title="Eliminar todas las actividades de este trimestre" style="color: #dc2626; border-color: #fca5a5;">
+              🗑️ Vaciar Trimestre
             </button>
           </div>
         </div>
@@ -2736,8 +2739,10 @@
           const raw = localStorage.getItem(key);
           if (raw && raw !== 'undefined' && raw !== 'null') {
             const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              return parsed;
+            if (Array.isArray(parsed)) {
+              if (parsed.length > 0 || localStorage.getItem(key + '_initialized') === 'true' || localStorage.getItem('church_quarterly_initialized') === 'true') {
+                return parsed;
+              }
             }
           }
         } catch (err) {
@@ -2775,10 +2780,11 @@
       ];
     }
 
+    const quarterlyWasInitialized = localStorage.getItem('church_quarterly_initialized') === 'true';
     let quarterlyActivities = loadSafeData([
       'church_quarterly_activities_v1',
       'church_quarterly_activities'
-    ], getDemoQuarterlyActivities());
+    ], quarterlyWasInitialized ? [] : getDemoQuarterlyActivities());
 
     let selectedQuarter = Math.floor(new Date().getMonth() / 3) + 1; // 1 a 4
     let selectedQuarterYear = new Date().getFullYear();
@@ -2848,6 +2854,11 @@
             if (Array.isArray(val.quarterlyActivities)) {
               quarterlyActivities = val.quarterlyActivities;
               try { localStorage.setItem('church_quarterly_activities_v1', JSON.stringify(quarterlyActivities)); } catch(e){}
+              try { localStorage.setItem('church_quarterly_initialized', 'true'); } catch(e){}
+            } else if (val.quarterlyActivitiesCleared === true || (val.updatedAt && !val.quarterlyActivities)) {
+              quarterlyActivities = [];
+              try { localStorage.setItem('church_quarterly_activities_v1', JSON.stringify([])); } catch(e){}
+              try { localStorage.setItem('church_quarterly_initialized', 'true'); } catch(e){}
             }
             renderCalendar();
             renderCollaboratorsTable();
@@ -2873,10 +2884,12 @@
 
     function pushDataToCloud() {
       if (!db) return;
+      const isQuarterlyEmpty = !quarterlyActivities || quarterlyActivities.length === 0;
       db.ref('church_turnos').update({
         collaborators: collaborators,
         shifts: shifts,
-        quarterlyActivities: quarterlyActivities,
+        quarterlyActivities: isQuarterlyEmpty ? null : quarterlyActivities,
+        quarterlyActivitiesCleared: isQuarterlyEmpty,
         updatedAt: Date.now()
       }).catch(err => {
         console.error('Error sincronizando con Firebase:', err);
@@ -2887,6 +2900,7 @@
       try {
         localStorage.setItem('church_quarterly_activities_v1', JSON.stringify(quarterlyActivities));
         localStorage.setItem('church_quarterly_activities', JSON.stringify(quarterlyActivities));
+        localStorage.setItem('church_quarterly_initialized', 'true');
       } catch (err) {
         console.error('Error guardando actividades trimestrales:', err);
       }
@@ -4668,6 +4682,25 @@
       saveQuarterlyData();
       renderQuarterlyActivities();
       showToast('🗑️ Actividad eliminada del programa', 'info');
+    }
+
+    function clearQuarterActivities() {
+      if (!ensureAuth(() => clearQuarterActivities())) return;
+      const qMonths = getQuarterMonths(selectedQuarter);
+      const qName = getQuarterName(selectedQuarter);
+      if (!confirm(`¿Estás seguro de eliminar todas las actividades de ${qName} ${selectedQuarterYear}? Esta acción no se puede deshacer.`)) {
+        return;
+      }
+      quarterlyActivities = quarterlyActivities.filter(act => {
+        if (!act.date) return false;
+        const [yStr, mStr] = act.date.split('-');
+        const actYear = parseInt(yStr, 10);
+        const actMonth = parseInt(mStr, 10) - 1;
+        return !(actYear === selectedQuarterYear && qMonths.includes(actMonth));
+      });
+      saveQuarterlyData();
+      renderQuarterlyActivities();
+      showToast(`🗑️ Actividades de ${qName} eliminadas`, 'info');
     }
 
     function exportQuarterPrintPDF() {
