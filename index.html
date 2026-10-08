@@ -9,8 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
+      --primary: #38628b;
+      --primary-hover: #2d5175;
+      --primary-dark: #203f5d;
+      --primary-blue: #38628b;
+      --gold: #d4af37;
+      --gold-dark: #b45309;
+      --gold-light: #fef3c7;
+      --gold-border: #fcd34d;
+      --gold-bright: #f6c84c;
+      --cyan-accent: #38bdf8;
       
       /* 1. PREDICACIÓN (Azul Zafiro Sólido) */
       --pred-bg: #e0f2fe;
@@ -48,13 +56,13 @@
       --warning: #f59e0b;
       --warning-bg: #fef3c7;
       --success: #10b981;
-      --bg: #f1f5f9;
+      --bg: #f4f6fa;
       --card-bg: #ffffff;
       --text: #0f172a;
       --text-muted: #475569;
       --border: #cbd5e1;
       --radius: 8px;
-      --shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.08), 0 1px 3px -1px rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 10px -1px rgba(32, 63, 93, 0.08), 0 2px 4px -1px rgba(32, 63, 93, 0.04);
     }
 
     html {
@@ -66,14 +74,20 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.42;
+      line-height: 1.45;
       padding: 14px;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    h1, h2, h3, .card-title, .modal-title {
+      font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      letter-spacing: -0.2px;
     }
 
     .container {
@@ -81,29 +95,39 @@
       margin: 0 auto;
     }
 
-    /* Header Compacto */
+    /* Header Compacto con estilo Azul IASD */
     header {
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      background: linear-gradient(135deg, #203f5d 0%, #38628b 55%, #4c7aa7 100%);
       color: white;
-      padding: 16px 20px;
+      padding: 16px 22px;
       border-radius: var(--radius);
       margin-bottom: 14px;
-      box-shadow: 0 4px 10px -2px rgba(30, 58, 138, 0.2);
+      box-shadow: 0 6px 18px rgba(32, 63, 93, 0.25);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-bottom: 3.5px solid #d4af37;
     }
 
     header h1 {
-      font-size: 1.35rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.42rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
       line-height: 1.25;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     }
 
     header p {
-      color: #bfdbfe;
-      margin-top: 4px;
+      color: #cbd5e1;
+      margin-top: 5px;
       font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    header p strong {
+      color: #f6c84c;
     }
 
     /* Pestañas */
@@ -124,32 +148,33 @@
 
     .tab-btn {
       background: #ffffff;
-      border: 1px solid #cbd5e1;
-      padding: 8px 14px;
+      border: 1.5px solid #cbd5e1;
+      padding: 9px 15px;
       font-size: 0.85rem;
       font-weight: 700;
-      color: #475569;
-      border-radius: 6px;
+      color: #334155;
+      border-radius: 7px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .tab-btn:hover {
       background-color: #f8fafc;
-      color: #0f172a;
-      border-color: #94a3b8;
+      color: #38628b;
+      border-color: #d4af37;
+      transform: translateY(-1px);
     }
 
     .tab-btn.active {
-      background-color: var(--primary);
+      background: linear-gradient(135deg, #203f5d 0%, #38628b 100%);
       color: white;
-      border-color: var(--primary);
-      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      border: 1.5px solid #d4af37;
+      box-shadow: 0 3px 8px rgba(32, 63, 93, 0.25);
     }
 
     .tab-content {
@@ -170,17 +195,18 @@
     .card {
       background: var(--card-bg);
       border-radius: var(--radius);
-      border: 1px solid var(--border);
+      border: 1.5px solid #cbd5e1;
       padding: 16px;
       box-shadow: var(--shadow);
       margin-bottom: 16px;
     }
 
     .card-title {
-      font-size: 1.1rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.2rem;
       font-weight: 700;
       margin-bottom: 12px;
-      color: var(--text);
+      color: #203f5d;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -226,8 +252,8 @@
 
     .form-control:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+      border-color: #38628b;
+      box-shadow: 0 0 0 2px rgba(56, 98, 139, 0.15), 0 0 0 3px rgba(212, 175, 55, 0.2);
     }
 
     .hint {
@@ -244,20 +270,25 @@
       gap: 6px;
       padding: 8px 14px;
       font-size: 0.84rem;
-      font-weight: 600;
+      font-weight: 700;
       border-radius: 6px;
       cursor: pointer;
       border: none;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
     }
 
     .btn-primary {
-      background-color: var(--primary);
+      background: linear-gradient(135deg, #203f5d 0%, #38628b 100%);
       color: white;
+      border: 1px solid #203f5d;
+      box-shadow: 0 2px 5px rgba(32, 63, 93, 0.2);
     }
 
     .btn-primary:hover {
-      background-color: var(--primary-hover);
+      background: linear-gradient(135deg, #2d5175 0%, #4c7aa7 100%);
+      border-color: #d4af37;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(32, 63, 93, 0.25);
     }
 
     .btn-danger {
@@ -430,12 +461,14 @@
     }
 
     .calendar-current-month {
-      font-size: 1.25rem;
-      font-weight: 800;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
       text-transform: capitalize;
       min-width: 160px;
       text-align: center;
-      color: #1e3a8a;
+      color: #05162e;
+      letter-spacing: -0.3px;
     }
 
     .calendar-filters {
@@ -477,16 +510,16 @@
     }
 
     .col-8days-header.is-friday {
-      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #38628b 0%, #4c7aa7 100%);
       color: #ffffff;
-      border: 1.5px solid #1d4ed8;
+      border: 1.5px solid #2d5175;
       border-bottom: none;
     }
 
     .col-8days-header.is-saturday {
-      background: linear-gradient(135deg, #9a3412 0%, #ea580c 100%);
+      background: linear-gradient(135deg, #203f5d 0%, #30567e 100%);
       color: #ffffff;
-      border: 1.5px solid #c2410c;
+      border: 1.5px solid #d4af37;
       border-bottom: none;
     }
 
@@ -506,7 +539,7 @@
       font-size: 0.74rem;
       font-weight: 800;
       background: #ffffff;
-      color: #1e40af;
+      color: #38628b;
       padding: 3px 10px;
       border-radius: 999px;
       margin-top: 3px;
@@ -514,7 +547,9 @@
     }
 
     .col-8days-header.is-saturday .col-8days-date-badge {
-      color: #c2410c;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
     }
 
     .calendar-8days-grid {
@@ -543,12 +578,12 @@
     }
 
     .col-8days-card.is-friday {
-      border-top: 4px solid #2563eb;
+      border-top: 4px solid #38628b;
       background: #ffffff;
     }
 
     .col-8days-card.is-saturday {
-      border-top: 4px solid #ea580c;
+      border-top: 4px solid #d4af37;
       background: #ffffff;
     }
 
@@ -1053,12 +1088,14 @@
 
     /* Header con barra de autenticación */
     header {
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      background: linear-gradient(135deg, #05162e 0%, #0a2550 55%, #12376e 100%);
       color: white;
-      padding: 16px 20px;
+      padding: 16px 22px;
       border-radius: var(--radius);
       margin-bottom: 14px;
-      box-shadow: 0 4px 10px -2px rgba(30, 58, 138, 0.2);
+      box-shadow: 0 6px 18px rgba(5, 22, 46, 0.25);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-bottom: 3.5px solid #d4af37;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1075,10 +1112,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: #0f2757;
+      background: rgba(3, 15, 33, 0.85);
       padding: 6px 12px;
       border-radius: 8px;
-      border: 1.5px solid #3b82f6;
+      border: 1.5px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .auth-badge {
@@ -1092,9 +1130,9 @@
     }
 
     .auth-badge.public {
-      background: #1e40af;
+      background: #0b254a;
       color: #ffffff;
-      border: 1.5px solid #60a5fa;
+      border: 1.5px solid #38bdf8;
     }
 
     .auth-badge.admin {
@@ -1118,22 +1156,29 @@
 
     .btn-light-glow {
       background: #ffffff;
-      color: #1e3a8a;
+      color: #05162e;
       font-weight: 700;
-      border: 1.5px solid #cbd5e1;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      border: 1.5px solid #d4af37;
+      box-shadow: 0 2px 8px rgba(212, 175, 55, 0.25);
     }
 
     .btn-light-glow:hover {
-      background: #f1f5f9;
+      background: #fef3c7;
       transform: translateY(-1px);
     }
 
     .btn-white-outline {
-      background: #1e40af;
+      background: rgba(255, 255, 255, 0.12);
       color: #ffffff;
-      border: 1.5px solid #60a5fa;
+      border: 1.5px solid rgba(212, 175, 55, 0.6);
       font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .btn-white-outline:hover {
+      background: rgba(212, 175, 55, 0.25);
+      border-color: #f6c84c;
+      color: #ffffff;
     }
 
     /* ==========================================================
@@ -1141,8 +1186,9 @@
        (Iglesia Adventista + OneVoice27 • Misión Para Todos • Viva la Entrega)
        ========================================================== */
     .brand-top-bar {
-      background: #090d16;
-      border: 1px solid #1e293b;
+      background: linear-gradient(135deg, #203f5d 0%, #2b4f73 45%, #38628b 100%);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-bottom: 3px solid #d4af37;
       border-radius: var(--radius);
       margin-bottom: 14px;
       padding: 9px 18px;
@@ -1152,7 +1198,7 @@
       gap: 16px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 16px rgba(32, 63, 93, 0.25);
     }
 
     .brand-top-bar::after {
@@ -1175,9 +1221,10 @@
 
     .brand-church-logo {
       height: 38px;
-      width: 38px;
-      border-radius: 50%;
-      object-fit: cover;
+      width: auto;
+      max-width: 170px;
+      border-radius: 6px;
+      object-fit: contain;
       background: #ffffff;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       border: 1.5px solid rgba(255, 255, 255, 0.4);
@@ -1337,9 +1384,10 @@
     }
 
     .quarter-btn.active {
-      background: #1e3a8a;
+      background: linear-gradient(135deg, #203f5d 0%, #38628b 100%);
       color: #ffffff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      border: 1px solid #d4af37;
+      box-shadow: 0 2px 6px rgba(32, 63, 93, 0.25);
     }
 
     .quarter-months-grid {
@@ -1365,15 +1413,17 @@
     }
 
     .quarter-month-header {
-      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #203f5d 0%, #2b4f73 50%, #38628b 100%);
+      border-bottom: 2.5px solid #d4af37;
       color: #ffffff;
       padding: 10px 14px;
-      font-size: 0.92rem;
-      font-weight: 800;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.98rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
     }
 
     .quarter-month-count {
@@ -1548,6 +1598,7 @@
     }
 
     @media print {
+      .brand-hero-banner,
       .brand-top-bar {
         display: none !important;
       }
@@ -1558,56 +1609,18 @@
 
   <div class="container">
     <!-- ==========================================================
-         BARRA SUPERIOR MODERNA DE IDENTIDAD INSTITUCIONAL
+         BANNER PRINCIPAL SUPERIOR OFICIAL (ONEVOICE27)
          ========================================================== -->
-    <div class="brand-top-bar">
-      <!-- Identidad Visual: Logo Iglesia Adventista + OneVoice27 -->
-      <div class="brand-left-group">
-        <div class="brand-church-badge" style="display: flex; align-items: center;" title="Iglesia Adventista del Séptimo Día">
-          <img src="logo-iasd.jpg" alt="Iglesia Adventista del Séptimo Día" class="brand-church-logo"
-               title="Iglesia Adventista del Séptimo Día"
-               onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='logo-iasd.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791234463495.jpg'; } else { this.style.display='none'; const fb = this.nextElementSibling; if (fb) fb.style.display='block'; }">
-          <svg class="brand-church-svg" viewBox="0 0 100 100" style="display: none;" width="38" height="38">
-            <circle cx="50" cy="50" r="46" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
-            <path d="M 14 74 C 26 71 37 70 48 74 L 48 83 C 37 78 25 78 14 81 Z" fill="#000000"/>
-            <path d="M 86 74 C 74 71 63 70 52 74 L 52 83 C 63 78 75 78 86 81 Z" fill="#000000"/>
-            <path d="M 47.5 68 H 52.5 V 86 H 47.5 Z" fill="#000000"/>
-            <path d="M 43.5 73 H 56.5 V 77 H 43.5 Z" fill="#000000"/>
-            <path d="M 47 67 C 45 48 30 38 41 14 C 28 30 25 50 37 68 Z" fill="#000000"/>
-            <path d="M 41 68 C 34 52 30 42 38 24 C 26 38 23 53 32 68 Z" fill="#000000"/>
-            <path d="M 53 67 C 55 48 70 38 59 14 C 72 30 75 50 63 68 Z" fill="#000000"/>
-            <path d="M 59 68 C 66 52 70 42 62 24 C 74 38 77 53 68 68 Z" fill="#000000"/>
-          </svg>
-        </div>
-        
-        <div class="brand-divider"></div>
-
-        <img src="onevoice27.png" alt="OneVoice27" class="brand-onevoice-logo"
-             title="OneVoice27"
-             onerror="if (!this.dataset.tried) { this.dataset.tried='1'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791233312219.png'; } else { this.style.display='none'; const fb = this.parentElement.querySelector('.brand-onevoice-vector'); if (fb) fb.style.display='inline-flex'; }">
-        <div class="brand-onevoice-vector" style="display: none;">
-          <div class="brand-ov-text">One<span style="font-weight: 900;">VOICE</span><span style="font-weight: 900;">27</span></div>
-          <div class="brand-ov-sub">MISIÓN PARA TODOS</div>
-        </div>
-      </div>
-
-      <!-- Lemas Institucionales: Misión Para Todos y Viva la Entrega -->
-      <div class="brand-right-group">
-        <div class="motto-badge mision" title="Lema Oficial">
-          <span class="motto-icon">✦</span>
-          <span>MISIÓN PARA TODOS</span>
-        </div>
-        <div class="motto-badge entrega" title="Lema Oficial">
-          <span class="motto-icon">✨</span>
-          <span>VIVA LA ENTREGA</span>
-        </div>
-      </div>
+    <div class="brand-hero-banner" style="margin-bottom: 14px; border-radius: var(--radius); overflow: hidden; border: 1.5px solid #d4af37; box-shadow: 0 4px 16px rgba(32, 63, 93, 0.25); background: #05162e;">
+      <img src="banner-principal.png" alt="OneVoice27 - Misión Para Todos"
+           style="width: 100%; height: auto; max-height: 200px; object-fit: cover; display: block;"
+           onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='banner.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='media_1791473229213.png'; } else if (this.dataset.t==='2') { this.dataset.t='3'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791473229213.png'; }">
     </div>
 
     <!-- Header con control de usuario -->
     <header>
       <div class="header-info">
-        <h1>📅 Gestión de Responsabilidades y Turnos</h1>
+        <h1>Gestión de Responsabilidades y Turnos</h1>
         <p>Organización compartida para <strong>Anciano de Turno (Sábados), Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual</strong>.</p>
       </div>
       <div class="auth-bar" id="authBar">
@@ -1618,31 +1631,31 @@
     <!-- Resumen / Estadísticas -->
     <div class="stats-row">
       <div class="stat-card" style="border-top-color: #2563eb;">
-        <div class="stat-label" style="color: #1e40af;">👥 Total Hermanos</div>
+        <div class="stat-label" style="color: #1e40af;">Total Hermanos</div>
         <div class="stat-value" id="statColabs" style="color: #0f172a;">0</div>
       </div>
       <div class="stat-card" style="border-top-color: #475569;">
-        <div class="stat-label" style="color: #334155;">🏛️ Anciano Turno</div>
+        <div class="stat-label" style="color: #334155;">Anciano Turno</div>
         <div class="stat-value" id="statAnciano" style="color: #334155;">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--pred-badge);">
-        <div class="stat-label" style="color: var(--pred-text);">📖 Predicación</div>
+        <div class="stat-label" style="color: var(--pred-text);">Predicación</div>
         <div class="stat-value" id="statPredicaciones" style="color: var(--pred-text);">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--alab-badge);">
-        <div class="stat-label" style="color: var(--alab-text);">🎵 Alabanza</div>
+        <div class="stat-label" style="color: var(--alab-text);">Alabanza</div>
         <div class="stat-value" id="statAlabanza" style="color: var(--alab-text);">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--diac-fem-badge);">
-        <div class="stat-label" style="color: var(--diac-fem-text);">🌸 Diaconisas</div>
+        <div class="stat-label" style="color: var(--diac-fem-text);">Diaconisas</div>
         <div class="stat-value" id="statDiaconisas" style="color: var(--diac-fem-text);">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--diac-masc-badge);">
-        <div class="stat-label" style="color: var(--diac-masc-text);">🤝 Diáconos</div>
+        <div class="stat-label" style="color: var(--diac-masc-text);">Diáconos</div>
         <div class="stat-value" id="statDiaconos" style="color: var(--diac-masc-text);">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--audio-badge);">
-        <div class="stat-label" style="color: var(--audio-text);">🎥 Audiovisual</div>
+        <div class="stat-label" style="color: var(--audio-text);">Audiovisual</div>
         <div class="stat-value" id="statAudiovisual" style="color: var(--audio-text);">0</div>
       </div>
     </div>
@@ -1650,19 +1663,19 @@
     <!-- Navegación por pestañas -->
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('calendarTab', this)">
-        📆 Almanaque (Vie y Sáb)
+        Almanaque (Vie y Sáb)
       </button>
       <button class="tab-btn" onclick="switchTab('quarterlyTab', this)">
-        📅 Programa Trimestral
+        Programa Trimestral
       </button>
       <button class="tab-btn" onclick="switchTab('assignTab', this)">
-        ➕ Asignar Responsabilidad
+        Asignar Responsabilidad
       </button>
       <button class="tab-btn admin-only" onclick="switchTab('collaboratorsTab', this)">
-        👥 Directorio de Hermanos
+        Directorio de Hermanos
       </button>
       <button class="tab-btn" onclick="switchTab('shiftsListTab', this)">
-        📋 Registro General
+        Registro General
       </button>
     </div>
 
@@ -1671,9 +1684,9 @@
       <div class="card">
         <div class="calendar-header">
           <div class="calendar-nav">
-            <button class="btn btn-outline btn-sm" onclick="changeMonth(-1)">◀ Anterior</button>
+            <button class="btn btn-outline btn-sm" onclick="changeMonth(-1)">Anterior</button>
             <span class="calendar-current-month" id="calendarMonthTitle">Octubre 2026</span>
-            <button class="btn btn-outline btn-sm" onclick="changeMonth(1)">Siguiente ▶</button>
+            <button class="btn btn-outline btn-sm" onclick="changeMonth(1)">Siguiente</button>
             <button class="btn btn-outline btn-sm" onclick="goToCurrentMonth()">Hoy</button>
           </div>
 
@@ -1682,23 +1695,23 @@
               <label style="font-weight: 600; font-size: 0.8rem;">Filtrar Área:</label>
               <select id="filterDepartment" class="form-control" style="width: auto;" onchange="renderCalendar()">
                 <option value="ALL">Todas las Áreas</option>
-                <option value="anciano">🏛️ Anciano de Turno</option>
-                <option value="predicaciones">📖 Predicación</option>
-                <option value="alabanza">🎵 Alabanza</option>
-                <option value="diaconisas">🌸 Diaconisas</option>
-                <option value="diaconos">🤝 Diáconos</option>
-                <option value="audiovisual">🎥 Audiovisual</option>
+                <option value="anciano">Anciano de Turno</option>
+                <option value="predicaciones">Predicación</option>
+                <option value="alabanza">Alabanza</option>
+                <option value="diaconisas">Diaconisas</option>
+                <option value="diaconos">Diáconos</option>
+                <option value="audiovisual">Audiovisual</option>
               </select>
             </div>
             <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-              <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
-                🎨 Anuncio Semanal (Flyer PDF)
+              <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #203f5d 0%, #38628b 100%); border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(32,63,93,0.3);">
+                Anuncio Semanal (Flyer PDF)
               </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
-                🖨️ Imprimir / PDF
+                Imprimir / PDF
               </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthExcelCSV()" title="Descargar informe de este mes en formato Excel (.csv)">
-                📊 Excel (.csv)
+                Excel (.csv)
               </button>
             </div>
           </div>
@@ -1732,7 +1745,7 @@
             </div>
           </div>
           <div style="color: #1e3a8a; font-size: 0.76rem; font-weight: 700; background: #e0f2fe; padding: 4px 10px; border-radius: 6px; border: 1px solid #7dd3fc;">
-            🗓️ 8 Columnas: Los 8 días de turno del mes (Viernes y Sábado)
+            8 Columnas: Los 8 días de turno del mes (Viernes y Sábado)
           </div>
         </div>
 
@@ -1748,7 +1761,6 @@
         <div class="quarter-controls">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <div style="font-weight: 800; font-size: 1.05rem; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
-              <span>📅</span>
               <span id="quarterMainTitle">Programa Trimestral de Actividades</span>
             </div>
             <select id="quarterYearSelect" class="form-control" style="width: auto; font-weight: 700; padding: 5px 10px;" onchange="changeQuarterYear(this.value)">
@@ -1774,20 +1786,20 @@
             </div>
 
             <button class="btn btn-primary btn-sm admin-only" onclick="openAddActivityModal()" title="Agregar nueva actividad a este trimestre">
-              ➕ Nueva Actividad
+              Nueva Actividad
             </button>
             <button class="btn btn-primary btn-sm public-only" onclick="ensureAuth(openAddActivityModal)" title="Ingresar para programar actividades">
-              🔑 Ingresar para Programar
+              Ingresar para Programar
             </button>
 
-            <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); border: 1px solid #1e3a8a; box-shadow: 0 2px 4px rgba(11,37,74,0.3);">
-              🎨 Anuncio Semanal (Flyer PDF)
+            <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #203f5d 0%, #38628b 100%); border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(32,63,93,0.3);">
+              Anuncio Semanal (Flyer PDF)
             </button>
             <button class="btn btn-outline btn-sm" onclick="exportQuarterPrintPDF()" title="Imprimir o guardar en PDF el programa del trimestre">
-              🖨️ Imprimir Trimestre / PDF
+              Imprimir Trimestre / PDF
             </button>
             <button class="btn btn-outline btn-sm admin-only" onclick="clearQuarterActivities()" title="Eliminar todas las actividades de este trimestre" style="color: #dc2626; border-color: #fca5a5;">
-              🗑️ Vaciar Trimestre
+              Vaciar Trimestre
             </button>
           </div>
         </div>
@@ -1803,13 +1815,12 @@
     <div id="assignTab" class="tab-content">
       <!-- Banner para modo lectura / público -->
       <div class="card public-only" style="background: #ffffff; text-align: center; padding: 36px 20px; border: 2px dashed #cbd5e1;">
-        <div style="font-size: 2.5rem; margin-bottom: 8px;">🔒</div>
         <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Modo Solo Lectura</h2>
         <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 460px; margin: 0 auto 16px;">
           Esta página está disponible públicamente para consultar el calendario. Para asignar o editar responsabilidades, ingresa con la contraseña de administrador.
         </p>
         <button class="btn btn-primary" onclick="openLoginModal()" style="padding: 10px 22px; font-size: 0.9rem;">
-          🔑 Desbloquear con Contraseña
+          Desbloquear con Contraseña
         </button>
       </div>
 
@@ -1817,16 +1828,16 @@
       <div class="grid-2 admin-only">
         <div class="card">
           <div class="card-title">
-            <span>📝 Asignar Responsabilidad</span>
+            <span>Asignar Responsabilidad</span>
           </div>
 
           <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; color: #15803d; margin-bottom: 12px;">
-            💡 <strong>Cualquier hermano(a)</strong> puede ser seleccionado para <strong>Predicación, Alabanza, Diaconisas, Diáconos o Audiovisual</strong>.
+            <strong>Cualquier hermano(a)</strong> puede ser seleccionado para <strong>Predicación, Alabanza, Diaconisas, Diáconos o Audiovisual</strong>.
           </div>
 
           <div id="conflictAlert" class="alert alert-danger" style="display: none;">
             <div>
-              <strong>⛔ Conflicto detectado:</strong>
+              <strong>Conflicto detectado:</strong>
               <div id="conflictAlertMessage" style="margin-top: 3px;"></div>
             </div>
           </div>
@@ -1836,12 +1847,12 @@
               <label for="assignDepartment">Área / Responsabilidad a Asignar *</label>
               <select id="assignDepartment" class="form-control" required onchange="onDepartmentSelected(); checkRealtimeConflict()">
                 <option value="">-- Seleccionar Área / Responsabilidad --</option>
-                <option value="anciano">🏛️ Anciano de Turno (Solo Sábados)</option>
-                <option value="predicaciones">📖 Predicación</option>
-                <option value="alabanza">🎵 Alabanza</option>
-                <option value="diaconisas">🌸 Diaconisas</option>
-                <option value="diaconos">🤝 Diáconos</option>
-                <option value="audiovisual">🎥 Audiovisual</option>
+                <option value="anciano">Anciano de Turno (Solo Sábados)</option>
+                <option value="predicaciones">Predicación</option>
+                <option value="alabanza">Alabanza</option>
+                <option value="diaconisas">Diaconisas</option>
+                <option value="diaconos">Diáconos</option>
+                <option value="audiovisual">Audiovisual</option>
               </select>
             </div>
 
@@ -1855,7 +1866,7 @@
             <div class="form-group">
               <label for="assignDate">Fecha del Turno (Solo Viernes o Sábado) *</label>
               <input type="date" id="assignDate" class="form-control" required onchange="onDateSelected(this.value)">
-              <div id="dateValidationNotice" class="hint">⚠️ Seleccione una fecha (Viernes o Sábado).</div>
+              <div id="dateValidationNotice" class="hint">Seleccione una fecha (Viernes o Sábado).</div>
             </div>
 
             <div class="form-group">
@@ -1875,14 +1886,14 @@
         </div>
 
         <div class="card" style="background: #f8fafc;">
-          <div class="card-title">🛡️ Reglas de Asignación y Bloqueo</div>
+          <div class="card-title">Reglas de Asignación y Bloqueo</div>
           <div style="font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px;">
-            <p>1️⃣ <strong>Flexibilidad total de áreas:</strong> Cualquier hermano(a) registrado puede participar indistintamente en <strong>Predicación, Alabanza, Diaconisas o Diáconos</strong>.</p>
-            <p>2️⃣ <strong>Bloqueo estricto del mismo día:</strong> Un hermano no puede tener dos responsabilidades en la misma fecha (incluso si son de áreas distintas).</p>
+            <p><strong>1. Flexibilidad total de áreas:</strong> Cualquier hermano(a) registrado puede participar indistintamente en <strong>Predicación, Alabanza, Diaconisas o Diáconos</strong>.</p>
+            <p><strong>2. Bloqueo estricto del mismo día:</strong> Un hermano no puede tener dos responsabilidades en la misma fecha (incluso si son de áreas distintas).</p>
             <div style="background: #fee2e2; border-left: 3px solid #ef4444; padding: 6px 10px; border-radius: 4px; color: #991b1b; font-weight: 600; font-size: 0.78rem;">
               "Tiene que cambiar la fecha para este colaborador porque ya tiene un turno asignado ese día."
             </div>
-            <p>3️⃣ <strong>Exclusivo Viernes y Sábado:</strong> No se pueden programar turnos de domingo a jueves.</p>
+            <p><strong>3. Exclusivo Viernes y Sábado:</strong> No se pueden programar turnos de domingo a jueves.</p>
           </div>
         </div>
       </div>
@@ -1892,20 +1903,19 @@
     <div id="collaboratorsTab" class="tab-content">
       <!-- Bloqueo para modo público / solo lectura -->
       <div class="card public-only" style="background: #ffffff; text-align: center; padding: 36px 20px; border: 2px dashed #cbd5e1;">
-        <div style="font-size: 2.5rem; margin-bottom: 8px;">🔒</div>
         <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Directorio Restringido</h2>
         <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 480px; margin: 0 auto 16px;">
           Por privacidad y protección de datos personales (teléfonos y correos), el directorio de hermanos solo es visible para el administrador.
         </p>
         <button class="btn btn-primary" onclick="openLoginModal(() => switchTab('collaboratorsTab'))" style="padding: 10px 22px; font-size: 0.9rem;">
-          🔑 Iniciar Sesión como Administrador
+          Iniciar Sesión como Administrador
         </button>
       </div>
 
       <!-- Contenido exclusivo para administradores -->
       <div class="grid-2 admin-only">
         <div class="card">
-          <div class="card-title">➕ Registrar Hermano(a)</div>
+          <div class="card-title">Registrar Hermano(a)</div>
           <form id="colabForm" onsubmit="handleCreateCollaborator(event)">
             <div class="form-group">
               <label for="colabName">Nombre Completo *</label>
@@ -1923,7 +1933,7 @@
             </div>
 
             <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 9px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
-              🌟 <strong>Habilitación universal:</strong> Queda disponible de inmediato para las 5 áreas (Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual).
+              <strong>Habilitación universal:</strong> Queda disponible de inmediato para las 5 áreas (Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual).
             </div>
 
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 4px;">
@@ -1934,7 +1944,7 @@
 
         <div class="card">
           <div class="card-title">
-            <span>👥 Directorio de Hermanos (<span id="colabsCountHeader">0</span>)</span>
+            <span>Directorio de Hermanos (<span id="colabsCountHeader">0</span>)</span>
           </div>
           <div class="table-container" style="max-height: 420px; overflow-y: auto;">
             <table>
@@ -1957,13 +1967,13 @@
     <div id="shiftsListTab" class="tab-content">
       <div class="card">
         <div class="card-title">
-          <span>📋 Registro General de Turnos</span>
+          <span>Registro General de Turnos</span>
           <div class="master-only" style="display: flex; gap: 6px;">
             <button class="btn btn-outline btn-sm" onclick="exportDataJSON()" title="Descargar copia de seguridad en archivo JSON">
-              📥 Descargar Respaldo JSON
+              Descargar Respaldo JSON
             </button>
             <button class="btn btn-outline btn-sm" onclick="triggerRestoreBackup()" title="Restaurar datos desde copia de seguridad">
-              🔄 Restaurar Respaldo
+              Restaurar Respaldo
             </button>
           </div>
         </div>
@@ -1972,12 +1982,12 @@
           <input type="text" id="searchShiftInput" class="form-control" style="max-width: 250px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
           <select id="filterShiftDept" class="form-control" style="max-width: 200px;" onchange="renderShiftsTable()">
             <option value="ALL">Todas las Áreas</option>
-            <option value="anciano">🏛️ Anciano de Turno</option>
-            <option value="predicaciones">📖 Predicación</option>
-            <option value="alabanza">🎵 Alabanza</option>
-            <option value="diaconisas">🌸 Diaconisas</option>
-            <option value="diaconos">🤝 Diáconos</option>
-            <option value="audiovisual">🎥 Audiovisual</option>
+            <option value="anciano">Anciano de Turno</option>
+            <option value="predicaciones">Predicación</option>
+            <option value="alabanza">Alabanza</option>
+            <option value="diaconisas">Diaconisas</option>
+            <option value="diaconos">Diáconos</option>
+            <option value="audiovisual">Audiovisual</option>
           </select>
         </div>
 
@@ -2020,7 +2030,7 @@
   <div id="loginModal" class="modal-backdrop" onclick="if (event.target === this) closeLoginModal()">
     <div class="modal" style="max-width: 420px;">
       <div class="modal-header">
-        <h3 class="modal-title">🔒 Acceso de Administrador</h3>
+        <h3 class="modal-title">Acceso de Administrador</h3>
         <button class="modal-close" onclick="closeLoginModal()">&times;</button>
       </div>
       <form id="loginForm" onsubmit="handleLogin(event)">
@@ -2031,7 +2041,7 @@
           <label for="adminPasswordInput">Contraseña de Administrador *</label>
           <input type="password" id="adminPasswordInput" class="form-control" placeholder="Ingresa la contraseña..." autocomplete="current-password" required>
           <div id="loginErrorMsg" style="color: #dc2626; font-size: 0.82rem; font-weight: 700; margin-top: 6px; display: none;">
-            ⛔ Contraseña incorrecta. Inténtalo de nuevo.
+            Contraseña incorrecta. Inténtalo de nuevo.
           </div>
         </div>
         <div style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
@@ -2042,8 +2052,8 @@
           <a href="javascript:void(0)" onclick="openResetPasswordModal()" style="font-size: 0.78rem; color: #2563eb; text-decoration: underline; font-weight: 600;">¿Olvidaste tu clave?</a>
         </div>
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 9px 12px; font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
-          🔑 <em>Contraseña inicial por defecto:</em> <strong>1234</strong><br>
-          <span style="font-size: 0.73rem; opacity: 0.9;">(Puedes cambiarla en cualquier momento desde "⚙️ Clave").</span>
+          <em>Contraseña inicial por defecto:</em> <strong>1234</strong><br>
+          <span style="font-size: 0.73rem; opacity: 0.9;">(Puedes cambiarla en cualquier momento desde "Clave").</span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeLoginModal()">Cancelar</button>
@@ -2057,7 +2067,7 @@
   <div id="resetPasswordModal" class="modal-backdrop" onclick="if (event.target === this) closeResetPasswordModal()">
     <div class="modal" style="max-width: 420px;">
       <div class="modal-header">
-        <h3 class="modal-title">🔑 Restablecer Contraseña</h3>
+        <h3 class="modal-title">Restablecer Contraseña</h3>
         <button class="modal-close" onclick="closeResetPasswordModal()">&times;</button>
       </div>
       <form id="resetPasswordForm" onsubmit="handleResetPassword(event)">
@@ -2089,7 +2099,7 @@
   <div id="changePasswordModal" class="modal-backdrop" onclick="if (event.target === this) closeChangePasswordModal()">
     <div class="modal" style="max-width: 430px;">
       <div class="modal-header">
-        <h3 class="modal-title">⚙️ Cambiar Contraseña</h3>
+        <h3 class="modal-title">Cambiar Contraseña</h3>
         <button class="modal-close" onclick="closeChangePasswordModal()">&times;</button>
       </div>
       <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
@@ -2121,7 +2131,7 @@
   <div id="masterCloudUnlockModal" class="modal-backdrop" onclick="if (event.target === this) closeMasterCloudUnlockModal()">
     <div class="modal" style="max-width: 420px;">
       <div class="modal-header">
-        <h3 class="modal-title">🔒 Seguridad Nube Google</h3>
+        <h3 class="modal-title">Seguridad Nube Google</h3>
         <button class="modal-close" onclick="closeMasterCloudUnlockModal()">&times;</button>
       </div>
       <form id="masterCloudUnlockForm" onsubmit="handleMasterCloudUnlock(event)">
@@ -2145,7 +2155,7 @@
   <div id="cloudModal" class="modal-backdrop" onclick="if (event.target === this) closeCloudModal()">
     <div class="modal" style="max-width: 520px;">
       <div class="modal-header">
-        <h3 class="modal-title">☁️ Sincronización en la Nube (Firebase)</h3>
+        <h3 class="modal-title">Sincronización en la Nube (Firebase)</h3>
         <button class="modal-close" onclick="closeCloudModal()">&times;</button>
       </div>
       <form id="cloudConfigForm" onsubmit="handleSaveCloudConfig(event)">
@@ -2160,18 +2170,18 @@
 
         <!-- SECCIÓN RESPALDOS Y RESTAURACIÓN (EXCLUSIVO MODO MAESTRO) -->
         <div style="margin-top: 18px; padding-top: 14px; border-top: 1.5px dashed #cbd5e1;">
-          <div style="font-weight: 800; font-size: 0.88rem; color: #1e3a8a; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <span>💾</span> Copia de Seguridad y Restauración (Exclusivo Maestro)
+          <div style="font-weight: 800; font-size: 0.88rem; color: #1e3a8a; margin-bottom: 6px;">
+            Copia de Seguridad y Restauración (Exclusivo Maestro)
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
             Descarga un archivo con toda la base de datos (hermanos, turnos y programación trimestral) o restaura una copia guardada en tu equipo.
           </p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button type="button" class="btn btn-outline btn-sm" onclick="exportDataJSON()" style="flex: 1; min-width: 170px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-              📥 Descargar Respaldo JSON
+              Descargar Respaldo JSON
             </button>
             <button type="button" class="btn btn-primary btn-sm" onclick="triggerRestoreBackup()" style="flex: 1; min-width: 170px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #0f766e; border-color: #0d9488;">
-              🔄 Restaurar Respaldo JSON
+              Restaurar Respaldo JSON
             </button>
             <input type="file" id="restoreBackupFileInput" accept=".json,application/json" style="display: none;" onchange="handleRestoreBackupFile(event)">
           </div>
@@ -2188,7 +2198,7 @@
   <div id="editCollaboratorModal" class="modal-backdrop" onclick="if (event.target === this) closeEditCollaboratorModal()">
     <div class="modal" style="max-width: 440px;">
       <div class="modal-header">
-        <h3 class="modal-title">✏️ Editar Hermano(a)</h3>
+        <h3 class="modal-title">Editar Hermano(a)</h3>
         <button class="modal-close" onclick="closeEditCollaboratorModal()">&times;</button>
       </div>
       <form id="editCollaboratorForm" onsubmit="handleSaveEditCollaborator(event)">
@@ -2210,7 +2220,7 @@
         </div>
 
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 9px 12px; border-radius: 6px; font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
-          💡 Los cambios de nombre y teléfono se reflejarán automáticamente en todos sus turnos asignados.
+          Los cambios de nombre y teléfono se reflejarán automáticamente en todos sus turnos asignados.
         </div>
 
         <div class="modal-footer">
@@ -2225,7 +2235,7 @@
   <div id="activityModal" class="modal-backdrop" onclick="if (event.target === this) closeActivityModal()">
     <div class="modal" style="max-width: 500px;">
       <div class="modal-header">
-        <h3 class="modal-title" id="activityModalTitle">➕ Nueva Actividad Trimestral</h3>
+        <h3 class="modal-title" id="activityModalTitle">Nueva Actividad Trimestral</h3>
         <button class="modal-close" onclick="closeActivityModal()">&times;</button>
       </div>
 
@@ -2324,7 +2334,6 @@
     <div class="modal modal-flyer-wide">
       <div class="modal-header" style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 1.6rem;">🎨</span>
           <div>
             <h3 class="modal-title" style="margin: 0; font-size: 1.15rem; color: #0f172a;">Generador de Anuncio Semanal (Flyer PDF)</h3>
             <div style="font-size: 0.76rem; color: #64748b;">Cartel oficial de actividades de fin de semana con diseño premium OneVoice27 &bull; Listo para imprimir o WhatsApp</div>
@@ -2339,40 +2348,45 @@
           <!-- Selector de Fin de Semana -->
           <div class="form-group" style="background: #eff6ff; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #bfdbfe; margin-bottom: 12px;">
             <label for="flyerWeekendSelect" style="font-weight: 800; color: #1e40af; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-              <span>📅</span> Elegir Fin de Semana:
+              Elegir Fin de Semana:
             </label>
             <select id="flyerWeekendSelect" class="form-control" onchange="onFlyerWeekendChange()" style="font-weight: 700; border-color: #93c5fd;">
               <!-- Llenado dinámicamente con los fines de semana -->
             </select>
             <div class="hint" style="color: #1e40af; font-size: 0.72rem; margin-top: 4px;">
-              💡 Al seleccionar una fecha se cargan automáticamente el <strong>Anciano de Turno</strong> y los <strong>Predicadores</strong> asignados en el sistema.
+              Al seleccionar una fecha se cargan automáticamente el <strong>Anciano de Turno</strong> y los <strong>Predicadores</strong> asignados en el sistema.
             </div>
           </div>
 
           <!-- Selector / Carga de Imagen de Cabecera -->
           <div class="form-group" style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <label style="font-weight: 700; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 0;">🖼️ Imagen de Cabecera Oficial:</label>
-              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('flyerHeaderFileInput').click()" style="padding: 2px 8px; font-size: 0.72rem; border-color: #2563eb; color: #1e40af;">
-                📁 Subir / Cambiar Banner
-              </button>
+              <label style="font-weight: 700; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 0;">Imagen de Cabecera Oficial:</label>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" class="btn btn-outline btn-sm" onclick="resetFlyerHeaderImage()" style="padding: 2px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Restaurar al nuevo banner oficial OneVoice27">
+                  Por defecto
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('flyerHeaderFileInput').click()" style="padding: 2px 8px; font-size: 0.72rem; border-color: #2563eb; color: #1e40af;">
+                  Subir / Cambiar
+                </button>
+              </div>
             </div>
             <input type="file" id="flyerHeaderFileInput" accept="image/*" style="display: none;" onchange="handleHeaderFileChange(event)">
             <div class="hint" style="font-size: 0.72rem; color: #64748b;">
-              💡 Selecciona cualquier archivo JPG o PNG de tu ordenador y se integrará al instante en el cartel y en el PDF.
+              Selecciona cualquier archivo JPG o PNG de tu ordenador y se integrará al instante en el cartel y en el PDF.
             </div>
           </div>
 
           <!-- Selector / Carga de Imagen Inferior Izquierda -->
           <div class="form-group" style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <label style="font-weight: 700; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 0;">📖 Imagen Inferior Izquierda:</label>
+              <label style="font-weight: 700; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 0;">Imagen Inferior Izquierda:</label>
               <div style="display: flex; gap: 4px;">
                 <button type="button" class="btn btn-outline btn-sm" onclick="resetFlyerBibleImage()" style="padding: 2px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Restaurar imagen por defecto">
-                  ↺ Por defecto
+                  Por defecto
                 </button>
                 <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('flyerBibleFileInput').click()" style="padding: 2px 8px; font-size: 0.72rem; border-color: #2563eb; color: #1e40af;">
-                  📁 Cambiar Imagen
+                  Cambiar Imagen
                 </button>
               </div>
             </div>
@@ -2381,7 +2395,7 @@
             <!-- Control de Altura y Dimensión Personalizable -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 6px; border-top: 1px dashed #e2e8f0;">
               <label for="flyerBibleHeightSlider" style="font-size: 0.72rem; font-weight: 600; color: #475569; margin-bottom: 0;">
-                📏 Altura / Dimensión:
+                Altura / Dimensión:
               </label>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <input type="range" id="flyerBibleHeightSlider" min="140" max="320" value="240" step="5" oninput="onFlyerBibleHeightChange(this.value)" style="width: 100px; cursor: pointer;">
@@ -2389,29 +2403,29 @@
               </div>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
-              <label style="font-size: 0.72rem; font-weight: 600; color: #475569; margin-bottom: 0;">🖼️ Ajuste de imagen:</label>
+              <label style="font-size: 0.72rem; font-weight: 600; color: #475569; margin-bottom: 0;">Ajuste de imagen:</label>
               <div style="display: flex; gap: 4px;">
                 <button type="button" id="btnFitCover" class="btn btn-sm btn-primary" onclick="setFlyerBibleFit('cover')" style="padding: 1px 7px; font-size: 0.68rem;">Rellenar (Cover)</button>
                 <button type="button" id="btnFitContain" class="btn btn-sm btn-outline" onclick="setFlyerBibleFit('contain')" style="padding: 1px 7px; font-size: 0.68rem;">Completa (Contain)</button>
               </div>
             </div>
             <div class="hint" style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">
-              💡 Dimensión óptima: <strong>Vertical</strong> (proporción aprox. 150 &times; 240px como la Santa Biblia oficial).
+              Dimensión óptima: <strong>Vertical</strong> (proporción aprox. 150 &times; 240px como la Santa Biblia oficial).
             </div>
           </div>
 
           <!-- Datos Institucionales y Versículo -->
           <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div class="form-group" style="margin-bottom: 8px;">
-              <label for="flyerInputChurch">🏛️ Nombre de la Iglesia:</label>
+              <label for="flyerInputChurch">Nombre de la Iglesia:</label>
               <input type="text" id="flyerInputChurch" class="form-control" value="Horeb" placeholder="Ej: Horeb, Central, Betel..." oninput="updateFlyerPreview()">
             </div>
 
             <div class="form-group" style="margin-bottom: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <label for="flyerInputVerse" style="margin-bottom: 0;">📖 Versículo Bíblico Inspirador:</label>
+                <label for="flyerInputVerse" style="margin-bottom: 0;">Versículo Bíblico Inspirador:</label>
                 <button type="button" class="btn btn-outline btn-sm" onclick="rotateFlyerVerse()" style="padding: 1px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Rotar a otro versículo bíblico">
-                  🎲 Cambiar Versículo
+                  Cambiar Versículo
                 </button>
               </div>
               <textarea id="flyerInputVerse" class="form-control" rows="2" style="font-size: 0.8rem; line-height: 1.3;" oninput="updateFlyerPreview()">En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.</textarea>
@@ -2426,32 +2440,32 @@
           <!-- Previsión del Clima para el Sábado -->
           <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div style="font-weight: 800; font-size: 0.82rem; color: #1e40af; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <span>🌤️</span> Previsión del Clima (Sábado)
+              Previsión del Clima (Sábado)
             </div>
             <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px; margin-bottom: 4px;">
               <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">🌡️ Temperatura:</label>
+                <label style="font-size: 0.7rem; font-weight: 600;">Temperatura:</label>
                 <input type="text" id="flyerInputWeatherTemp" class="form-control" value="22°C" placeholder="Ej: 22°C" oninput="updateFlyerPreview()">
               </div>
               <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">🌧️ ¿Va a llover?:</label>
+                <label style="font-size: 0.7rem; font-weight: 600;">¿Va a llover?:</label>
                 <select id="flyerInputWeatherRain" class="form-control" onchange="updateFlyerPreview()">
-                  <option value="no">☀️ No (Sin lluvia)</option>
-                  <option value="yes">🌧️ Sí (Lluvia prevista)</option>
-                  <option value="prob">🌦️ Lluvia probable</option>
-                  <option value="clouds">⛅ Nublado (Sin lluvia)</option>
+                  <option value="no">No (Sin lluvia)</option>
+                  <option value="yes">Sí (Lluvia prevista)</option>
+                  <option value="prob">Lluvia probable</option>
+                  <option value="clouds">Nublado (Sin lluvia)</option>
                 </select>
               </div>
             </div>
             <div class="hint" style="font-size: 0.7rem; color: #64748b;">
-              💡 Se muestra debajo del versículo: solo la temperatura y si va a llover o no.
+              Se muestra debajo del versículo: solo la temperatura y si va a llover o no.
             </div>
           </div>
 
           <!-- Actividades del Viernes -->
           <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div style="font-weight: 800; font-size: 0.82rem; color: #854d0e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <span>🌟</span> VIERNES - Culto de Apertura
+              VIERNES - Culto de Apertura
             </div>
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
@@ -2472,7 +2486,7 @@
           <!-- Actividades del Sábado -->
           <div style="background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div style="font-weight: 800; font-size: 0.82rem; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <span>☀️</span> SÁBADO - Cultos y Programación
+              SÁBADO - Cultos y Programación
             </div>
             
             <!-- Mañana 1: Canto y Escuela Sabática -->
@@ -2508,7 +2522,7 @@
             <!-- Franja de División: Personalización en Controles -->
             <div style="background: #eff6ff; border: 1px dashed #93c5fd; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
               <label for="flyerInputDividerText" style="font-size: 0.72rem; font-weight: 700; color: #1e40af; margin-bottom: 0; display: flex; align-items: center; gap: 4px;">
-                <span>🌤️</span> Franja División (Tarde):
+                Franja División (Tarde):
               </label>
               <input type="text" id="flyerInputDividerText" class="form-control" value="Actividades de la Tarde" style="font-size: 0.72rem; padding: 2px 6px; max-width: 175px;" oninput="updateFlyerPreview()">
             </div>
@@ -2516,7 +2530,7 @@
             <!-- Tarde 1: Junta de Iglesia u otra actividad -->
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">☀️ Hora Tarde 1:</label>
+                <label style="font-size: 0.7rem; font-weight: 600;">Hora Tarde 1:</label>
                 <input type="text" id="flyerInputSatAct3Time" class="form-control" value="16:00 – 17:00" oninput="updateFlyerPreview()">
               </div>
               <div>
@@ -2528,7 +2542,7 @@
             <!-- Tarde 2: JA -->
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px;">
               <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">🌙 Hora Tarde 2:</label>
+                <label style="font-size: 0.7rem; font-weight: 600;">Hora Tarde 2:</label>
                 <input type="text" id="flyerInputSatAct4Time" class="form-control" value="17:00 – 18:00" oninput="updateFlyerPreview()">
               </div>
               <div>
@@ -2541,7 +2555,7 @@
           <!-- Anciano de Turno y Lema -->
           <div style="background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px; margin-bottom: 14px;">
             <div style="font-weight: 800; font-size: 0.82rem; color: #334155; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <span>🏛️</span> Anciano de Turno (Pie del Anuncio)
+              Anciano de Turno (Pie del Anuncio)
             </div>
             <div class="form-group" style="margin-bottom: 6px;">
               <label for="flyerInputElder">Nombre del Anciano de Turno:</label>
@@ -2556,10 +2570,10 @@
           <!-- Botones de Acción -->
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button type="button" class="btn btn-primary" onclick="printFlyerPDF()" style="flex: 1; min-width: 190px; padding: 10px 14px; background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); font-size: 0.88rem; box-shadow: 0 4px 10px rgba(11,37,74,0.3);">
-              🖨️ Descargar / Imprimir Flyer PDF
+              Descargar / Imprimir Flyer PDF
             </button>
             <button type="button" class="btn btn-success" onclick="downloadFlyerPNG()" style="padding: 10px 14px; font-size: 0.88rem; background: #059669; border: 1px solid #047857; color: white;" title="Descargar como imagen PNG en alta definición para compartir">
-              📥 Guardar Imagen (PNG)
+              Guardar Imagen (PNG)
             </button>
             <button type="button" class="btn btn-outline" onclick="closeFlyerModal()">
               Cerrar
@@ -2572,8 +2586,8 @@
           <div class="flyer-poster" id="flyerPosterCard">
             <!-- 1. Cabecera Superior OneVoice27 Oficial -->
             <div class="flyer-poster-top">
-              <img id="flyerTopBannerImg" src="cabecera-onevoice.jpg" alt="OneVoice27 - Misión Para Todos" class="flyer-top-banner-img"
-                   onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='cabecera-onevoice.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='cabecera-top.png'; } else if (this.dataset.t==='2') { this.dataset.t='3'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791412526544.jpg'; }">
+              <img id="flyerTopBannerImg" src="file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791473229213.png" alt="OneVoice27 - Misión Para Todos" class="flyer-top-banner-img"
+                   onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='cabecera-onevoice.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='cabecera-onevoice.jpg'; }">
             </div>
 
             <!-- 2. Cuerpo Dividido en 2 Columnas -->
@@ -2590,7 +2604,7 @@
                   <!-- Badge de Fecha -->
                   <div style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid #d4af37; border-radius: 8px; padding: 6px 4px; margin: 12px 0 10px 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
                     <div style="font-size: 0.65rem; color: #cbd5e1; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                      <span>📅</span> <span id="flyerPreviewMonthPill">OCTUBRE</span>
+                      <span id="flyerPreviewMonthPill">OCTUBRE</span>
                     </div>
                     <div id="flyerPreviewDaysPill" style="font-size: 0.95rem; font-weight: 900; color: #f6c84c; margin-top: 1px;">— 9 y 10 —</div>
                   </div>
@@ -2617,7 +2631,7 @@
                 <!-- Imagen Santa Biblia con Hojas Verdes (Inferior Izquierda) -->
                 <div style="margin-top: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); position: relative; cursor: pointer;" onclick="document.getElementById('flyerBibleFileInput').click()" title="Haz clic para cambiar la imagen inferior">
                   <img id="flyerPreviewBibleImg" src="biblia-col-left.png" alt="Santa Biblia" style="width: 100%; height: 240px; object-fit: cover; object-position: center; display: block;" onerror="if (!this.dataset.t) { this.dataset.t='1'; this.src='file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791413658534.png'; } else if (this.dataset.t==='1') { this.dataset.t='2'; this.src='https://images.unsplash.com/photo-1507692049790-de58290a4334?w=400&auto=format&fit=crop&q=80'; }">
-                  <div class="flyer-no-print" style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.72); color: #ffffff; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; pointer-events: none; border: 1px solid rgba(255,255,255,0.3);">📷 Cambiar</div>
+                  <div class="flyer-no-print" style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.72); color: #ffffff; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; pointer-events: none; border: 1px solid rgba(255,255,255,0.3);">Cambiar</div>
                 </div>
               </div>
 
@@ -2634,13 +2648,11 @@
 
                   <!-- Sección Viernes -->
                   <div class="flyer-pill-badge">
-                    <span>📅</span> <span id="flyerPreviewFriBadge">VIERNES 9 DE OCTUBRE</span>
+                    <span id="flyerPreviewFriBadge">VIERNES 9 DE OCTUBRE</span>
                   </div>
                   <div class="flyer-row-item">
-                    <span style="font-size: 0.95rem;">🕒</span>
                     <span id="flyerPreviewFriTime" style="font-weight: 700; color: #0f172a; white-space: nowrap;">20:00 – 21:00</span>
                     <span style="color: #cbd5e1;">|</span>
-                    <span style="font-size: 0.95rem;">⛪</span>
                     <div style="line-height: 1.2;">
                       <div id="flyerPreviewFriAct" style="font-size: 0.66rem; color: #64748b; font-weight: 600;">Iglesia</div>
                       <div id="flyerPreviewFriSpeaker" style="font-weight: 800; color: #0f172a;">María Antonia Lopez</div>
@@ -2649,26 +2661,22 @@
 
                   <!-- Sección Sábado -->
                   <div class="flyer-pill-badge" style="margin-top: 10px;">
-                    <span>📅</span> <span id="flyerPreviewSatBadge">SÁBADO 10 DE OCTUBRE</span>
+                    <span id="flyerPreviewSatBadge">SÁBADO 10 DE OCTUBRE</span>
                   </div>
 
                   <!-- Actividad 1: Mañana Canto y Escuela Sabática -->
                   <div class="flyer-row-item">
-                    <span style="font-size: 0.95rem;">☀️</span>
                     <span class="flyer-tag-time">MAÑANA</span>
                     <span id="flyerPreviewSatAct1Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">12:00 – 13:15</span>
                     <span style="color: #cbd5e1;">|</span>
-                    <span style="font-size: 0.95rem;">⛪</span>
                     <div id="flyerPreviewSatAct1Name" style="font-weight: 800; color: #0f172a;">Canto y Escuela Sabática</div>
                   </div>
 
                   <!-- Actividad 2: Mañana Predicación Central -->
                   <div class="flyer-row-item">
-                    <span style="font-size: 0.95rem;">☀️</span>
                     <span class="flyer-tag-time">MAÑANA</span>
                     <span id="flyerPreviewSatAct2Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">13:15 – 14:30</span>
                     <span style="color: #cbd5e1;">|</span>
-                    <span style="font-size: 0.95rem;">👤</span>
                     <div style="line-height: 1.2;">
                       <div id="flyerPreviewSatAct2Title" style="font-size: 0.66rem; color: #64748b; font-weight: 600;">Predicación</div>
                       <div id="flyerPreviewSatAct2Speaker" style="font-weight: 900; color: #0f172a;">Pr. Igor Domingos</div>
@@ -2679,40 +2687,33 @@
                   <div class="flyer-divider-strip">
                     <div class="flyer-divider-line"></div>
                     <div class="flyer-divider-badge">
-                      <span>🌤️</span> <span id="flyerPreviewDividerText">ACTIVIDADES DE LA TARDE</span>
+                      <span id="flyerPreviewDividerText">ACTIVIDADES DE LA TARDE</span>
                     </div>
                     <div class="flyer-divider-line"></div>
                   </div>
 
                   <!-- Actividad 3: Tarde Junta de Iglesia -->
                   <div class="flyer-row-item">
-                    <span style="font-size: 0.95rem;">☀️</span>
                     <span class="flyer-tag-time">TARDE</span>
                     <span id="flyerPreviewSatAct3Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">16:00 – 17:00</span>
                     <span style="color: #cbd5e1;">|</span>
-                    <span style="font-size: 0.95rem;">📖</span>
                     <div id="flyerPreviewSatAct3Name" style="font-weight: 800; color: #0f172a;">Junta de Iglesia</div>
                   </div>
 
                   <!-- Actividad 4: Tarde JA -->
                   <div class="flyer-row-item" style="border-bottom: none;">
-                    <span style="font-size: 0.95rem;">🌙</span>
                     <span class="flyer-tag-time">TARDE</span>
                     <span id="flyerPreviewSatAct4Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">17:00 – 18:00</span>
                     <span style="color: #cbd5e1;">|</span>
-                    <span style="font-size: 0.95rem;">👥</span>
                     <div id="flyerPreviewSatAct4Name" style="font-weight: 800; color: #0f172a;">JA</div>
                   </div>
                 </div>
 
                 <!-- Recuadro Inferior: Anciano de Turno -->
                 <div class="flyer-elder-card">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 1.4rem;">🏛️</span>
-                    <div style="border-left: 1.5px solid #cbd5e1; padding-left: 8px; flex: 1;">
-                      <div style="font-size: 0.6rem; font-weight: 800; color: #475569; letter-spacing: 1px;">ANCIANO DE TURNO</div>
-                      <div id="flyerPreviewElder" style="font-family: 'Alex Brush', 'Playfair Display', cursive, serif; font-size: 1.55rem; font-weight: 700; color: #082142; line-height: 1.1;">Jaime Zaragoza</div>
-                    </div>
+                  <div>
+                    <div style="font-size: 0.6rem; font-weight: 800; color: #475569; letter-spacing: 1px; text-transform: uppercase;">ANCIANO DE TURNO</div>
+                    <div id="flyerPreviewElder" style="font-family: 'Alex Brush', 'Playfair Display', cursive, serif; font-size: 1.55rem; font-weight: 700; color: #082142; line-height: 1.1;">Jaime Zaragoza</div>
                   </div>
                   <div id="flyerPreviewMotto" style="text-align: center; margin-top: 4px; font-family: 'Playfair Display', Georgia, cursive, serif; font-style: italic; font-size: 0.78rem; color: #475569;">
                     Juntos en la obra de Dios
@@ -2755,12 +2756,12 @@
     const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
     const DEPARTMENTS = {
-      'anciano': { id: 'anciano', name: 'Anciano de Turno', icon: '🏛️', badgeClass: 'area-anciano', color: '#475569', saturdayOnly: true },
-      'predicaciones': { id: 'predicaciones', name: 'Predicación', icon: '📖', badgeClass: 'area-predicaciones', color: '#2563eb' },
-      'alabanza': { id: 'alabanza', name: 'Alabanza', icon: '🎵', badgeClass: 'area-alabanza', color: '#d97706' },
-      'diaconisas': { id: 'diaconisas', name: 'Diaconisas', icon: '🌸', badgeClass: 'area-diaconisas', color: '#db2777' },
-      'diaconos': { id: 'diaconos', name: 'Diáconos', icon: '🤝', badgeClass: 'area-diaconos', color: '#16a34a' },
-      'audiovisual': { id: 'audiovisual', name: 'Audiovisual', icon: '🎥', badgeClass: 'area-audiovisual', color: '#7c3aed' }
+      'anciano': { id: 'anciano', name: 'Anciano de Turno', icon: '', badgeClass: 'area-anciano', color: '#475569', saturdayOnly: true },
+      'predicaciones': { id: 'predicaciones', name: 'Predicación', icon: '', badgeClass: 'area-predicaciones', color: '#2563eb' },
+      'alabanza': { id: 'alabanza', name: 'Alabanza', icon: '', badgeClass: 'area-alabanza', color: '#d97706' },
+      'diaconisas': { id: 'diaconisas', name: 'Diaconisas', icon: '', badgeClass: 'area-diaconisas', color: '#db2777' },
+      'diaconos': { id: 'diaconos', name: 'Diáconos', icon: '', badgeClass: 'area-diaconos', color: '#16a34a' },
+      'audiovisual': { id: 'audiovisual', name: 'Audiovisual', icon: '', badgeClass: 'area-audiovisual', color: '#7c3aed' }
     };
 
     const INITIAL_COLLABORATORS = [
@@ -2849,7 +2850,7 @@
     let currentMonth = new Date().getMonth();
 
     // ==============================================================
-    // ☁️ CONFIGURACIÓN DE BASE DE DATOS EN LA NUBE (FIREBASE)
+    // CONFIGURACIÓN DE BASE DE DATOS EN LA NUBE (FIREBASE)
     // ==============================================================
     // Las credenciales configuradas aquí conectan a todos los usuarios automáticamente:
     const DEFAULT_FIREBASE_CONFIG = {
@@ -2980,13 +2981,13 @@
         statusAlert.style.background = '#d1fae5';
         statusAlert.style.color = '#065f46';
         statusAlert.style.border = '1px solid #6ee7b7';
-        statusAlert.innerHTML = '🟢 <strong>Conectado a Firebase:</strong> Todos los cambios se sincronizan en vivo entre computadoras y celulares.';
+        statusAlert.innerHTML = '<strong>Conectado a Firebase:</strong> Todos los cambios se sincronizan en vivo entre computadoras y celulares.';
       } else {
         textarea.value = '';
         statusAlert.style.background = '#fef3c7';
         statusAlert.style.color = '#92400e';
         statusAlert.style.border = '1px solid #fde68a';
-        statusAlert.innerHTML = '🟡 <strong>Modo Local:</strong> Los cambios solo se guardan en este dispositivo. Pega tu <code>firebaseConfig</code> para sincronizar entre todos los usuarios.';
+        statusAlert.innerHTML = '<strong>Modo Local:</strong> Los cambios solo se guardan en este dispositivo. Pega tu <code>firebaseConfig</code> para sincronizar entre todos los usuarios.';
       }
       document.getElementById('cloudModal').classList.add('open');
     }
@@ -3020,7 +3021,7 @@
         sessionStorage.setItem('church_is_master_admin', 'true');
         closeMasterCloudUnlockModal();
         updateAuthUI();
-        showToast('👑 Acceso Maestro desbloqueado con éxito', 'success');
+        showToast('Acceso Maestro desbloqueado con éxito', 'success');
         if (pendingMasterCallback) {
           const cb = pendingMasterCallback;
           pendingMasterCallback = null;
@@ -3030,7 +3031,7 @@
         }
       } else {
         const errorMsg = document.getElementById('masterCloudErrorMsg');
-        errorMsg.innerText = '⛔ Código maestro incorrecto. Acceso denegado.';
+        errorMsg.innerText = 'Código maestro incorrecto. Acceso denegado.';
         errorMsg.style.display = 'block';
         document.getElementById('masterCloudCodeInput').focus();
       }
@@ -3039,7 +3040,7 @@
     function handleSaveCloudConfig(e) {
       e.preventDefault();
       if (!isMasterAdmin) {
-        showToast('⛔ Acceso restringido. Solo el usuario con código maestro puede modificar la nube.', 'error');
+        showToast('Acceso restringido. Solo el usuario con código maestro puede modificar la nube.', 'error');
         return;
       }
 
@@ -3057,7 +3058,7 @@
         const parsed = JSON.parse(formatted);
 
         if (!parsed.apiKey) {
-          alert('⚠️ Falta el campo apiKey en la configuración.');
+          alert('Falta el campo apiKey en la configuración.');
           return;
         }
 
@@ -3066,13 +3067,13 @@
         showToast('Configuración de nube guardada. Conectando...', 'info');
         initFirebase();
       } catch (err) {
-        alert('⛔ El formato ingresado no es válido. Pega el objeto firebaseConfig generado por Firebase.');
+        alert('El formato ingresado no es válido. Pega el objeto firebaseConfig generado por Firebase.');
       }
     }
 
     function handleClearCloudConfig() {
       if (!isMasterAdmin) {
-        showToast('⛔ Acceso restringido. Solo el usuario con código maestro puede desconectar la nube.', 'error');
+        showToast('Acceso restringido. Solo el usuario con código maestro puede desconectar la nube.', 'error');
         return;
       }
 
@@ -3122,8 +3123,8 @@
       if (!bar) return;
 
       const cloudStatusHtml = isCloudConnected
-        ? `<div class="auth-badge cloud-online" title="Sincronizado en tiempo real con Firebase en la nube"><span>☁️</span><span>Nube Activa</span></div>`
-        : `<div class="auth-badge cloud-offline" title="Datos guardados en este dispositivo."><span>💾</span><span>Solo Local</span></div>`;
+        ? `<div class="auth-badge cloud-online" title="Sincronizado en tiempo real con Firebase en la nube"><span>Nube Activa</span></div>`
+        : `<div class="auth-badge cloud-offline" title="Datos guardados en este dispositivo."><span>Solo Local</span></div>`;
 
       if (isAuthenticated) {
         let masterControlsHtml = '';
@@ -3131,17 +3132,15 @@
         if (isMasterAdmin) {
           masterControlsHtml = `
             <div class="auth-badge admin" style="background: #047857; border-color: #10b981;">
-              <span>👑</span>
               <span>Acceso Maestro</span>
             </div>
             <button class="btn btn-white-outline btn-sm" onclick="openCloudModal()" title="Configuración de la Nube Google y Copias de Seguridad">
-              ☁️ Nube y Respaldos
+              Nube y Respaldos
             </button>
           `;
         } else {
           masterControlsHtml = `
             <div class="auth-badge admin">
-              <span>🔓</span>
               <span>Modo Administrador</span>
             </div>
           `;
@@ -3151,21 +3150,20 @@
           ${cloudStatusHtml}
           ${masterControlsHtml}
           <button class="btn btn-white-outline btn-sm" onclick="openChangePasswordModal()" title="Cambiar clave de acceso">
-            ⚙️ Clave
+            Clave
           </button>
           <button class="btn btn-white-outline btn-sm" onclick="handleLogout()" title="Cerrar modo administrador">
-            🚪 Salir
+            Salir
           </button>
         `;
       } else {
         bar.innerHTML = `
           ${cloudStatusHtml}
           <div class="auth-badge public">
-            <span>👁️</span>
             <span>Modo Lectura</span>
           </div>
           <button class="btn btn-light-glow btn-sm" onclick="openLoginModal()">
-            🔒 Iniciar Sesión para Editar
+            Iniciar Sesión para Editar
           </button>
         `;
       }
@@ -3207,7 +3205,7 @@
         renderCollaboratorsTable();
         renderShiftsTable();
         renderQuarterlyActivities();
-        showToast('👑 Acceso concedido en Modo Maestro. Anuncio Semanal desbloqueado.', 'success');
+        showToast('Acceso concedido en Modo Maestro. Anuncio Semanal desbloqueado.', 'success');
 
         if (pendingAuthCallback) {
           const cb = pendingAuthCallback;
@@ -3264,26 +3262,26 @@
       const errorMsg = document.getElementById('resetPwdErrorMsg');
 
       if (masterCode !== '1844') {
-        errorMsg.innerText = '⛔ Código maestro de seguridad incorrecto.';
+        errorMsg.innerText = 'Código maestro de seguridad incorrecto.';
         errorMsg.style.display = 'block';
         return;
       }
 
       if (newPwd.length < 3) {
-        errorMsg.innerText = '⛔ La nueva contraseña debe tener al menos 3 caracteres.';
+        errorMsg.innerText = 'La nueva contraseña debe tener al menos 3 caracteres.';
         errorMsg.style.display = 'block';
         return;
       }
 
       if (newPwd !== confirmPwd) {
-        errorMsg.innerText = '⛔ Las contraseñas nuevas no coinciden.';
+        errorMsg.innerText = 'Las contraseñas nuevas no coinciden.';
         errorMsg.style.display = 'block';
         return;
       }
 
       localStorage.setItem('church_admin_pwd', newPwd);
       closeResetPasswordModal();
-      showToast('✅ Contraseña restablecida con éxito. Puedes ingresar con tu nueva clave.', 'success');
+      showToast('Contraseña restablecida con éxito. Puedes ingresar con tu nueva clave.', 'success');
       openLoginModal();
     }
 
@@ -3321,19 +3319,19 @@
 
       const realCurrent = getAdminPassword();
       if (currentEntered !== realCurrent) {
-        errorMsg.innerText = '⛔ La contraseña actual es incorrecta.';
+        errorMsg.innerText = 'La contraseña actual es incorrecta.';
         errorMsg.style.display = 'block';
         return;
       }
 
       if (newPwd.length < 3) {
-        errorMsg.innerText = '⛔ La nueva contraseña debe tener al menos 3 caracteres.';
+        errorMsg.innerText = 'La nueva contraseña debe tener al menos 3 caracteres.';
         errorMsg.style.display = 'block';
         return;
       }
 
       if (newPwd !== confirmPwd) {
-        errorMsg.innerText = '⛔ Las contraseñas nuevas no coinciden.';
+        errorMsg.innerText = 'Las contraseñas nuevas no coinciden.';
         errorMsg.style.display = 'block';
         return;
       }
@@ -3372,7 +3370,7 @@
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span>${type === 'error' ? '⛔' : '✅'}</span><div>${message}</div>`;
+      toast.innerHTML = `<div>${message}</div>`;
       container.appendChild(toast);
       setTimeout(() => { toast.remove(); }, 4000);
     }
@@ -3434,7 +3432,7 @@
       const normName = normalizeName(name);
       const duplicate = collaborators.find(c => normalizeName(c.name) === normName);
       if (duplicate) {
-        showToast(`⛔ Ya existe un hermano(a) registrado como "${duplicate.name}". No se permiten nombres repetidos.`, 'error');
+        showToast(`Ya existe un hermano(a) registrado como "${duplicate.name}". No se permiten nombres repetidos.`, 'error');
         nameEl.focus();
         nameEl.select();
         return;
@@ -3483,7 +3481,7 @@
       const normName = normalizeName(name);
       const duplicate = collaborators.find(c => c.id !== id && normalizeName(c.name) === normName);
       if (duplicate) {
-        showToast(`⛔ Ya existe otro hermano(a) registrado como "${duplicate.name}". No se permiten nombres repetidos.`, 'error');
+        showToast(`Ya existe otro hermano(a) registrado como "${duplicate.name}". No se permiten nombres repetidos.`, 'error');
         nameInput.focus();
         nameInput.select();
         return;
@@ -3530,12 +3528,12 @@
         const row = document.createElement('tr');
         row.innerHTML = `
           <td><strong>${c.name}</strong></td>
-          <td><span class="badge-area badge-multidisciplinar">🌟 Cualquier Área</span></td>
+          <td><span class="badge-area badge-multidisciplinar">Cualquier Área</span></td>
           <td style="font-size: 0.78rem;">${c.email}<br><span style="color:var(--text-muted);">${c.phone}</span></td>
           <td class="admin-only">
             <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-              <button class="btn btn-outline btn-sm" onclick="openEditCollaboratorModal('${c.id}')" title="Editar datos del hermano(a)">✏️ Editar</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteCollaborator('${c.id}')" title="Eliminar del directorio">🗑️ Eliminar</button>
+              <button class="btn btn-outline btn-sm" onclick="openEditCollaboratorModal('${c.id}')" title="Editar datos del hermano(a)">Editar</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteCollaborator('${c.id}')" title="Eliminar del directorio">Eliminar</button>
             </div>
           </td>
         `;
@@ -3601,7 +3599,7 @@
       const deptVal = document.getElementById('assignDepartment').value;
 
       if (!dateVal) {
-        notice.innerHTML = '⚠️ Seleccione una fecha (Viernes o Sábado).';
+        notice.innerHTML = 'Seleccione una fecha (Viernes o Sábado).';
         notice.style.color = 'var(--text-muted)';
         if (submitBtn) submitBtn.disabled = false;
         return true;
@@ -3609,7 +3607,7 @@
 
       if (!isFridayOrSaturday(dateVal)) {
         const dayName = getDayOfWeekName(dateVal);
-        notice.innerHTML = `❌ El ${dateVal} es <strong>${dayName}</strong>. Solo se permite asignar en días <strong>Viernes o Sábado</strong>.`;
+        notice.innerHTML = `El ${dateVal} es <strong>${dayName}</strong>. Solo se permite asignar en días <strong>Viernes o Sábado</strong>.`;
         notice.style.color = '#dc2626';
         if (submitBtn) submitBtn.disabled = true;
         return false;
@@ -3617,7 +3615,7 @@
 
       const isSat = isSaturday(dateVal);
       if (deptVal === 'anciano' && !isSat) {
-        notice.innerHTML = `⛔ <strong>Restricción:</strong> El <strong>Anciano de Turno</strong> solo se puede asignar los días <strong>SÁBADO</strong> (la fecha seleccionada es Viernes).`;
+        notice.innerHTML = `<strong>Restricción:</strong> El <strong>Anciano de Turno</strong> solo se puede asignar los días <strong>SÁBADO</strong> (la fecha seleccionada es Viernes).`;
         notice.style.color = '#dc2626';
         if (submitBtn) submitBtn.disabled = true;
         return false;
@@ -3625,9 +3623,9 @@
 
       const dayName = getDayOfWeekName(dateVal);
       if (deptVal === 'anciano') {
-        notice.innerHTML = `✅ <strong>Fecha válida:</strong> Es <strong>Sábado</strong> (permitido para Anciano de Turno).`;
+        notice.innerHTML = `<strong>Fecha válida:</strong> Es <strong>Sábado</strong> (permitido para Anciano de Turno).`;
       } else {
-        notice.innerHTML = `✅ <strong>Fecha válida:</strong> Es <strong>${dayName}</strong>.`;
+        notice.innerHTML = `<strong>Fecha válida:</strong> Es <strong>${dayName}</strong>.`;
       }
       notice.style.color = '#059669';
       if (submitBtn) submitBtn.disabled = false;
@@ -3663,7 +3661,7 @@
         alertMsg.innerHTML = `
           El hermano(a) <strong>${colabName}</strong> ya tiene una responsabilidad asignada para la fecha <strong>${dateVal}</strong> en <strong>${assignedArea}</strong>.<br>
           <span style="font-weight: 700; color: #b91c1c; font-size: 0.95rem; display: block; margin-top: 4px;">
-            ⚠️ TIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.
+            TIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.
           </span>
         `;
         alertBox.style.display = 'block';
@@ -3687,7 +3685,7 @@
       }
 
       if (DEPARTMENTS[departmentId] && DEPARTMENTS[departmentId].saturdayOnly && !isSaturday(date)) {
-        alert('⛔ ATENCIÓN: El cargo de "Anciano de Turno" solo se puede asignar para los días SÁBADO.');
+        alert('ATENCIÓN: El cargo de "Anciano de Turno" solo se puede asignar para los días SÁBADO.');
         return;
       }
 
@@ -3695,7 +3693,7 @@
       if (conflict) {
         const colab = collaborators.find(c => c.id === collaboratorId);
         const conflictArea = DEPARTMENTS[conflict.departmentId] ? DEPARTMENTS[conflict.departmentId].name : conflict.departmentId;
-        alert(`⛔ ATENCIÓN: El hermano(a) ${colab ? colab.name : ''} ya tiene asignación en ${conflictArea} para esa fecha.\n\nTIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.`);
+        alert(`ATENCIÓN: El hermano(a) ${colab ? colab.name : ''} ya tiene asignación en ${conflictArea} para esa fecha.\n\nTIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.`);
         return;
       }
 
@@ -3718,7 +3716,7 @@
       document.getElementById('assignShiftForm').reset();
       document.getElementById('conflictAlert').style.display = 'none';
       document.getElementById('btnSubmitShift').disabled = false;
-      document.getElementById('dateValidationNotice').innerHTML = '⚠️ Seleccione una fecha (Viernes o Sábado).';
+      document.getElementById('dateValidationNotice').innerHTML = 'Seleccione una fecha (Viernes o Sábado).';
       document.getElementById('dateValidationNotice').style.color = 'var(--text-muted)';
     }
 
@@ -3813,7 +3811,7 @@
         const colHeader = document.createElement('div');
         colHeader.className = `col-8days-header ${isFri ? 'is-friday' : 'is-saturday'}`;
         colHeader.innerHTML = `
-          <div class="col-8days-day-name">${isFri ? '🌟 VIERNES' : '🌟 SÁBADO'}</div>
+          <div class="col-8days-day-name">${isFri ? 'VIERNES' : 'SÁBADO'}</div>
           <div class="col-8days-week-label">Semana ${d.weekNum} &bull; Columna ${idx + 1}</div>
           <div class="col-8days-date-badge">${d.date.getDate()} de ${MONTH_NAMES[d.date.getMonth()]}</div>
         `;
@@ -3894,11 +3892,11 @@
             slotsHTML += `
               <div class="slot-item slot-${deptKey}">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2px;">
-                  <span style="font-weight: 800; font-size: 0.72rem;">${dept.icon} ${dept.name}</span>
+                  <span style="font-weight: 800; font-size: 0.72rem;">${dept.name}</span>
                   <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); deleteShift('${shift.id}')" style="padding: 1px 4px; font-size: 0.65rem; line-height: 1; border-radius: 3px;" title="Eliminar responsabilidad">✕</button>
                 </div>
-                <div style="font-weight: 700; font-size: 0.78rem; color: #0f172a; margin-top: 2px;">👤 ${colabName}</div>
-                ${shift.notes ? `<div style="font-size: 0.68rem; color: #475569; margin-top: 1px;">📝 ${shift.notes}</div>` : ''}
+                <div style="font-weight: 700; font-size: 0.78rem; color: #0f172a; margin-top: 2px;">${colabName}</div>
+                ${shift.notes ? `<div style="font-size: 0.68rem; color: #475569; margin-top: 1px;">${shift.notes}</div>` : ''}
               </div>
             `;
           });
@@ -3906,7 +3904,6 @@
           // Ranura disponible para asignar directamente con 1 clic (requiere autenticación)
           slotsHTML += `
             <button class="btn-slot-empty" onclick="event.stopPropagation(); ensureAuth(() => quickAssignDate('${d.dateStr}', '${deptKey}'))" title="Asignar ${dept.name} para este ${d.dayName}">
-              <span>${dept.icon}</span>
               <span>+ ${dept.name}</span>
             </button>
           `;
@@ -3917,7 +3914,7 @@
 
       const addBtn = `
         <button class="btn-col-add-more admin-only" onclick="event.stopPropagation(); quickAssignDate('${d.dateStr}')">
-          ➕ Asignar turno
+          Asignar turno
         </button>
       `;
 
@@ -3974,14 +3971,14 @@
         dayShifts.forEach(shift => {
           const colab = collaborators.find(c => c.id === shift.collaboratorId);
           const colabName = colab ? colab.name : 'Responsable';
-          const area = DEPARTMENTS[shift.departmentId] || { name: shift.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
+          const area = DEPARTMENTS[shift.departmentId] || { name: shift.departmentId, badgeClass: 'area-predicaciones', icon: '' };
 
           shiftsListHTML += `
             <div class="shift-item-card ${area.badgeClass}">
               <div class="shift-info-main">
-                <span class="shift-colab-name">👤 ${colabName}</span>
-                <span style="font-size: 0.68rem; font-weight: 700;">${area.icon} ${area.name}</span>
-                ${shift.notes ? `<span style="font-size: 0.72rem; color: #475569;">📝 ${shift.notes}</span>` : ''}
+                <span class="shift-colab-name">${colabName}</span>
+                <span style="font-size: 0.68rem; font-weight: 700;">${area.name}</span>
+                ${shift.notes ? `<span style="font-size: 0.72rem; color: #475569;">${shift.notes}</span>` : ''}
               </div>
               <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); deleteShift('${shift.id}')" style="padding: 2px 6px; font-size: 0.72rem;">✕</button>
             </div>
@@ -3992,7 +3989,7 @@
 
       const quickAddBtn = `
         <button class="btn-quick-add admin-only" onclick="event.stopPropagation(); quickAssignDate('${dateStr}')">
-          ➕ Asignar para este ${dayName}
+          Asignar para este ${dayName}
         </button>
       `;
 
@@ -4037,7 +4034,6 @@
       if (dayShifts.length === 0) {
         content.innerHTML = `
           <div style="text-align: center; padding: 16px; color: var(--text-muted);">
-            <div style="font-size: 1.8rem; margin-bottom: 6px;">🗓️</div>
             <p><strong>No hay ninguna responsabilidad asignada para este ${dayName} ${dateStr}.</strong></p>
           </div>
         `;
@@ -4045,13 +4041,13 @@
         let listHtml = '<div style="display: flex; flex-direction: column; gap: 8px;">';
         dayShifts.forEach(s => {
           const colab = collaborators.find(c => c.id === s.collaboratorId);
-          const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
+          const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '' };
           listHtml += `
             <div style="border: 1.5px solid #cbd5e1; background: #ffffff; border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
               <div>
-                <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">👤 ${colab ? colab.name : 'Hermano(a)'}</div>
-                <div style="margin-top: 4px;"><span class="badge-area ${area.badgeClass}">${area.icon} ${area.name}</span></div>
-                ${s.notes ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 4px;">📝 ${s.notes}</div>` : ''}
+                <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">${colab ? colab.name : 'Hermano(a)'}</div>
+                <div style="margin-top: 4px;"><span class="badge-area ${area.badgeClass}">${area.name}</span></div>
+                ${s.notes ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 4px;">${s.notes}</div>` : ''}
               </div>
               <button class="btn btn-danger btn-sm admin-only" onclick="deleteShift('${s.id}'); closeDayModal();">Eliminar</button>
             </div>
@@ -4072,14 +4068,14 @@
       tbody.innerHTML = '';
       shifts.forEach(s => {
         const colab = collaborators.find(c => c.id === s.collaboratorId);
-        const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '✨' };
+        const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '' };
         const dayBadge = s.dayOfWeek === 'Viernes' ? 'badge-viernes' : 'badge-sabado';
         const row = document.createElement('tr');
         row.innerHTML = `
           <td><strong>${s.date}</strong></td>
           <td><span class="badge-day ${dayBadge}">${s.dayOfWeek}</span></td>
           <td><strong>${colab ? colab.name : 'Desconocido'}</strong></td>
-          <td><span class="badge-area ${area.badgeClass}">${area.icon} ${area.name}</span></td>
+          <td><span class="badge-area ${area.badgeClass}">${area.name}</span></td>
           <td style="color: var(--text-muted); font-size: 0.8rem;">${s.notes || '-'}</td>
           <td class="admin-only"><button class="btn btn-danger btn-sm" onclick="deleteShift('${s.id}')">Eliminar</button></td>
         `;
@@ -4105,7 +4101,7 @@
 
     function exportDataJSON() {
       if (!isMasterAdmin) {
-        showToast('⛔ Solo el administrador en Modo Maestro puede exportar copias de seguridad.', 'error');
+        showToast('Solo el administrador en Modo Maestro puede exportar copias de seguridad.', 'error');
         return;
       }
       const data = {
@@ -4125,12 +4121,12 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('📥 Copia de seguridad descargada con éxito', 'success');
+      showToast('Copia de seguridad descargada con éxito', 'success');
     }
 
     function triggerRestoreBackup() {
       if (!isMasterAdmin) {
-        showToast('⛔ Solo el administrador en Modo Maestro puede restaurar copias de seguridad.', 'error');
+        showToast('Solo el administrador en Modo Maestro puede restaurar copias de seguridad.', 'error');
         return;
       }
       let input = document.getElementById('restoreBackupFileInput');
@@ -4149,7 +4145,7 @@
 
     function handleRestoreBackupFile(e) {
       if (!isMasterAdmin) {
-        showToast('⛔ Solo el administrador en Modo Maestro puede restaurar copias de seguridad.', 'error');
+        showToast('Solo el administrador en Modo Maestro puede restaurar copias de seguridad.', 'error');
         return;
       }
       const file = e.target.files && e.target.files[0];
@@ -4162,7 +4158,7 @@
           const data = JSON.parse(raw);
 
           if (!data || typeof data !== 'object') {
-            showToast('⛔ El archivo de respaldo no tiene un formato válido.', 'error');
+            showToast('El archivo de respaldo no tiene un formato válido.', 'error');
             return;
           }
 
@@ -4171,7 +4167,7 @@
           const hasQuarterly = Array.isArray(data.quarterlyActivities);
 
           if (!hasColabs && !hasShifts && !hasQuarterly) {
-            showToast('⛔ El archivo no contiene datos compatibles de la iglesia.', 'error');
+            showToast('El archivo no contiene datos compatibles de la iglesia.', 'error');
             return;
           }
 
@@ -4183,7 +4179,7 @@
             `• Hermanos en directorio: ${colabCount}\n` +
             `• Turnos y responsabilidades: ${shiftCount}\n` +
             `• Actividades trimestrales: ${qCount}\n\n` +
-            `⚠️ Se reemplazarán los datos actuales y se sincronizará automáticamente con la nube Firebase.`;
+            `Se reemplazarán los datos actuales y se sincronizará automáticamente con la nube Firebase.`;
 
           if (!confirm(msg)) {
             return;
@@ -4209,10 +4205,10 @@
           renderQuarterlyActivities();
           updateStats();
 
-          showToast('✅ ¡Respaldo restaurado con éxito y sincronizado con la nube!', 'success');
+          showToast('¡Respaldo restaurado con éxito y sincronizado con la nube!', 'success');
         } catch (err) {
           console.error('Error al restaurar respaldo:', err);
-          showToast('⛔ Error al procesar el archivo JSON de respaldo.', 'error');
+          showToast('Error al procesar el archivo JSON de respaldo.', 'error');
         }
       };
       reader.readAsText(file);
@@ -4461,17 +4457,17 @@
       printDoc.body.innerHTML = `
         <div class="print-container" id="printableArea">
           <div class="toolbar no-print">
-            <span style="font-size: 0.75rem; color: #64748b; margin-right: auto;">📄 Configurado para imprimir en <strong>1 sola página</strong></span>
+            <span style="font-size: 0.75rem; color: #64748b; margin-right: auto;">Configurado para imprimir en <strong>1 sola página</strong></span>
             <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #1e40af; background: #dbeafe; padding: 2px 7px; border-radius: 4px;">94%</span>
-            <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">🔍 Reducir</button>
-            <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">🔍 Ampliar</button>
-            <button class="btn btn-outline" onclick="window.close()">✖ Cerrar</button>
-            <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+            <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">Reducir</button>
+            <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">Ampliar</button>
+            <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
+            <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
           </div>
 
           <div class="header-banner">
             <div class="header-title">
-              <h1>⛪ Programación de Turnos y Responsabilidades</h1>
+              <h1>Programación de Turnos y Responsabilidades</h1>
               <p>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual (Viernes y Sábados)</p>
             </div>
             <div class="badge-month">
@@ -4482,7 +4478,7 @@
           ${weeksHtml}
 
           <div class="footer-bar">
-            <span>⛪ Documento oficial de turnos y responsabilidades ministeriales</span>
+            <span>Documento oficial de turnos y responsabilidades ministeriales</span>
             <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
           </div>
         </div>
@@ -4511,35 +4507,35 @@
     }
 
     // ==============================================================
-    // 📅 PROGRAMA TRIMESTRAL DE ACTIVIDADES (LÓGICA Y RENDERIZADO)
+    // PROGRAMA TRIMESTRAL DE ACTIVIDADES (LÓGICA Y RENDERIZADO)
     // ==============================================================
 
     const DEPT_PRESETS = {
-      'escuela sabática': { icon: '📘', color: '#1d4ed8', bg: '#dbeafe', border: '#bfdbfe' },
-      'ministerio personal': { icon: '🌍', color: '#b45309', bg: '#fef3c7', border: '#fde68a' },
-      'jóvenes (ja)': { icon: '🔥', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
-      'jovenes': { icon: '🔥', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
-      'ministerio infantil': { icon: '🎈', color: '#047857', bg: '#d1fae5', border: '#a7f3d0' },
-      'club de conquistadores / aventureros': { icon: '⛺', color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
-      'conquistadores': { icon: '⛺', color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
-      'mayordomía cristiana': { icon: '💎', color: '#7e22ce', bg: '#f3e8ff', border: '#e9d5ff' },
-      'mayordomía': { icon: '💎', color: '#7e22ce', bg: '#f3e8ff', border: '#e9d5ff' },
-      'salud y temperancia': { icon: '🍎', color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
-      'salud': { icon: '🍎', color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
-      'ministerio de la mujer / dorcas': { icon: '🌸', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
-      'dorcas': { icon: '🌸', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
-      'alabanza y música': { icon: '🎵', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
-      'alabanza': { icon: '🎵', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
-      'diaconía (diáconos / diaconisas)': { icon: '🤝', color: '#0f766e', bg: '#ccfbf1', border: '#99f6e4' },
-      'diáconos': { icon: '🤝', color: '#16a34a', bg: '#dcfce7', border: '#bbf7d0' },
-      'diaconisas': { icon: '🌸', color: '#db2777', bg: '#fce7f3', border: '#fbcfe8' },
-      'audiovisual y comunicaciones': { icon: '🎥', color: '#6d28d9', bg: '#ede9fe', border: '#ddd6fe' },
-      'audiovisual': { icon: '🎥', color: '#7c3aed', bg: '#ede9fe', border: '#ddd6fe' },
-      'ancianos / junta de iglesia': { icon: '🏛️', color: '#334155', bg: '#f1f5f9', border: '#cbd5e1' },
-      'ancianos': { icon: '🏛️', color: '#334155', bg: '#f1f5f9', border: '#cbd5e1' },
-      'evangelismo y misión global': { icon: '✨', color: '#1e40af', bg: '#dbeafe', border: '#93c5fd' },
-      'misión': { icon: '✨', color: '#1e40af', bg: '#dbeafe', border: '#93c5fd' },
-      'secretaría y tesorería': { icon: '📊', color: '#0369a1', bg: '#e0f2fe', border: '#bae6fd' }
+      'escuela sabática': { icon: '', color: '#1d4ed8', bg: '#dbeafe', border: '#bfdbfe' },
+      'ministerio personal': { icon: '', color: '#b45309', bg: '#fef3c7', border: '#fde68a' },
+      'jóvenes (ja)': { icon: '', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
+      'jovenes': { icon: '', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
+      'ministerio infantil': { icon: '', color: '#047857', bg: '#d1fae5', border: '#a7f3d0' },
+      'club de conquistadores / aventureros': { icon: '', color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
+      'conquistadores': { icon: '', color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
+      'mayordomía cristiana': { icon: '', color: '#7e22ce', bg: '#f3e8ff', border: '#e9d5ff' },
+      'mayordomía': { icon: '', color: '#7e22ce', bg: '#f3e8ff', border: '#e9d5ff' },
+      'salud y temperancia': { icon: '', color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
+      'salud': { icon: '', color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
+      'ministerio de la mujer / dorcas': { icon: '', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
+      'dorcas': { icon: '', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
+      'alabanza y música': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+      'alabanza': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+      'diaconía (diáconos / diaconisas)': { icon: '', color: '#0f766e', bg: '#ccfbf1', border: '#99f6e4' },
+      'diáconos': { icon: '', color: '#16a34a', bg: '#dcfce7', border: '#bbf7d0' },
+      'diaconisas': { icon: '', color: '#db2777', bg: '#fce7f3', border: '#fbcfe8' },
+      'audiovisual y comunicaciones': { icon: '', color: '#6d28d9', bg: '#ede9fe', border: '#ddd6fe' },
+      'audiovisual': { icon: '', color: '#7c3aed', bg: '#ede9fe', border: '#ddd6fe' },
+      'ancianos / junta de iglesia': { icon: '', color: '#334155', bg: '#f1f5f9', border: '#cbd5e1' },
+      'ancianos': { icon: '', color: '#334155', bg: '#f1f5f9', border: '#cbd5e1' },
+      'evangelismo y misión global': { icon: '', color: '#1e40af', bg: '#dbeafe', border: '#93c5fd' },
+      'misión': { icon: '', color: '#1e40af', bg: '#dbeafe', border: '#93c5fd' },
+      'secretaría y tesorería': { icon: '', color: '#0369a1', bg: '#e0f2fe', border: '#bae6fd' }
     };
 
     function getDepartmentStyle(deptName) {
@@ -4549,7 +4545,7 @@
           return val;
         }
       }
-      return { icon: '📌', color: '#1e293b', bg: '#f1f5f9', border: '#cbd5e1' };
+      return { icon: '', color: '#1e293b', bg: '#f1f5f9', border: '#cbd5e1' };
     }
 
     function selectQuarter(q) {
@@ -4662,11 +4658,10 @@
         if (monthActivities.length === 0) {
           activitiesCardsHtml = `
             <div class="quarter-empty-state">
-              <span style="font-size: 2rem;">🌱</span>
               <div>Sin actividades programadas para ${monthName}</div>
               ${isAuthenticated ? `
                 <button class="btn btn-outline btn-sm" style="margin-top: 8px;" onclick="openAddActivityModal(${monthIdx})">
-                  ➕ Programar en ${monthName}
+                  Programar en ${monthName}
                 </button>
               ` : ''}
             </div>
@@ -4682,12 +4677,11 @@
               <div class="activity-card" style="border-left-color: ${style.color};">
                 <div class="activity-meta-row">
                   <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                    <span class="activity-date-badge">📅 ${dayName} ${dayNum}</span>
-                    <span class="activity-time-badge">⏰ ${escapeHtml(act.time || 'Hora por definir')}</span>
-                    ${act.duration ? `<span class="activity-duration-badge">⏱️ ${escapeHtml(act.duration)}</span>` : ''}
+                    <span class="activity-date-badge">${dayName} ${dayNum}</span>
+                    <span class="activity-time-badge">${escapeHtml(act.time || 'Hora por definir')}</span>
+                    ${act.duration ? `<span class="activity-duration-badge">${escapeHtml(act.duration)}</span>` : ''}
                   </div>
                   <div class="activity-dept-badge" style="background: ${style.bg}; color: ${style.color}; border: 1px solid ${style.border};">
-                    <span>${style.icon}</span>
                     <span>${escapeHtml(act.department || 'General')}</span>
                   </div>
                 </div>
@@ -4699,10 +4693,10 @@
                 ${isAuthenticated ? `
                   <div class="activity-card-actions">
                     <button class="btn btn-outline btn-sm" style="padding: 2px 7px; font-size: 0.72rem;" onclick="openEditActivityModal('${act.id}')" title="Editar actividad">
-                      ✏️ Editar
+                      Editar
                     </button>
                     <button class="btn btn-danger btn-sm" style="padding: 2px 7px; font-size: 0.72rem;" onclick="handleDeleteActivity('${act.id}')" title="Eliminar actividad">
-                      🗑️ Eliminar
+                      Eliminar
                     </button>
                   </div>
                 ` : ''}
@@ -4714,7 +4708,7 @@
         gridHtml += `
           <div class="quarter-month-col">
             <div class="quarter-month-header">
-              <span>🗓️ ${monthName.toUpperCase()} ${selectedQuarterYear}</span>
+              <span>${monthName.toUpperCase()} ${selectedQuarterYear}</span>
               <span class="quarter-month-count">${monthActivities.length} ${monthActivities.length === 1 ? 'actividad' : 'actividades'}</span>
             </div>
             <div class="quarter-activities-list">
@@ -4741,7 +4735,7 @@
       if (!ensureAuth(() => openAddActivityModal(defaultMonth))) return;
       document.getElementById('activityForm').reset();
       document.getElementById('activityEditId').value = '';
-      document.getElementById('activityModalTitle').innerText = '➕ Nueva Actividad Trimestral';
+      document.getElementById('activityModalTitle').innerText = 'Nueva Actividad Trimestral';
       document.getElementById('activitySubmitBtn').innerText = 'Guardar Actividad';
 
       let targetYear = selectedQuarterYear;
@@ -4777,7 +4771,7 @@
       if (durEl) durEl.value = act.duration || '';
       document.getElementById('actDept').value = act.department;
       document.getElementById('actNotes').value = act.notes;
-      document.getElementById('activityModalTitle').innerText = '✏️ Editar Actividad Trimestral';
+      document.getElementById('activityModalTitle').innerText = 'Editar Actividad Trimestral';
       document.getElementById('activitySubmitBtn').innerText = 'Guardar Cambios';
       document.getElementById('activityModal').classList.add('open');
       setTimeout(() => document.getElementById('actNotes').focus(), 100);
@@ -4814,7 +4808,7 @@
             department,
             notes
           };
-          showToast('✅ Actividad trimestral actualizada con éxito', 'success');
+          showToast('Actividad trimestral actualizada con éxito', 'success');
         }
       } else {
         const newAct = {
@@ -4826,7 +4820,7 @@
           notes
         };
         quarterlyActivities.push(newAct);
-        showToast('✅ Actividad trimestral guardada con éxito', 'success');
+        showToast('Actividad trimestral guardada con éxito', 'success');
       }
 
       saveQuarterlyData();
@@ -4849,7 +4843,7 @@
       quarterlyActivities = quarterlyActivities.filter(a => a.id !== actId);
       saveQuarterlyData();
       renderQuarterlyActivities();
-      showToast('🗑️ Actividad eliminada del programa', 'info');
+      showToast('Actividad eliminada del programa', 'info');
     }
 
     function clearQuarterActivities() {
@@ -4868,7 +4862,7 @@
       });
       saveQuarterlyData();
       renderQuarterlyActivities();
-      showToast(`🗑️ Actividades de ${qName} eliminadas`, 'info');
+      showToast(`Actividades de ${qName} eliminadas`, 'info');
     }
 
     function exportQuarterPrintPDF() {
@@ -4908,14 +4902,14 @@
           tableRowsHtml += `
             <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 10px; font-weight: 700; white-space: nowrap; color: #1e3a8a;">
-                📅 ${dayName} ${dayNum} de ${monthName}
+                ${dayName} ${dayNum} de ${monthName}
               </td>
               <td style="padding: 10px; font-weight: 700; white-space: nowrap; color: #0284c7;">
-                <div>⏰ ${escapeHtml(act.time || 'Por definir')}</div>
-                ${act.duration ? `<div style="font-size: 0.75rem; color: #0f766e; margin-top: 3px; font-weight: 700;">⏱️ ${escapeHtml(act.duration)}</div>` : ''}
+                <div>${escapeHtml(act.time || 'Por definir')}</div>
+                ${act.duration ? `<div style="font-size: 0.75rem; color: #0f766e; margin-top: 3px; font-weight: 700;">${escapeHtml(act.duration)}</div>` : ''}
               </td>
               <td style="padding: 10px; font-weight: 700; color: ${style.color}; white-space: nowrap;">
-                <span>${style.icon}</span> ${escapeHtml(act.department)}
+                ${escapeHtml(act.department)}
               </td>
               <td style="padding: 10px; color: #1e293b; font-weight: 500;">
                 ${escapeHtml(act.notes)}
@@ -4964,11 +4958,11 @@
         <div class="print-wrapper">
           <div class="action-bar">
             <div style="font-weight: 800; color: #1e3a8a; font-size: 0.95rem;">
-              🖨️ Vista de Impresión / PDF • ${qLabel}
+              Vista de Impresión / PDF • ${qLabel}
             </div>
             <div style="display: flex; gap: 8px;">
               <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
-              <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+              <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
             </div>
           </div>
 
@@ -4976,7 +4970,7 @@
             <div class="header-box">
               <div>
                 <div class="header-title">Iglesia Adventista del Séptimo Día</div>
-                <div class="header-sub">📅 PROGRAMA TRIMESTRAL DE ACTIVIDADES • ${qLabel.toUpperCase()} ${selectedQuarterYear}</div>
+                <div class="header-sub">PROGRAMA TRIMESTRAL DE ACTIVIDADES • ${qLabel.toUpperCase()} ${selectedQuarterYear}</div>
               </div>
               <div style="text-align: right;">
                 <div style="font-weight: 900; font-size: 1rem; color: #1e3a8a;">OneVOICE27</div>
@@ -5010,7 +5004,7 @@
     }
 
     // ==============================================================
-    // 🎨 GENERADOR DE ANUNCIO SEMANAL (FLYER PDF) - ONEVOICE27
+    // GENERADOR DE ANUNCIO SEMANAL (FLYER PDF) - ONEVOICE27
     // ==============================================================
 
     const BIBLE_VERSES_LIST = [
@@ -5024,14 +5018,29 @@
     ];
     let currentFlyerVerseIdx = 0;
 
+    const DEFAULT_HEADER_BANNER = 'file:///C:/Users/0scar/.gemini/antigravity/brain/4e9cdfa3-c1a5-4eb6-9031-db3283bf530c/.user_uploaded/media_1791473229213.png';
+
     function openFlyerModal() {
       if (!ensureAuth(() => openFlyerModal())) return;
       populateFlyerWeekendDropdown();
       onFlyerWeekendChange();
+
+      // Si la versión del banner cambió, restablecer a la nueva cabecera oficial
+      const headerVersion = localStorage.getItem('church_flyer_header_version');
+      if (headerVersion !== 'v2_onevoice27') {
+        try {
+          localStorage.removeItem('church_flyer_header_b64');
+          localStorage.setItem('church_flyer_header_version', 'v2_onevoice27');
+        } catch (e) {}
+      }
+
       const savedHeader = localStorage.getItem('church_flyer_header_b64');
       if (savedHeader) {
         applyFlyerHeaderImage(savedHeader);
+      } else {
+        applyFlyerHeaderImage(DEFAULT_HEADER_BANNER);
       }
+
       const savedBible = localStorage.getItem('church_flyer_bible_b64');
       if (savedBible) {
         applyFlyerBibleImage(savedBible);
@@ -5057,7 +5066,7 @@
           console.warn('LocalStorage limit:', err);
         }
         applyFlyerHeaderImage(b64);
-        showToast('✅ Imagen de cabecera cargada con éxito', 'success');
+        showToast('Imagen de cabecera cargada con éxito', 'success');
       };
       reader.readAsDataURL(file);
     }
@@ -5068,6 +5077,15 @@
         img.src = imgSrc;
         img.setAttribute('src', imgSrc);
       }
+    }
+
+    function resetFlyerHeaderImage() {
+      try {
+        localStorage.removeItem('church_flyer_header_b64');
+        localStorage.setItem('church_flyer_header_version', 'v2_onevoice27');
+      } catch (err) {}
+      applyFlyerHeaderImage(DEFAULT_HEADER_BANNER);
+      showToast('Cabecera restaurada al nuevo banner oficial OneVoice27', 'info');
     }
 
     function handleBibleFileChange(e) {
@@ -5083,7 +5101,7 @@
           console.warn('LocalStorage limit:', err);
         }
         applyFlyerBibleImage(b64);
-        showToast('✅ Imagen inferior izquierda actualizada con éxito', 'success');
+        showToast('Imagen inferior izquierda actualizada con éxito', 'success');
       };
       reader.readAsDataURL(file);
     }
@@ -5406,7 +5424,7 @@
     function printFlyerPDF() {
       const flyerCard = document.getElementById('flyerPosterCard');
       if (!flyerCard) {
-        showToast('⚠️ No se encontró el cartel para exportar', 'error');
+        showToast('No se encontró el cartel para exportar', 'error');
         return;
       }
 
@@ -5694,11 +5712,11 @@
       printDoc.body.innerHTML = `
         <div class="print-actions-bar flyer-no-print">
           <div class="print-actions-title">
-            <span>🎨</span> Vista de Impresión / Guardar en PDF
+            Vista de Impresión / Guardar en PDF
           </div>
           <div style="display: flex; gap: 8px;">
-            <button class="print-btn-close" onclick="window.close()">✖ Cerrar</button>
-            <button class="print-btn-main" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+            <button class="print-btn-close" onclick="window.close()">Cerrar</button>
+            <button class="print-btn-main" onclick="window.print()">Imprimir / Guardar en PDF</button>
           </div>
         </div>
         ${flyerHtml}
@@ -5720,7 +5738,7 @@
     function downloadFlyerPNG() {
       const flyerCard = document.getElementById('flyerPosterCard');
       if (!flyerCard) {
-        showToast('⚠️ No se encontró el cartel', 'error');
+        showToast('No se encontró el cartel', 'error');
         return;
       }
 
@@ -5730,7 +5748,7 @@
         return;
       }
 
-      showToast('⏳ Generando imagen PNG en alta resolución...', 'info');
+      showToast('Generando imagen PNG en alta resolución...', 'info');
 
       // Ocultar temporalmente elementos no imprimibles
       const noPrintEls = flyerCard.querySelectorAll('.flyer-no-print');
@@ -5749,7 +5767,7 @@
         link.download = `Anuncio_Semanal_${safeName}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        showToast('✅ Imagen PNG descargada correctamente', 'success');
+        showToast('Imagen PNG descargada correctamente', 'success');
       }).catch(err => {
         noPrintEls.forEach(el => el.style.display = '');
         console.warn('html2canvas error:', err);
