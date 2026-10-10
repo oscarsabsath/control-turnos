@@ -2347,14 +2347,22 @@
         <div class="flyer-controls-scroll">
           <!-- Selector de Fin de Semana -->
           <div class="form-group" style="background: #eff6ff; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #bfdbfe; margin-bottom: 12px;">
-            <label for="flyerWeekendSelect" style="font-weight: 800; color: #1e40af; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-              Elegir Fin de Semana:
-            </label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="flyerWeekendSelect" style="font-weight: 800; color: #1e40af; font-size: 0.82rem; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+                Elegir Fin de Semana:
+              </label>
+              <div id="flyerSaveStatus"></div>
+            </div>
             <select id="flyerWeekendSelect" class="form-control" onchange="onFlyerWeekendChange()" style="font-weight: 700; border-color: #93c5fd;">
               <!-- Llenado dinámicamente con los fines de semana -->
             </select>
-            <div class="hint" style="color: #1e40af; font-size: 0.72rem; margin-top: 4px;">
-              Al seleccionar una fecha se cargan automáticamente el <strong>Anciano de Turno</strong> y los <strong>Predicadores</strong> asignados en el sistema.
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; gap: 8px;">
+              <div class="hint" style="color: #1e40af; font-size: 0.72rem; margin-top: 0; flex: 1;">
+                Tus cambios en este anuncio se <strong>guardan automáticamente</strong>.
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" onclick="resetFlyerFromSchedule()" style="padding: 2px 8px; font-size: 0.7rem; border-color: #93c5fd; color: #1e40af; white-space: nowrap; background: #ffffff;" title="Recargar nombres y cultos originales desde los turnos del calendario">
+                ↻ Recargar turnos
+              </button>
             </div>
           </div>
 
@@ -2418,7 +2426,7 @@
           <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div class="form-group" style="margin-bottom: 8px;">
               <label for="flyerInputChurch">Nombre de la Iglesia:</label>
-              <input type="text" id="flyerInputChurch" class="form-control" value="Horeb" placeholder="Ej: Horeb, Central, Betel..." oninput="updateFlyerPreview()">
+              <input type="text" id="flyerInputChurch" class="form-control" value="Horeb" placeholder="Ej: Horeb, Central, Betel..." oninput="onFlyerFieldInput()">
             </div>
 
             <div class="form-group" style="margin-bottom: 8px;">
@@ -2428,12 +2436,12 @@
                   Cambiar Versículo
                 </button>
               </div>
-              <textarea id="flyerInputVerse" class="form-control" rows="2" style="font-size: 0.8rem; line-height: 1.3;" oninput="updateFlyerPreview()">En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.</textarea>
+              <textarea id="flyerInputVerse" class="form-control" rows="2" style="font-size: 0.8rem; line-height: 1.3;" oninput="onFlyerFieldInput()">En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.</textarea>
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
               <label for="flyerInputRef">Cita / Libro y Versículo:</label>
-              <input type="text" id="flyerInputRef" class="form-control" value="Proverbios 17:17" oninput="updateFlyerPreview()">
+              <input type="text" id="flyerInputRef" class="form-control" value="Proverbios 17:17" oninput="onFlyerFieldInput()">
             </div>
           </div>
 
@@ -2445,11 +2453,11 @@
             <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px; margin-bottom: 4px;">
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Temperatura:</label>
-                <input type="text" id="flyerInputWeatherTemp" class="form-control" value="22°C" placeholder="Ej: 22°C" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputWeatherTemp" class="form-control" value="22°C" placeholder="Ej: 22°C" oninput="onFlyerFieldInput()">
               </div>
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">¿Va a llover?:</label>
-                <select id="flyerInputWeatherRain" class="form-control" onchange="updateFlyerPreview()">
+                <select id="flyerInputWeatherRain" class="form-control" onchange="onFlyerFieldInput()">
                   <option value="no">No (Sin lluvia)</option>
                   <option value="yes">Sí (Lluvia prevista)</option>
                   <option value="prob">Lluvia probable</option>
@@ -2470,16 +2478,16 @@
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
                 <label style="font-size: 0.72rem; font-weight: 600;">Horario:</label>
-                <input type="text" id="flyerInputFriTime" class="form-control" value="20:00 – 21:00" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputFriTime" class="form-control" value="20:00 – 21:00" oninput="onFlyerFieldInput()">
               </div>
               <div>
                 <label style="font-size: 0.72rem; font-weight: 600;">Lugar / Actividad:</label>
-                <input type="text" id="flyerInputFriAct" class="form-control" value="Iglesia" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputFriAct" class="form-control" value="Iglesia" oninput="onFlyerFieldInput()">
               </div>
             </div>
             <div>
               <label style="font-size: 0.72rem; font-weight: 600;">Responsable / Predicador(a):</label>
-              <input type="text" id="flyerInputFriSpeaker" class="form-control" value="María Antonia Lopez" placeholder="Nombre del predicador o líder" oninput="updateFlyerPreview()">
+              <input type="text" id="flyerInputFriSpeaker" class="form-control" value="María Antonia Lopez" placeholder="Nombre del predicador o líder" oninput="onFlyerFieldInput()">
             </div>
           </div>
 
@@ -2493,11 +2501,11 @@
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Hora Mañana 1:</label>
-                <input type="text" id="flyerInputSatAct1Time" class="form-control" value="12:00 – 13:15" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct1Time" class="form-control" value="12:00 – 13:15" oninput="onFlyerFieldInput()">
               </div>
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Actividad Mañana 1:</label>
-                <input type="text" id="flyerInputSatAct1Name" class="form-control" value="Canto y Escuela Sabática" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct1Name" class="form-control" value="Canto y Escuela Sabática" oninput="onFlyerFieldInput()">
               </div>
             </div>
 
@@ -2506,16 +2514,16 @@
               <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px;">
                 <div>
                   <label style="font-size: 0.7rem; font-weight: 600;">Hora Culto:</label>
-                  <input type="text" id="flyerInputSatAct2Time" class="form-control" value="13:15 – 14:30" oninput="updateFlyerPreview()">
+                  <input type="text" id="flyerInputSatAct2Time" class="form-control" value="13:15 – 14:30" oninput="onFlyerFieldInput()">
                 </div>
                 <div>
                   <label style="font-size: 0.7rem; font-weight: 600;">Título Culto:</label>
-                  <input type="text" id="flyerInputSatAct2Title" class="form-control" value="Predicación" oninput="updateFlyerPreview()">
+                  <input type="text" id="flyerInputSatAct2Title" class="form-control" value="Predicación" oninput="onFlyerFieldInput()">
                 </div>
               </div>
               <div style="margin-top: 4px;">
                 <label style="font-size: 0.7rem; font-weight: 600;">Predicador(a) / Pastor:</label>
-                <input type="text" id="flyerInputSatAct2Speaker" class="form-control" value="Pr. Igor Domingos" placeholder="Nombre del predicador del sábado" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct2Speaker" class="form-control" value="Pr. Igor Domingos" placeholder="Nombre del predicador del sábado" oninput="onFlyerFieldInput()">
               </div>
             </div>
 
@@ -2524,18 +2532,18 @@
               <label for="flyerInputDividerText" style="font-size: 0.72rem; font-weight: 700; color: #1e40af; margin-bottom: 0; display: flex; align-items: center; gap: 4px;">
                 Franja División (Tarde):
               </label>
-              <input type="text" id="flyerInputDividerText" class="form-control" value="Actividades de la Tarde" style="font-size: 0.72rem; padding: 2px 6px; max-width: 175px;" oninput="updateFlyerPreview()">
+              <input type="text" id="flyerInputDividerText" class="form-control" value="Actividades de la Tarde" style="font-size: 0.72rem; padding: 2px 6px; max-width: 175px;" oninput="onFlyerFieldInput()">
             </div>
 
             <!-- Tarde 1: Junta de Iglesia u otra actividad -->
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Hora Tarde 1:</label>
-                <input type="text" id="flyerInputSatAct3Time" class="form-control" value="16:00 – 17:00" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct3Time" class="form-control" value="16:00 – 17:00" oninput="onFlyerFieldInput()">
               </div>
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Actividad Tarde 1:</label>
-                <input type="text" id="flyerInputSatAct3Name" class="form-control" value="Junta de Iglesia" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct3Name" class="form-control" value="Junta de Iglesia" oninput="onFlyerFieldInput()">
               </div>
             </div>
 
@@ -2543,11 +2551,11 @@
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px;">
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Hora Tarde 2:</label>
-                <input type="text" id="flyerInputSatAct4Time" class="form-control" value="17:00 – 18:00" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct4Time" class="form-control" value="17:00 – 18:00" oninput="onFlyerFieldInput()">
               </div>
               <div>
                 <label style="font-size: 0.7rem; font-weight: 600;">Actividad Tarde 2:</label>
-                <input type="text" id="flyerInputSatAct4Name" class="form-control" value="JA" oninput="updateFlyerPreview()">
+                <input type="text" id="flyerInputSatAct4Name" class="form-control" value="JA" oninput="onFlyerFieldInput()">
               </div>
             </div>
           </div>
@@ -2559,17 +2567,20 @@
             </div>
             <div class="form-group" style="margin-bottom: 6px;">
               <label for="flyerInputElder">Nombre del Anciano de Turno:</label>
-              <input type="text" id="flyerInputElder" class="form-control" value="Jaime Zaragoza" placeholder="Nombre del anciano asignado" oninput="updateFlyerPreview()">
+              <input type="text" id="flyerInputElder" class="form-control" value="Jaime Zaragoza" placeholder="Nombre del anciano asignado" oninput="onFlyerFieldInput()">
             </div>
             <div class="form-group" style="margin-bottom: 0;">
               <label for="flyerInputMotto">Lema Inferior:</label>
-              <input type="text" id="flyerInputMotto" class="form-control" value="Juntos en la obra de Dios" oninput="updateFlyerPreview()">
+              <input type="text" id="flyerInputMotto" class="form-control" value="Juntos en la obra de Dios" oninput="onFlyerFieldInput()">
             </div>
           </div>
 
           <!-- Botones de Acción -->
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="btn btn-primary" onclick="printFlyerPDF()" style="flex: 1; min-width: 190px; padding: 10px 14px; background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); font-size: 0.88rem; box-shadow: 0 4px 10px rgba(11,37,74,0.3);">
+            <button type="button" class="btn btn-primary" onclick="manualSaveFlyer()" style="background: #2563eb; color: white; border: 1px solid #1d4ed8; font-weight: 700; padding: 10px 14px; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="Guardar todos los cambios de este anuncio">
+              💾 Guardar Anuncio
+            </button>
+            <button type="button" class="btn btn-primary" onclick="printFlyerPDF()" style="flex: 1; min-width: 170px; padding: 10px 14px; background: linear-gradient(135deg, #0b254a 0%, #1e40af 100%); font-size: 0.88rem; box-shadow: 0 4px 10px rgba(11,37,74,0.3);">
               Descargar / Imprimir Flyer PDF
             </button>
             <button type="button" class="btn btn-success" onclick="downloadFlyerPNG()" style="padding: 10px 14px; font-size: 0.88rem; background: #059669; border: 1px solid #047857; color: white;" title="Descargar como imagen PNG en alta definición para compartir">
@@ -2849,6 +2860,28 @@
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
 
+    function loadSafeObjectData(keys, defaultData) {
+      for (const key of keys) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (raw && raw !== 'undefined' && raw !== 'null') {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+              return parsed;
+            }
+          }
+        } catch (err) {
+          console.warn(`Error leyendo clave de almacenamiento ${key}:`, err);
+        }
+      }
+      return defaultData;
+    }
+
+    let flyersData = loadSafeObjectData([
+      'church_flyers_data_v1',
+      'church_flyers_data'
+    ], {});
+
     // ==============================================================
     // CONFIGURACIÓN DE BASE DE DATOS EN LA NUBE (FIREBASE)
     // ==============================================================
@@ -2917,6 +2950,32 @@
               try { localStorage.setItem('church_quarterly_activities_v1', JSON.stringify([])); } catch(e){}
               try { localStorage.setItem('church_quarterly_initialized', 'true'); } catch(e){}
             }
+            if (val.flyersData && typeof val.flyersData === 'object' && !Array.isArray(val.flyersData)) {
+              if (!flyersData) flyersData = {};
+              Object.assign(flyersData, val.flyersData);
+              for (const k of Object.keys(val.flyersData)) {
+                if (k.includes('_')) {
+                  const pipeKey = k.replace(/_(\d{4}-)/, '|$1');
+                  flyersData[pipeKey] = val.flyersData[k];
+                }
+              }
+              try {
+                localStorage.setItem('church_flyers_data_v1', JSON.stringify(flyersData));
+                localStorage.setItem('church_flyers_data', JSON.stringify(flyersData));
+              } catch(e){}
+              const flyerSelect = document.getElementById('flyerWeekendSelect');
+              const flyerModal = document.getElementById('weeklyFlyerModal');
+              if (flyerModal && flyerModal.classList.contains('open') && flyerSelect && flyerSelect.value) {
+                if (typeof loadFlyerDataForWeekend === 'function') {
+                  loadFlyerDataForWeekend(flyerSelect.value);
+                }
+              }
+            } else if (flyersData && Object.keys(flyersData).length > 0 && db) {
+              const cleanFlyers = getCleanFlyersDataForFirebase(flyersData);
+              if (cleanFlyers) {
+                db.ref('church_turnos/flyersData').set(cleanFlyers).catch(() => {});
+              }
+            }
             renderCalendar();
             renderCollaboratorsTable();
             renderShiftsTable();
@@ -2939,14 +2998,28 @@
       }
     }
 
+    function getCleanFlyersDataForFirebase(data) {
+      if (!data || typeof data !== 'object') return null;
+      const clean = {};
+      let count = 0;
+      for (const k of Object.keys(data)) {
+        const safeKey = k.replace(/[^a-zA-Z0-9_-]/g, '_');
+        clean[safeKey] = data[k];
+        count++;
+      }
+      return count > 0 ? clean : null;
+    }
+
     function pushDataToCloud() {
       if (!db) return;
       const isQuarterlyEmpty = !quarterlyActivities || quarterlyActivities.length === 0;
+      const cleanFlyers = getCleanFlyersDataForFirebase(flyersData);
       db.ref('church_turnos').update({
         collaborators: collaborators,
         shifts: shifts,
         quarterlyActivities: isQuarterlyEmpty ? null : quarterlyActivities,
         quarterlyActivitiesCleared: isQuarterlyEmpty,
+        flyersData: cleanFlyers,
         updatedAt: Date.now()
       }).catch(err => {
         console.error('Error sincronizando con Firebase:', err);
@@ -3357,6 +3430,11 @@
         localStorage.setItem('church_assignments_v4', shiftsJson);
         localStorage.setItem('church_collaborators', colabJson);
         localStorage.setItem('church_assignments', shiftsJson);
+        if (flyersData) {
+          const flyersJson = JSON.stringify(flyersData);
+          localStorage.setItem('church_flyers_data_v1', flyersJson);
+          localStorage.setItem('church_flyers_data', flyersJson);
+        }
       } catch (err) {
         console.error('Error al guardar datos en el navegador:', err);
       }
@@ -4110,7 +4188,8 @@
         exportedAt: new Date().toISOString(),
         collaborators,
         shifts,
-        quarterlyActivities
+        quarterlyActivities,
+        flyersData: flyersData || {}
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -4165,8 +4244,9 @@
           const hasColabs = Array.isArray(data.collaborators);
           const hasShifts = Array.isArray(data.shifts);
           const hasQuarterly = Array.isArray(data.quarterlyActivities);
+          const hasFlyers = data.flyersData && typeof data.flyersData === 'object' && !Array.isArray(data.flyersData);
 
-          if (!hasColabs && !hasShifts && !hasQuarterly) {
+          if (!hasColabs && !hasShifts && !hasQuarterly && !hasFlyers) {
             showToast('El archivo no contiene datos compatibles de la iglesia.', 'error');
             return;
           }
@@ -4174,11 +4254,13 @@
           const colabCount = hasColabs ? data.collaborators.length : 0;
           const shiftCount = hasShifts ? data.shifts.length : 0;
           const qCount = hasQuarterly ? data.quarterlyActivities.length : 0;
+          const flyerCount = hasFlyers ? Object.keys(data.flyersData).length : 0;
 
           const msg = `¿Confirmas que deseas restaurar este respaldo?\n\n` +
             `• Hermanos en directorio: ${colabCount}\n` +
             `• Turnos y responsabilidades: ${shiftCount}\n` +
-            `• Actividades trimestrales: ${qCount}\n\n` +
+            `• Actividades trimestrales: ${qCount}\n` +
+            `• Anuncios flyers personalizados: ${flyerCount}\n\n` +
             `Se reemplazarán los datos actuales y se sincronizará automáticamente con la nube Firebase.`;
 
           if (!confirm(msg)) {
@@ -4193,6 +4275,9 @@
           }
           if (hasQuarterly) {
             quarterlyActivities = data.quarterlyActivities;
+          }
+          if (hasFlyers) {
+            flyersData = data.flyersData;
           }
 
           saveData();
@@ -5161,6 +5246,13 @@
     }
 
     function closeFlyerModal() {
+      if (typeof flyerAutoSaveTimer !== 'undefined' && flyerAutoSaveTimer) {
+        clearTimeout(flyerAutoSaveTimer);
+        flyerAutoSaveTimer = null;
+        if (typeof saveFlyerData === 'function') {
+          saveFlyerData(false);
+        }
+      }
       const modal = document.getElementById('weeklyFlyerModal');
       if (modal) modal.classList.remove('open');
     }
@@ -5213,9 +5305,274 @@
       }
     }
 
+    let flyerAutoSaveTimer = null;
+    let activeFlyerWeekendKey = null;
+
+    function sanitizeWeekendKey(key) {
+      if (!key) return '';
+      return key.replace(/[^a-zA-Z0-9_-]/g, '_');
+    }
+
+    function setFieldValue(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== undefined && val !== null) ? val : '';
+    }
+
+    function updateFlyerSaveStatus(state) {
+      const el = document.getElementById('flyerSaveStatus');
+      if (!el) return;
+      if (state === 'saving') {
+        el.innerHTML = '<span style="color: #d97706; font-size: 0.72rem; font-weight: 700;">⏳ Guardando...</span>';
+      } else if (state === 'cloud') {
+        el.innerHTML = '<span style="color: #2563eb; font-size: 0.72rem; font-weight: 700;" title="Sincronizado con la base de datos de la nube">☁️ En la Nube</span>';
+      } else if (state === 'saved' || state === true) {
+        el.innerHTML = '<span style="color: #16a34a; font-size: 0.72rem; font-weight: 700;">✓ Guardado</span>';
+      } else {
+        el.innerHTML = '<span style="color: #64748b; font-size: 0.72rem; font-weight: 500;">Automático</span>';
+      }
+    }
+
+    function saveFlyerDataLocally() {
+      const select = document.getElementById('flyerWeekendSelect');
+      if (!select || !select.value) return null;
+      const weekendKey = select.value;
+      const safeKey = sanitizeWeekendKey(weekendKey);
+
+      const flyerData = {
+        church: (document.getElementById('flyerInputChurch')?.value || '').trim(),
+        verse: document.getElementById('flyerInputVerse')?.value || '',
+        ref: document.getElementById('flyerInputRef')?.value || '',
+        weatherTemp: (document.getElementById('flyerInputWeatherTemp')?.value || '').trim(),
+        weatherRain: document.getElementById('flyerInputWeatherRain')?.value || 'no',
+        friTime: document.getElementById('flyerInputFriTime')?.value || '',
+        friAct: document.getElementById('flyerInputFriAct')?.value || '',
+        friSpeaker: document.getElementById('flyerInputFriSpeaker')?.value || '',
+        satAct1Time: document.getElementById('flyerInputSatAct1Time')?.value || '',
+        satAct1Name: document.getElementById('flyerInputSatAct1Name')?.value || '',
+        satAct2Time: document.getElementById('flyerInputSatAct2Time')?.value || '',
+        satAct2Title: document.getElementById('flyerInputSatAct2Title')?.value || '',
+        satAct2Speaker: document.getElementById('flyerInputSatAct2Speaker')?.value || '',
+        dividerText: document.getElementById('flyerInputDividerText')?.value || '',
+        satAct3Time: document.getElementById('flyerInputSatAct3Time')?.value || '',
+        satAct3Name: document.getElementById('flyerInputSatAct3Name')?.value || '',
+        satAct4Time: document.getElementById('flyerInputSatAct4Time')?.value || '',
+        satAct4Name: document.getElementById('flyerInputSatAct4Name')?.value || '',
+        elder: document.getElementById('flyerInputElder')?.value || '',
+        motto: document.getElementById('flyerInputMotto')?.value || '',
+        updatedAt: Date.now()
+      };
+
+      if (!flyersData) flyersData = {};
+      flyersData[weekendKey] = flyerData;
+      flyersData[safeKey] = flyerData;
+
+      if (flyerData.church) {
+        try { localStorage.setItem('church_flyer_global_church', flyerData.church); } catch(e){}
+      }
+      if (flyerData.motto) {
+        try { localStorage.setItem('church_flyer_global_motto', flyerData.motto); } catch(e){}
+      }
+
+      try {
+        const json = JSON.stringify(flyersData);
+        localStorage.setItem('church_flyers_data_v1', json);
+        localStorage.setItem('church_flyers_data', json);
+      } catch (err) {
+        console.warn('Error guardando flyersData en localStorage:', err);
+      }
+
+      return { weekendKey, safeKey, flyerData };
+    }
+
+    function onFlyerFieldInput() {
+      updateFlyerPreview();
+      updateFlyerSaveStatus('saving');
+      saveFlyerDataLocally();
+      if (flyerAutoSaveTimer) clearTimeout(flyerAutoSaveTimer);
+      flyerAutoSaveTimer = setTimeout(() => {
+        saveFlyerData(false);
+      }, 350);
+    }
+
+    function manualSaveFlyer() {
+      if (flyerAutoSaveTimer) clearTimeout(flyerAutoSaveTimer);
+      flyerAutoSaveTimer = null;
+      saveFlyerData(true);
+    }
+
+    function saveFlyerData(showToastNotification = false) {
+      const savedInfo = saveFlyerDataLocally();
+      if (!savedInfo) return;
+      const { safeKey, flyerData } = savedInfo;
+
+      if (db) {
+        db.ref('church_turnos/flyersData/' + safeKey).set(flyerData).then(() => {
+          updateFlyerSaveStatus('cloud');
+        }).catch(err => {
+          console.warn('Aviso sincronizando flyer con Firebase:', err);
+          updateFlyerSaveStatus('saved');
+        });
+        pushDataToCloud();
+      } else {
+        updateFlyerSaveStatus('saved');
+      }
+
+      if (showToastNotification) {
+        showToast('¡Cambios del cartel/anuncio guardados en la nube con éxito!', 'success');
+      }
+    }
+
+    function loadFlyerDataForWeekend(weekendKey) {
+      if (!weekendKey) return;
+      activeFlyerWeekendKey = weekendKey;
+      const safeKey = sanitizeWeekendKey(weekendKey);
+
+      let saved = (flyersData && (flyersData[weekendKey] || flyersData[safeKey])) || null;
+
+      if (!saved) {
+        try {
+          const raw = localStorage.getItem('church_flyers_data_v1') || localStorage.getItem('church_flyers_data');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') {
+              saved = parsed[weekendKey] || parsed[safeKey] || null;
+              if (saved && flyersData) {
+                flyersData[weekendKey] = saved;
+                flyersData[safeKey] = saved;
+              }
+            }
+          }
+        } catch(e){}
+      }
+
+      const [friStr, satStr] = weekendKey.split('|');
+
+      // Turnos del calendario para valores por defecto
+      const elderShift = shifts.find(s => s.date === satStr && s.departmentId === 'anciano');
+      const satPredShift = shifts.find(s => s.date === satStr && s.departmentId === 'predicaciones');
+      const satAlabShift = shifts.find(s => s.date === satStr && s.departmentId === 'alabanza');
+      const friPredShift = shifts.find(s => s.date === friStr && s.departmentId === 'predicaciones');
+
+      const defaultElder = elderShift
+        ? (collaborators.find(c => c.id === elderShift.collaboratorId)?.name || '')
+        : 'Jaime Zaragoza';
+
+      const defaultSatSpeaker = satPredShift
+        ? (collaborators.find(c => c.id === satPredShift.collaboratorId)?.name || '')
+        : 'Pr. Igor Domingos';
+
+      const defaultSatTitle = (satPredShift && satPredShift.notes) ? satPredShift.notes : 'Predicación';
+
+      let defaultSatAct1Name = 'Canto y Escuela Sabática';
+      if (satAlabShift) {
+        const colab = collaborators.find(c => c.id === satAlabShift.collaboratorId);
+        if (colab) {
+          defaultSatAct1Name = `Canto (${colab.name}) y Escuela Sabática`;
+        }
+      }
+
+      const defaultFriSpeaker = friPredShift
+        ? (collaborators.find(c => c.id === friPredShift.collaboratorId)?.name || '')
+        : 'María Antonia Lopez';
+
+      const defaultFriAct = (friPredShift && friPredShift.notes) ? friPredShift.notes : 'Iglesia';
+
+      let defaultSatAct3Time = '16:00 – 17:00';
+      let defaultSatAct3Name = 'Junta de Iglesia';
+      let defaultSatAct4Time = '17:00 – 18:00';
+      let defaultSatAct4Name = 'JA';
+
+      if (typeof quarterlyActivities !== 'undefined' && Array.isArray(quarterlyActivities)) {
+        const satActs = quarterlyActivities.filter(a => a.date === satStr);
+        if (satActs.length > 0 && satActs[0]) {
+          if (satActs[0].time) {
+            defaultSatAct3Time = satActs[0].duration ? `${satActs[0].time} (${satActs[0].duration})` : satActs[0].time;
+          }
+          if (satActs[0].notes || satActs[0].department) {
+            defaultSatAct3Name = satActs[0].department ? `${satActs[0].department}: ${satActs[0].notes}` : satActs[0].notes;
+          }
+        }
+        if (satActs.length > 1 && satActs[1]) {
+          if (satActs[1].time) {
+            defaultSatAct4Time = satActs[1].duration ? `${satActs[1].time} (${satActs[1].duration})` : satActs[1].time;
+          }
+          if (satActs[1].notes || satActs[1].department) {
+            defaultSatAct4Name = satActs[1].department ? `${satActs[1].department}: ${satActs[1].notes}` : satActs[1].notes;
+          }
+        }
+      }
+
+      const globalChurch = localStorage.getItem('church_flyer_global_church') || 'Horeb';
+      const globalMotto = localStorage.getItem('church_flyer_global_motto') || 'Juntos en la obra de Dios';
+
+      setFieldValue('flyerInputChurch', saved ? (saved.church ?? globalChurch) : globalChurch);
+      setFieldValue('flyerInputVerse', saved ? (saved.verse ?? 'En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.') : 'En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.');
+      setFieldValue('flyerInputRef', saved ? (saved.ref ?? 'Proverbios 17:17') : 'Proverbios 17:17');
+      setFieldValue('flyerInputWeatherTemp', saved ? (saved.weatherTemp ?? '22°C') : '22°C');
+      setFieldValue('flyerInputWeatherRain', saved ? (saved.weatherRain ?? 'no') : 'no');
+      setFieldValue('flyerInputFriTime', saved ? (saved.friTime ?? '20:00 – 21:00') : '20:00 – 21:00');
+      setFieldValue('flyerInputFriAct', saved ? (saved.friAct ?? defaultFriAct) : defaultFriAct);
+      setFieldValue('flyerInputFriSpeaker', saved ? (saved.friSpeaker ?? defaultFriSpeaker) : defaultFriSpeaker);
+      setFieldValue('flyerInputSatAct1Time', saved ? (saved.satAct1Time ?? '12:00 – 13:15') : '12:00 – 13:15');
+      setFieldValue('flyerInputSatAct1Name', saved ? (saved.satAct1Name ?? defaultSatAct1Name) : defaultSatAct1Name);
+      setFieldValue('flyerInputSatAct2Time', saved ? (saved.satAct2Time ?? '13:15 – 14:30') : '13:15 – 14:30');
+      setFieldValue('flyerInputSatAct2Title', saved ? (saved.satAct2Title ?? defaultSatTitle) : defaultSatTitle);
+      setFieldValue('flyerInputSatAct2Speaker', saved ? (saved.satAct2Speaker ?? defaultSatSpeaker) : defaultSatSpeaker);
+      setFieldValue('flyerInputDividerText', saved ? (saved.dividerText ?? 'Actividades de la Tarde') : 'Actividades de la Tarde');
+      setFieldValue('flyerInputSatAct3Time', saved ? (saved.satAct3Time ?? defaultSatAct3Time) : defaultSatAct3Time);
+      setFieldValue('flyerInputSatAct3Name', saved ? (saved.satAct3Name ?? defaultSatAct3Name) : defaultSatAct3Name);
+      setFieldValue('flyerInputSatAct4Time', saved ? (saved.satAct4Time ?? defaultSatAct4Time) : defaultSatAct4Time);
+      setFieldValue('flyerInputSatAct4Name', saved ? (saved.satAct4Name ?? defaultSatAct4Name) : defaultSatAct4Name);
+      setFieldValue('flyerInputElder', saved ? (saved.elder ?? defaultElder) : defaultElder);
+      setFieldValue('flyerInputMotto', saved ? (saved.motto ?? globalMotto) : globalMotto);
+
+      updateFlyerPreview();
+      updateFlyerSaveStatus(Boolean(saved));
+    }
+
+    function resetFlyerFromSchedule() {
+      const select = document.getElementById('flyerWeekendSelect');
+      if (!select || !select.value) return;
+      const weekendKey = select.value;
+      const safeKey = sanitizeWeekendKey(weekendKey);
+
+      if (flyersData) {
+        delete flyersData[weekendKey];
+        delete flyersData[safeKey];
+        try {
+          const json = JSON.stringify(flyersData);
+          localStorage.setItem('church_flyers_data_v1', json);
+          localStorage.setItem('church_flyers_data', json);
+        } catch(e){}
+        if (db) {
+          db.ref('church_turnos/flyersData/' + safeKey).remove().catch(() => {});
+          pushDataToCloud();
+        }
+      }
+
+      loadFlyerDataForWeekend(weekendKey);
+      showToast('Datos del anuncio recargados desde los turnos del calendario', 'info');
+    }
+
+    window.addEventListener('beforeunload', () => {
+      if (typeof flyerAutoSaveTimer !== 'undefined' && flyerAutoSaveTimer) {
+        clearTimeout(flyerAutoSaveTimer);
+        flyerAutoSaveTimer = null;
+      }
+      if (typeof saveFlyerData === 'function') {
+        saveFlyerData(false);
+      }
+    });
+
     function onFlyerWeekendChange() {
       const select = document.getElementById('flyerWeekendSelect');
       if (!select || !select.value) return;
+
+      if (activeFlyerWeekendKey && activeFlyerWeekendKey !== select.value && flyerAutoSaveTimer) {
+        clearTimeout(flyerAutoSaveTimer);
+        flyerAutoSaveTimer = null;
+        saveFlyerData(false);
+      }
 
       const [friStr, satStr] = select.value.split('|');
       const friParts = friStr.split('-');
@@ -5239,76 +5596,7 @@
       if (friBadge) friBadge.innerText = friBadgeText;
       if (satBadge) satBadge.innerText = satBadgeText;
 
-      // 1. Anciano de Turno (exclusivo de Sábado)
-      const elderShift = shifts.find(s => s.date === satStr && s.departmentId === 'anciano');
-      const elderInput = document.getElementById('flyerInputElder');
-      if (elderShift && elderInput) {
-        const colab = collaborators.find(c => c.id === elderShift.collaboratorId);
-        if (colab) elderInput.value = colab.name;
-      }
-
-      // 2. Predicación del Sábado
-      const satPredShift = shifts.find(s => s.date === satStr && s.departmentId === 'predicaciones');
-      const satSpeakerInput = document.getElementById('flyerInputSatAct2Speaker');
-      if (satPredShift && satSpeakerInput) {
-        const colab = collaborators.find(c => c.id === satPredShift.collaboratorId);
-        if (colab) satSpeakerInput.value = colab.name;
-        if (satPredShift.notes) {
-          const titleInput = document.getElementById('flyerInputSatAct2Title');
-          if (titleInput) titleInput.value = satPredShift.notes;
-        }
-      }
-
-      // 3. Alabanza / Canto del Sábado
-      const satAlabShift = shifts.find(s => s.date === satStr && s.departmentId === 'alabanza');
-      const satAct1Input = document.getElementById('flyerInputSatAct1Name');
-      if (satAlabShift && satAct1Input) {
-        const colab = collaborators.find(c => c.id === satAlabShift.collaboratorId);
-        if (colab) {
-          satAct1Input.value = `Canto (${colab.name}) y Escuela Sabática`;
-        }
-      }
-
-      // 4. Culto del Viernes
-      const friPredShift = shifts.find(s => s.date === friStr && s.departmentId === 'predicaciones');
-      const friSpeakerInput = document.getElementById('flyerInputFriSpeaker');
-      if (friPredShift && friSpeakerInput) {
-        const colab = collaborators.find(c => c.id === friPredShift.collaboratorId);
-        if (colab) friSpeakerInput.value = colab.name;
-        if (friPredShift.notes) {
-          const actInput = document.getElementById('flyerInputFriAct');
-          if (actInput) actInput.value = friPredShift.notes;
-        }
-      }
-
-      // 5. Verificar actividades en el Programa Trimestral para ese sábado
-      if (typeof quarterlyActivities !== 'undefined' && Array.isArray(quarterlyActivities)) {
-        const satActs = quarterlyActivities.filter(a => a.date === satStr);
-        if (satActs.length > 0) {
-          if (satActs[0]) {
-            const time3 = document.getElementById('flyerInputSatAct3Time');
-            const name3 = document.getElementById('flyerInputSatAct3Name');
-            if (time3 && satActs[0].time) {
-              time3.value = satActs[0].duration ? `${satActs[0].time} (${satActs[0].duration})` : satActs[0].time;
-            }
-            if (name3 && (satActs[0].notes || satActs[0].department)) {
-              name3.value = satActs[0].department ? `${satActs[0].department}: ${satActs[0].notes}` : satActs[0].notes;
-            }
-          }
-          if (satActs[1]) {
-            const time4 = document.getElementById('flyerInputSatAct4Time');
-            const name4 = document.getElementById('flyerInputSatAct4Name');
-            if (time4 && satActs[1].time) {
-              time4.value = satActs[1].duration ? `${satActs[1].time} (${satActs[1].duration})` : satActs[1].time;
-            }
-            if (name4 && (satActs[1].notes || satActs[1].department)) {
-              name4.value = satActs[1].department ? `${satActs[1].department}: ${satActs[1].notes}` : satActs[1].notes;
-            }
-          }
-        }
-      }
-
-      updateFlyerPreview();
+      loadFlyerDataForWeekend(select.value);
     }
 
     function updateFlyerPreview() {
@@ -5417,11 +5705,14 @@
       const rInput = document.getElementById('flyerInputRef');
       if (vInput) vInput.value = item.verse;
       if (rInput) rInput.value = item.ref;
-      updateFlyerPreview();
+      onFlyerFieldInput();
       showToast(`Versículo bíblico cambiado: ${item.ref}`, 'info');
     }
 
     function printFlyerPDF() {
+      if (typeof saveFlyerData === 'function') {
+        saveFlyerData(false);
+      }
       const flyerCard = document.getElementById('flyerPosterCard');
       if (!flyerCard) {
         showToast('No se encontró el cartel para exportar', 'error');
@@ -5736,6 +6027,9 @@
     }
 
     function downloadFlyerPNG() {
+      if (typeof saveFlyerData === 'function') {
+        saveFlyerData(false);
+      }
       const flyerCard = document.getElementById('flyerPosterCard');
       if (!flyerCard) {
         showToast('No se encontró el cartel', 'error');
