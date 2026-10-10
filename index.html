@@ -1945,6 +1945,14 @@
         <div class="card">
           <div class="card-title">
             <span>Directorio de Hermanos (<span id="colabsCountHeader">0</span>)</span>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button class="btn btn-outline btn-sm" onclick="exportCollaboratorsCSV()" title="Descargar directorio en formato Excel (.csv)">
+                Descargar Excel
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="openDeptSummaryModal()" title="Ver y exportar hermanos por tipo de asignación / área">
+                Por Tipo de Asignación
+              </button>
+            </div>
           </div>
           <div class="table-container" style="max-height: 420px; overflow-y: auto;">
             <table>
@@ -1978,17 +1986,32 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-          <input type="text" id="searchShiftInput" class="form-control" style="max-width: 250px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
-          <select id="filterShiftDept" class="form-control" style="max-width: 200px;" onchange="renderShiftsTable()">
-            <option value="ALL">Todas las Áreas</option>
-            <option value="anciano">Anciano de Turno</option>
-            <option value="predicaciones">Predicación</option>
-            <option value="alabanza">Alabanza</option>
-            <option value="diaconisas">Diaconisas</option>
-            <option value="diaconos">Diáconos</option>
-            <option value="audiovisual">Audiovisual</option>
-          </select>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <input type="text" id="searchShiftInput" class="form-control" style="max-width: 220px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
+            <select id="filterShiftDept" class="form-control" style="max-width: 200px;" onchange="renderShiftsTable()">
+              <option value="ALL">Todas las Áreas</option>
+              <option value="anciano">Anciano de Turno</option>
+              <option value="predicaciones">Predicación</option>
+              <option value="alabanza">Alabanza</option>
+              <option value="diaconisas">Diaconisas</option>
+              <option value="diaconos">Diáconos</option>
+              <option value="audiovisual">Audiovisual</option>
+            </select>
+            <span id="shiftsFilteredCount" style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-left: 4px;"></span>
+          </div>
+
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" onclick="exportShiftsExcelCSV()" title="Descargar en formato Excel (.csv) la lista de hermanos según el tipo de asignación seleccionado">
+              Descargar Excel (.csv)
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="exportShiftsPrintPDF()" title="Imprimir o guardar en PDF la lista de hermanos por tipo de asignación">
+              Imprimir / PDF
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="openDeptSummaryModal()" title="Ver y exportar resumen de hermanos agrupados por tipo de asignación">
+              Resumen por Área
+            </button>
+          </div>
         </div>
 
         <div class="table-container">
@@ -2009,6 +2032,36 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- MODAL RESUMEN DE HERMANOS POR TIPO DE ASIGNACIÓN -->
+  <div id="deptSummaryModal" class="modal-backdrop" onclick="if (event.target === this) closeDeptSummaryModal()">
+    <div class="modal" style="max-width: 840px; max-height: 88vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Hermanos por Tipo de Asignación</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+            Resumen consolidado de hermanos y turnos agrupados por ministerio y área
+          </p>
+        </div>
+        <button class="modal-close" onclick="closeDeptSummaryModal()">&times;</button>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end; padding: 10px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap;">
+        <button class="btn btn-primary btn-sm" onclick="exportDeptSummaryCSV()" title="Descargar este resumen consolidado en Excel (.csv)">
+          Descargar Excel (.csv)
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="exportDeptSummaryPrintPDF()" title="Imprimir o guardar en PDF el resumen consolidado">
+          Imprimir / PDF
+        </button>
+      </div>
+
+      <div id="deptSummaryModalContent" style="padding: 16px; overflow-y: auto; flex: 1;"></div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDeptSummaryModal()">Cerrar</button>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL DETALLE DE DÍA -->
@@ -2470,6 +2523,26 @@
             </div>
           </div>
 
+          <!-- Puesta de Sol (Viernes y Sábado) -->
+          <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="font-weight: 800; font-size: 0.82rem; color: #b45309; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              Puesta de Sol (Viernes y Sábado)
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">Viernes:</label>
+                <input type="text" id="flyerInputSunsetFri" class="form-control" value="19:42" placeholder="Ej: 19:42" oninput="onFlyerFieldInput()">
+              </div>
+              <div>
+                <label style="font-size: 0.7rem; font-weight: 600;">Sábado:</label>
+                <input type="text" id="flyerInputSunsetSat" class="form-control" value="19:43" placeholder="Ej: 19:43" oninput="onFlyerFieldInput()">
+              </div>
+            </div>
+            <div class="hint" style="font-size: 0.7rem; color: #64748b;">
+              Se muestra debajo de la previsión del clima en la columna izquierda.
+            </div>
+          </div>
+
           <!-- Actividades del Viernes -->
           <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
             <div style="font-weight: 800; font-size: 0.82rem; color: #854d0e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
@@ -2535,27 +2608,57 @@
               <input type="text" id="flyerInputDividerText" class="form-control" value="Actividades de la Tarde" style="font-size: 0.72rem; padding: 2px 6px; max-width: 175px;" oninput="onFlyerFieldInput()">
             </div>
 
-            <!-- Tarde 1: Junta de Iglesia u otra actividad -->
+            <!-- Tarde 1: 16:00 Fija (Espíritu de Profecía) -->
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Hora Tarde 1:</label>
+                <label style="font-size: 0.7rem; font-weight: 600;">Hora 16:00 (Fija):</label>
                 <input type="text" id="flyerInputSatAct3Time" class="form-control" value="16:00 – 17:00" oninput="onFlyerFieldInput()">
               </div>
               <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Actividad Tarde 1:</label>
-                <input type="text" id="flyerInputSatAct3Name" class="form-control" value="Junta de Iglesia" oninput="onFlyerFieldInput()">
+                <label style="font-size: 0.7rem; font-weight: 600;">Actividad 16:00:</label>
+                <input type="text" id="flyerInputSatAct3Name" class="form-control" value="Espíritu de Profecía" oninput="onFlyerFieldInput()">
               </div>
             </div>
 
-            <!-- Tarde 2: JA -->
-            <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px;">
-              <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Hora Tarde 2:</label>
-                <input type="text" id="flyerInputSatAct4Time" class="form-control" value="17:00 – 18:00" oninput="onFlyerFieldInput()">
+            <!-- Tarde 2: Actividades después de las 16:00 (Opción de esconder) -->
+            <div style="background: #ffffff; border: 1px solid #fed7aa; border-radius: 6px; padding: 6px 8px; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <label style="font-size: 0.72rem; font-weight: 700; color: #9a3412; margin-bottom: 0; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="flyerInputShowSatAct4" checked onchange="onFlyerFieldInput()" style="cursor: pointer;">
+                  2ª franja tarde (después de las 16:00)
+                </label>
+                <span style="font-size: 0.65rem; color: #64748b;">(Desmarcar para ocultar)</span>
               </div>
-              <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Actividad Tarde 2:</label>
-                <input type="text" id="flyerInputSatAct4Name" class="form-control" value="JA" oninput="onFlyerFieldInput()">
+              <div id="flyerSatAct4InputFields" style="display: grid; grid-template-columns: 115px 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 0.7rem; font-weight: 600;">Hora:</label>
+                  <input type="text" id="flyerInputSatAct4Time" class="form-control" value="17:00 – 18:00" oninput="onFlyerFieldInput()">
+                </div>
+                <div>
+                  <label style="font-size: 0.7rem; font-weight: 600;">Actividad:</label>
+                  <input type="text" id="flyerInputSatAct4Name" class="form-control" value="JA" placeholder="Ej: JA, Junta, etc. (vacío para ocultar)" oninput="onFlyerFieldInput()">
+                </div>
+              </div>
+            </div>
+
+            <!-- Tarde 3: Actividad adicional después de la 2ª franja (Opción de adicionar/ocultar) -->
+            <div style="background: #ffffff; border: 1px solid #fed7aa; border-radius: 6px; padding: 6px 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <label style="font-size: 0.72rem; font-weight: 700; color: #9a3412; margin-bottom: 0; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="flyerInputShowSatAct5" onchange="onFlyerFieldInput()" style="cursor: pointer;">
+                  3ª franja tarde (adicional)
+                </label>
+                <span style="font-size: 0.65rem; color: #64748b;">(Marcar para mostrar)</span>
+              </div>
+              <div id="flyerSatAct5InputFields" style="display: grid; grid-template-columns: 115px 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 0.7rem; font-weight: 600;">Hora:</label>
+                  <input type="text" id="flyerInputSatAct5Time" class="form-control" value="18:00 – 19:00" placeholder="Ej: 18:00 – 19:00" oninput="onFlyerFieldInput()">
+                </div>
+                <div>
+                  <label style="font-size: 0.7rem; font-weight: 600;">Actividad:</label>
+                  <input type="text" id="flyerInputSatAct5Name" class="form-control" value="" placeholder="Ej: Concierto, Taller, etc." oninput="onFlyerFieldInput()">
+                </div>
               </div>
             </div>
           </div>
@@ -2637,6 +2740,19 @@
                     </div>
                     <div id="flyerPreviewWeatherTemp" style="font-size: 1.05rem; font-weight: 900; color: #f6c84c; letter-spacing: -0.3px; white-space: nowrap;">22°C</div>
                   </div>
+
+                  <!-- Puesta de Sol Viernes y Sábado -->
+                  <div id="flyerPreviewSunsetBox" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 6px; padding: 5px 8px; margin: 0 0 6px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.25);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                      <div style="font-size: 0.55rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Puesta de Sol</div>
+                      <span style="font-size: 0.75rem; line-height: 1;">🌅</span>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.68rem; font-weight: 700; color: #f1f5f9;">
+                      <div><span style="color: #94a3b8; font-size: 0.6rem; font-weight: 600;">Vie:</span> <span id="flyerPreviewSunsetFri" style="color: #f6c84c; font-weight: 800;">19:42</span></div>
+                      <div style="color: rgba(212, 175, 55, 0.4); font-size: 0.65rem;">•</div>
+                      <div><span style="color: #94a3b8; font-size: 0.6rem; font-weight: 600;">Sáb:</span> <span id="flyerPreviewSunsetSat" style="color: #f6c84c; font-weight: 800;">19:43</span></div>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Imagen Santa Biblia con Hojas Verdes (Inferior Izquierda) -->
@@ -2695,7 +2811,7 @@
                   </div>
 
                   <!-- Franja de División: Mañana y Tarde -->
-                  <div class="flyer-divider-strip">
+                  <div class="flyer-divider-strip" id="flyerPreviewDividerStrip">
                     <div class="flyer-divider-line"></div>
                     <div class="flyer-divider-badge">
                       <span id="flyerPreviewDividerText">ACTIVIDADES DE LA TARDE</span>
@@ -2703,20 +2819,28 @@
                     <div class="flyer-divider-line"></div>
                   </div>
 
-                  <!-- Actividad 3: Tarde Junta de Iglesia -->
-                  <div class="flyer-row-item">
+                  <!-- Actividad 3: Tarde 16:00 Espíritu de Profecía -->
+                  <div class="flyer-row-item" id="flyerPreviewSatAct3Row">
                     <span class="flyer-tag-time">TARDE</span>
                     <span id="flyerPreviewSatAct3Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">16:00 – 17:00</span>
                     <span style="color: #cbd5e1;">|</span>
-                    <div id="flyerPreviewSatAct3Name" style="font-weight: 800; color: #0f172a;">Junta de Iglesia</div>
+                    <div id="flyerPreviewSatAct3Name" style="font-weight: 800; color: #0f172a;">Espíritu de Profecía</div>
                   </div>
 
-                  <!-- Actividad 4: Tarde JA -->
-                  <div class="flyer-row-item" style="border-bottom: none;">
+                  <!-- Actividad 4: Tarde después de las 16:00 (Ocultable) -->
+                  <div class="flyer-row-item" id="flyerPreviewSatAct4Row">
                     <span class="flyer-tag-time">TARDE</span>
                     <span id="flyerPreviewSatAct4Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">17:00 – 18:00</span>
                     <span style="color: #cbd5e1;">|</span>
                     <div id="flyerPreviewSatAct4Name" style="font-weight: 800; color: #0f172a;">JA</div>
+                  </div>
+
+                  <!-- Actividad 5: Tarde adicional después de la 2ª franja (Ocultable) -->
+                  <div class="flyer-row-item" id="flyerPreviewSatAct5Row" style="border-bottom: none; display: none;">
+                    <span class="flyer-tag-time">TARDE</span>
+                    <span id="flyerPreviewSatAct5Time" style="font-weight: 700; color: #0f172a; white-space: nowrap;">18:00 – 19:00</span>
+                    <span style="color: #cbd5e1;">|</span>
+                    <div id="flyerPreviewSatAct5Name" style="font-weight: 800; color: #0f172a;"></div>
                   </div>
                 </div>
 
@@ -4143,8 +4267,46 @@
 
     function renderShiftsTable() {
       const tbody = document.getElementById('shiftsTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
-      shifts.forEach(s => {
+
+      const filterDept = document.getElementById('filterShiftDept')?.value || 'ALL';
+      const searchTerm = (document.getElementById('searchShiftInput')?.value || '').toLowerCase().trim();
+
+      let filtered = shifts.slice();
+      if (filterDept !== 'ALL') {
+        filtered = filtered.filter(s => s.departmentId === filterDept);
+      }
+      if (searchTerm) {
+        filtered = filtered.filter(s => {
+          const colab = collaborators.find(c => c.id === s.collaboratorId);
+          const name = colab ? colab.name.toLowerCase() : '';
+          const notes = (s.notes || '').toLowerCase();
+          return name.includes(searchTerm) || notes.includes(searchTerm);
+        });
+      }
+
+      // Ordenar cronológicamente por fecha
+      filtered.sort((a, b) => a.date.localeCompare(b.date));
+
+      const countEl = document.getElementById('shiftsFilteredCount');
+      if (countEl) {
+        const uniqueColabs = new Set(filtered.map(s => s.collaboratorId).filter(Boolean));
+        countEl.innerText = `${filtered.length} turno(s) • ${uniqueColabs.size} hermano(s)`;
+      }
+
+      if (filtered.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td colspan="6" style="text-align: center; padding: 22px; color: var(--text-muted); font-size: 0.88rem;">
+            No se encontraron asignaciones con el filtro actual.
+          </td>
+        `;
+        tbody.appendChild(row);
+        return;
+      }
+
+      filtered.forEach(s => {
         const colab = collaborators.find(c => c.id === s.collaboratorId);
         const area = DEPARTMENTS[s.departmentId] || { name: s.departmentId, badgeClass: 'area-predicaciones', icon: '' };
         const dayBadge = s.dayOfWeek === 'Viernes' ? 'badge-viernes' : 'badge-sabado';
@@ -4589,6 +4751,502 @@
         <\/script>
       `;
       showToast(`Informe de ${monthName} listo para imprimir en 1 página`, 'success');
+    }
+
+    // ==============================================================
+    // EXPORTACIÓN DE LISTA DE HERMANOS POR ASIGNACIÓN (EXCEL / PDF)
+    // ==============================================================
+
+    function exportShiftsExcelCSV() {
+      const filterDept = document.getElementById('filterShiftDept')?.value || 'ALL';
+      const searchTerm = (document.getElementById('searchShiftInput')?.value || '').toLowerCase().trim();
+
+      let filtered = shifts.slice();
+      if (filterDept !== 'ALL') {
+        filtered = filtered.filter(s => s.departmentId === filterDept);
+      }
+      if (searchTerm) {
+        filtered = filtered.filter(s => {
+          const colab = collaborators.find(c => c.id === s.collaboratorId);
+          const name = colab ? colab.name.toLowerCase() : '';
+          const notes = (s.notes || '').toLowerCase();
+          return name.includes(searchTerm) || notes.includes(searchTerm);
+        });
+      }
+
+      if (filtered.length === 0) {
+        showToast('No hay turnos para exportar con el filtro actual.', 'warning');
+        return;
+      }
+
+      // Ordenar cronológicamente por fecha
+      filtered.sort((a, b) => a.date.localeCompare(b.date));
+
+      const rows = [];
+      rows.push(['Fecha', 'Día', 'Área / Asignación', 'Hermano(a) Responsable', 'Teléfono Contacto', 'Correo Electrónico', 'Notas / Observaciones']);
+
+      filtered.forEach(s => {
+        const colab = collaborators.find(c => c.id === s.collaboratorId);
+        const dept = DEPARTMENTS[s.departmentId] || { name: s.departmentId };
+        rows.push([
+          s.date,
+          s.dayOfWeek || '',
+          dept.name,
+          colab ? colab.name : 'Responsable no asignado',
+          colab ? (colab.phone === 'Sin teléfono' ? '' : colab.phone) : '',
+          colab ? (colab.email === 'Sin correo' ? '' : colab.email) : '',
+          s.notes || ''
+        ]);
+      });
+
+      const csvString = rows.map(r => r.map(field => {
+        const str = String(field || '').replace(/"/g, '""');
+        return `"${str}"`;
+      }).join(';')).join('\r\n');
+
+      let filename = 'Lista_Hermanos_Por_Asignacion.csv';
+      if (filterDept !== 'ALL' && DEPARTMENTS[filterDept]) {
+        const deptClean = DEPARTMENTS[filterDept].name.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_');
+        filename = `Lista_Hermanos_${deptClean}.csv`;
+      }
+
+      const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Lista de hermanos descargada para Excel (.csv)', 'success');
+    }
+
+    function exportShiftsPrintPDF() {
+      const filterDept = document.getElementById('filterShiftDept')?.value || 'ALL';
+      const searchTerm = (document.getElementById('searchShiftInput')?.value || '').toLowerCase().trim();
+
+      let filtered = shifts.slice();
+      if (filterDept !== 'ALL') {
+        filtered = filtered.filter(s => s.departmentId === filterDept);
+      }
+      if (searchTerm) {
+        filtered = filtered.filter(s => {
+          const colab = collaborators.find(c => c.id === s.collaboratorId);
+          const name = colab ? colab.name.toLowerCase() : '';
+          const notes = (s.notes || '').toLowerCase();
+          return name.includes(searchTerm) || notes.includes(searchTerm);
+        });
+      }
+
+      if (filtered.length === 0) {
+        alert('No hay asignaciones registradas para imprimir con el filtro actual.');
+        return;
+      }
+
+      filtered.sort((a, b) => a.date.localeCompare(b.date));
+
+      const filterTitle = filterDept !== 'ALL' && DEPARTMENTS[filterDept]
+        ? DEPARTMENTS[filterDept].name
+        : 'Todas las Asignaciones';
+
+      const uniqueColabs = new Set(filtered.map(s => s.collaboratorId).filter(Boolean));
+
+      let rowsHtml = '';
+      filtered.forEach((s, idx) => {
+        const colab = collaborators.find(c => c.id === s.collaboratorId);
+        const dept = DEPARTMENTS[s.departmentId] || { name: s.departmentId };
+        const dayBadgeBg = s.dayOfWeek === 'Viernes' ? '#ede9fe; color: #6b21a8;' : '#dbeafe; color: #1e40af;';
+        rowsHtml += `
+          <tr style="background: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 700; white-space: nowrap;">${s.date}</td>
+            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0;"><span style="background: ${dayBadgeBg} padding: 2px 7px; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">${s.dayOfWeek || ''}</span></td>
+            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #1e3a8a;">${dept.name}</td>
+            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 800; color: #0f172a;">${colab ? colab.name : 'Responsable no asignado'}</td>
+            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 0.8rem;">${colab && colab.phone !== 'Sin teléfono' ? colab.phone : '-'}</td>
+            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 0.78rem;">${s.notes || '-'}</td>
+          </tr>
+        `;
+      });
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('Por favor permite abrir ventanas emergentes para ver el reporte de impresión.');
+        return;
+      }
+
+      const printDoc = printWindow.document;
+      printDoc.title = `Lista_Hermanos_${filterTitle.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+      printDoc.head.innerHTML = `
+        <title>Lista de Asignaciones - ${filterTitle}</title>
+        <style>
+          @page { size: portrait; margin: 10mm 12mm; }
+          * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+          body { padding: 18px; color: #0f172a; background: #f8fafc; font-size: 12px; }
+          .container { max-width: 900px; margin: 0 auto; background: #ffffff; padding: 20px 24px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+          .header { border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+          .header h1 { font-size: 1.25rem; font-weight: 800; color: #1e3a8a; }
+          .header p { color: #64748b; font-size: 0.8rem; margin-top: 3px; }
+          .badge-filter { background: #2563eb; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 5px; font-size: 0.85rem; text-align: right; }
+          .meta-bar { background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 14px; font-size: 0.82rem; color: #334155; display: flex; justify-content: space-between; }
+          table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.82rem; }
+          th { background: #082142; color: #ffffff; padding: 8px 10px; font-weight: 700; font-size: 0.8rem; }
+          .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 14px; }
+          .btn { padding: 6px 12px; font-size: 0.82rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff; }
+          .btn-primary { background: #2563eb; color: #ffffff; border: none; }
+          @media print {
+            body { padding: 0 !important; background: #ffffff !important; }
+            .container { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; }
+            .toolbar { display: none !important; }
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        </style>
+      `;
+
+      printDoc.body.innerHTML = `
+        <div class="container">
+          <div class="toolbar">
+            <button class="btn" onclick="window.close()">Cerrar</button>
+            <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
+          </div>
+          <div class="header">
+            <div>
+              <h1>Programación de Turnos: ${filterTitle}</h1>
+              <p>Iglesia Adventista del Séptimo Día &bull; Registro oficial de asignaciones</p>
+            </div>
+            <div class="badge-filter">
+              ${filterTitle.toUpperCase()}
+            </div>
+          </div>
+          <div class="meta-bar">
+            <span><strong>Total:</strong> ${filtered.length} asignaciones registradas &bull; <strong>Hermanos participantes:</strong> ${uniqueColabs.size}</span>
+            <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Día</th>
+                <th>Área / Cargo</th>
+                <th>Hermano(a) Responsable</th>
+                <th>Teléfono</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>
+      `;
+      showToast('Documento listo para imprimir o guardar en PDF', 'success');
+    }
+
+    // Modal de Resumen Consolidado por Asignación
+    function openDeptSummaryModal() {
+      renderDeptSummaryModal();
+      const modal = document.getElementById('deptSummaryModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeDeptSummaryModal() {
+      const modal = document.getElementById('deptSummaryModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function getDeptSummaryData() {
+      return DEPT_ORDER.map(deptKey => {
+        const dept = DEPARTMENTS[deptKey] || { name: deptKey, badgeClass: 'area-predicaciones' };
+        const deptShifts = shifts.filter(s => s.departmentId === deptKey);
+        
+        const colabMap = {};
+        deptShifts.forEach(s => {
+          const colabId = s.collaboratorId || 'desconocido';
+          if (!colabMap[colabId]) {
+            const colab = collaborators.find(c => c.id === colabId);
+            colabMap[colabId] = {
+              id: colabId,
+              name: colab ? colab.name : 'Hermano no asignado',
+              phone: colab && colab.phone !== 'Sin teléfono' ? colab.phone : '',
+              email: colab && colab.email !== 'Sin correo' ? colab.email : '',
+              shiftsCount: 0,
+              dates: []
+            };
+          }
+          colabMap[colabId].shiftsCount++;
+          colabMap[colabId].dates.push(s.date);
+        });
+
+        const list = Object.values(colabMap).sort((a, b) => {
+          if (b.shiftsCount !== a.shiftsCount) return b.shiftsCount - a.shiftsCount;
+          return a.name.localeCompare(b.name);
+        });
+
+        // Ordenar fechas cronológicamente
+        list.forEach(item => item.dates.sort());
+
+        return {
+          deptKey,
+          deptName: dept.name,
+          badgeClass: dept.badgeClass,
+          totalShifts: deptShifts.length,
+          collaborators: list
+        };
+      });
+    }
+
+    function renderDeptSummaryModal() {
+      const container = document.getElementById('deptSummaryModalContent');
+      if (!container) return;
+
+      const summary = getDeptSummaryData();
+      let html = '';
+
+      summary.forEach(group => {
+        html += `
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+            <div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge-area ${group.badgeClass}" style="font-size: 0.88rem; padding: 4px 10px; font-weight: 800;">${group.deptName}</span>
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">
+                  ${group.collaborators.length} hermano(s) asignado(s)
+                </span>
+              </div>
+              <span style="background: #e2e8f0; color: #1e293b; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;">
+                ${group.totalShifts} turno(s) en total
+              </span>
+            </div>
+        `;
+
+        if (group.collaborators.length === 0) {
+          html += `
+            <div style="padding: 16px; text-align: center; color: #94a3b8; font-size: 0.84rem;">
+              No hay hermanos asignados aún a este departamento.
+            </div>
+          `;
+        } else {
+          html += `
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: #f1f5f9; color: #475569; border-bottom: 1px solid #e2e8f0;">
+                    <th style="padding: 8px 12px; text-align: left; font-weight: 700;">Hermano(a)</th>
+                    <th style="padding: 8px 12px; text-align: left; font-weight: 700;">Contacto</th>
+                    <th style="padding: 8px 12px; text-align: center; font-weight: 700; width: 100px;">Total Turnos</th>
+                    <th style="padding: 8px 12px; text-align: left; font-weight: 700;">Fechas Asignadas</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          group.collaborators.forEach((c, idx) => {
+            const datesBadges = c.dates.map(d => `<span style="display: inline-block; background: #e0f2fe; color: #0369a1; padding: 1px 6px; border-radius: 3px; font-size: 0.73rem; font-weight: 600; margin: 2px 3px 2px 0;">${d}</span>`).join('');
+            html += `
+              <tr style="border-bottom: 1px solid #f1f5f9; background: ${idx % 2 === 0 ? '#ffffff' : '#fafafa'};">
+                <td style="padding: 8px 12px; font-weight: 700; color: #0f172a;">${c.name}</td>
+                <td style="padding: 8px 12px; color: #64748b; font-size: 0.78rem;">${c.phone || '-'}</td>
+                <td style="padding: 8px 12px; text-align: center;">
+                  <span style="background: #dbeafe; color: #1e40af; font-weight: 800; padding: 2px 8px; border-radius: 10px; font-size: 0.78rem;">${c.shiftsCount}</span>
+                </td>
+                <td style="padding: 8px 12px;">${datesBadges}</td>
+              </tr>
+            `;
+          });
+
+          html += `
+                </tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function exportDeptSummaryCSV() {
+      const summary = getDeptSummaryData();
+      const rows = [];
+      rows.push(['Área / Asignación', 'Hermano(a) Responsable', 'Teléfono Contacto', 'Correo Electrónico', 'Total Turnos', 'Fechas Asignadas']);
+
+      summary.forEach(group => {
+        if (group.collaborators.length === 0) {
+          rows.push([group.deptName, '(Sin hermanos asignados)', '', '', '0', '']);
+        } else {
+          group.collaborators.forEach(c => {
+            rows.push([
+              group.deptName,
+              c.name,
+              c.phone,
+              c.email,
+              c.shiftsCount,
+              c.dates.join(', ')
+            ]);
+          });
+        }
+      });
+
+      const csvString = rows.map(r => r.map(field => {
+        const str = String(field || '').replace(/"/g, '""');
+        return `"${str}"`;
+      }).join(';')).join('\r\n');
+
+      const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Resumen_Hermanos_Por_Asignacion.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Resumen por asignación descargado para Excel (.csv)', 'success');
+    }
+
+    function exportDeptSummaryPrintPDF() {
+      const summary = getDeptSummaryData();
+
+      let groupsHtml = '';
+      summary.forEach(group => {
+        let rowsHtml = '';
+        if (group.collaborators.length === 0) {
+          rowsHtml = `<tr><td colspan="4" style="text-align: center; padding: 10px; color: #94a3b8; font-style: italic;">Sin asignaciones registradas en este período</td></tr>`;
+        } else {
+          group.collaborators.forEach((c, idx) => {
+            rowsHtml += `
+              <tr style="background: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0f172a;">${c.name}</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 0.8rem;">${c.phone || '-'}</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; font-weight: 800; color: #1e40af;">${c.shiftsCount}</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; font-size: 0.78rem; color: #334155;">${c.dates.join(', ')}</td>
+              </tr>
+            `;
+          });
+        }
+
+        groupsHtml += `
+          <div style="margin-bottom: 18px; page-break-inside: avoid;">
+            <div style="background: #082142; color: #ffffff; padding: 6px 12px; border-radius: 5px 5px 0 0; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; font-size: 0.9rem; letter-spacing: 0.5px;">${group.deptName.toUpperCase()}</span>
+              <span style="font-size: 0.78rem; opacity: 0.9;">${group.totalShifts} turno(s) &bull; ${group.collaborators.length} hermano(s)</span>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; border: 1px solid #cbd5e1; border-top: none;">
+              <thead>
+                <tr style="background: #f1f5f9; color: #334155; border-bottom: 1px solid #cbd5e1;">
+                  <th style="padding: 6px 10px; text-align: left; width: 32%;">Hermano(a)</th>
+                  <th style="padding: 6px 10px; text-align: left; width: 18%;">Teléfono</th>
+                  <th style="padding: 6px 10px; text-align: center; width: 12%;">Turnos</th>
+                  <th style="padding: 6px 10px; text-align: left; width: 38%;">Fechas de Turno</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        `;
+      });
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('Por favor permite abrir ventanas emergentes para ver el informe de impresión.');
+        return;
+      }
+
+      const printDoc = printWindow.document;
+      printDoc.title = `Resumen_Hermanos_Por_Asignacion`;
+
+      printDoc.head.innerHTML = `
+        <title>Resumen de Hermanos por Tipo de Asignación</title>
+        <style>
+          @page { size: portrait; margin: 10mm 12mm; }
+          * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+          body { padding: 18px; color: #0f172a; background: #f8fafc; font-size: 12px; }
+          .container { max-width: 900px; margin: 0 auto; background: #ffffff; padding: 20px 24px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+          .header { border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start; }
+          .header h1 { font-size: 1.25rem; font-weight: 800; color: #1e3a8a; }
+          .header p { color: #64748b; font-size: 0.8rem; margin-top: 3px; }
+          .badge-doc { background: #2563eb; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 5px; font-size: 0.85rem; }
+          .meta-bar { background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 16px; font-size: 0.82rem; color: #334155; display: flex; justify-content: space-between; }
+          .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 14px; }
+          .btn { padding: 6px 12px; font-size: 0.82rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff; }
+          .btn-primary { background: #2563eb; color: #ffffff; border: none; }
+          @media print {
+            body { padding: 0 !important; background: #ffffff !important; }
+            .container { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; }
+            .toolbar { display: none !important; }
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        </style>
+      `;
+
+      printDoc.body.innerHTML = `
+        <div class="container">
+          <div class="toolbar">
+            <button class="btn" onclick="window.close()">Cerrar</button>
+            <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
+          </div>
+          <div class="header">
+            <div>
+              <h1>Resumen de Hermanos por Tipo de Asignación</h1>
+              <p>Iglesia Adventista del Séptimo Día &bull; Consolidado ministerial por departamentos</p>
+            </div>
+            <div class="badge-doc">RESUMEN POR ÁREAS</div>
+          </div>
+          <div class="meta-bar">
+            <span><strong>Total Turnos Registrados:</strong> ${shifts.length} &bull; <strong>Directorio Activo:</strong> ${collaborators.length} hermanos</span>
+            <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+          </div>
+          ${groupsHtml}
+        </div>
+      `;
+      showToast('Resumen consolidado listo para imprimir o guardar en PDF', 'success');
+    }
+
+    function exportCollaboratorsCSV() {
+      if (collaborators.length === 0) {
+        showToast('No hay hermanos en el directorio para exportar.', 'warning');
+        return;
+      }
+
+      const rows = [];
+      rows.push(['Hermano(a) Responsable', 'Teléfono Contacto', 'Correo Electrónico', 'Total Turnos Asignados', 'Áreas / Asignaciones en que sirve']);
+
+      const sortedColabs = collaborators.slice().sort((a, b) => a.name.localeCompare(b.name));
+
+      sortedColabs.forEach(c => {
+        const colabShifts = shifts.filter(s => s.collaboratorId === c.id);
+        const distinctDepts = [...new Set(colabShifts.map(s => DEPARTMENTS[s.departmentId]?.name || s.departmentId))].join(', ');
+
+        rows.push([
+          c.name,
+          c.phone && c.phone !== 'Sin teléfono' ? c.phone : '',
+          c.email && c.email !== 'Sin correo' ? c.email : '',
+          colabShifts.length,
+          distinctDepts || 'Sin turnos asignados'
+        ]);
+      });
+
+      const csvString = rows.map(r => r.map(field => {
+        const str = String(field || '').replace(/"/g, '""');
+        return `"${str}"`;
+      }).join(';')).join('\r\n');
+
+      const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Directorio_Hermanos_Colaboradores.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Directorio de hermanos descargado para Excel (.csv)', 'success');
     }
 
     // ==============================================================
@@ -5344,6 +6002,8 @@
         ref: document.getElementById('flyerInputRef')?.value || '',
         weatherTemp: (document.getElementById('flyerInputWeatherTemp')?.value || '').trim(),
         weatherRain: document.getElementById('flyerInputWeatherRain')?.value || 'no',
+        sunsetFri: (document.getElementById('flyerInputSunsetFri')?.value || '').trim(),
+        sunsetSat: (document.getElementById('flyerInputSunsetSat')?.value || '').trim(),
         friTime: document.getElementById('flyerInputFriTime')?.value || '',
         friAct: document.getElementById('flyerInputFriAct')?.value || '',
         friSpeaker: document.getElementById('flyerInputFriSpeaker')?.value || '',
@@ -5355,8 +6015,12 @@
         dividerText: document.getElementById('flyerInputDividerText')?.value || '',
         satAct3Time: document.getElementById('flyerInputSatAct3Time')?.value || '',
         satAct3Name: document.getElementById('flyerInputSatAct3Name')?.value || '',
+        showSatAct4: document.getElementById('flyerInputShowSatAct4') ? document.getElementById('flyerInputShowSatAct4').checked : true,
         satAct4Time: document.getElementById('flyerInputSatAct4Time')?.value || '',
         satAct4Name: document.getElementById('flyerInputSatAct4Name')?.value || '',
+        showSatAct5: document.getElementById('flyerInputShowSatAct5') ? document.getElementById('flyerInputShowSatAct5').checked : false,
+        satAct5Time: document.getElementById('flyerInputSatAct5Time')?.value || '',
+        satAct5Name: document.getElementById('flyerInputSatAct5Name')?.value || '',
         elder: document.getElementById('flyerInputElder')?.value || '',
         motto: document.getElementById('flyerInputMotto')?.value || '',
         updatedAt: Date.now()
@@ -5477,27 +6141,29 @@
 
       const defaultFriAct = (friPredShift && friPredShift.notes) ? friPredShift.notes : 'Iglesia';
 
-      let defaultSatAct3Time = '16:00 – 17:00';
-      let defaultSatAct3Name = 'Junta de Iglesia';
+      const defaultSatAct3Time = '16:00 – 17:00';
+      const defaultSatAct3Name = 'Espíritu de Profecía';
       let defaultSatAct4Time = '17:00 – 18:00';
       let defaultSatAct4Name = 'JA';
+      let defaultSatAct5Time = '18:00 – 19:00';
+      let defaultSatAct5Name = '';
 
       if (typeof quarterlyActivities !== 'undefined' && Array.isArray(quarterlyActivities)) {
         const satActs = quarterlyActivities.filter(a => a.date === satStr);
         if (satActs.length > 0 && satActs[0]) {
           if (satActs[0].time) {
-            defaultSatAct3Time = satActs[0].duration ? `${satActs[0].time} (${satActs[0].duration})` : satActs[0].time;
+            defaultSatAct4Time = satActs[0].duration ? `${satActs[0].time} (${satActs[0].duration})` : satActs[0].time;
           }
           if (satActs[0].notes || satActs[0].department) {
-            defaultSatAct3Name = satActs[0].department ? `${satActs[0].department}: ${satActs[0].notes}` : satActs[0].notes;
+            defaultSatAct4Name = satActs[0].department ? `${satActs[0].department}: ${satActs[0].notes}` : satActs[0].notes;
           }
         }
         if (satActs.length > 1 && satActs[1]) {
           if (satActs[1].time) {
-            defaultSatAct4Time = satActs[1].duration ? `${satActs[1].time} (${satActs[1].duration})` : satActs[1].time;
+            defaultSatAct5Time = satActs[1].duration ? `${satActs[1].time} (${satActs[1].duration})` : satActs[1].time;
           }
           if (satActs[1].notes || satActs[1].department) {
-            defaultSatAct4Name = satActs[1].department ? `${satActs[1].department}: ${satActs[1].notes}` : satActs[1].notes;
+            defaultSatAct5Name = satActs[1].department ? `${satActs[1].department}: ${satActs[1].notes}` : satActs[1].notes;
           }
         }
       }
@@ -5510,6 +6176,8 @@
       setFieldValue('flyerInputRef', saved ? (saved.ref ?? 'Proverbios 17:17') : 'Proverbios 17:17');
       setFieldValue('flyerInputWeatherTemp', saved ? (saved.weatherTemp ?? '22°C') : '22°C');
       setFieldValue('flyerInputWeatherRain', saved ? (saved.weatherRain ?? 'no') : 'no');
+      setFieldValue('flyerInputSunsetFri', saved ? (saved.sunsetFri ?? '19:42') : '19:42');
+      setFieldValue('flyerInputSunsetSat', saved ? (saved.sunsetSat ?? '19:43') : '19:43');
       setFieldValue('flyerInputFriTime', saved ? (saved.friTime ?? '20:00 – 21:00') : '20:00 – 21:00');
       setFieldValue('flyerInputFriAct', saved ? (saved.friAct ?? defaultFriAct) : defaultFriAct);
       setFieldValue('flyerInputFriSpeaker', saved ? (saved.friSpeaker ?? defaultFriSpeaker) : defaultFriSpeaker);
@@ -5523,6 +6191,17 @@
       setFieldValue('flyerInputSatAct3Name', saved ? (saved.satAct3Name ?? defaultSatAct3Name) : defaultSatAct3Name);
       setFieldValue('flyerInputSatAct4Time', saved ? (saved.satAct4Time ?? defaultSatAct4Time) : defaultSatAct4Time);
       setFieldValue('flyerInputSatAct4Name', saved ? (saved.satAct4Name ?? defaultSatAct4Name) : defaultSatAct4Name);
+      setFieldValue('flyerInputSatAct5Time', saved ? (saved.satAct5Time ?? defaultSatAct5Time) : defaultSatAct5Time);
+      setFieldValue('flyerInputSatAct5Name', saved ? (saved.satAct5Name ?? defaultSatAct5Name) : defaultSatAct5Name);
+
+      const chkShowAct4 = document.getElementById('flyerInputShowSatAct4');
+      if (chkShowAct4) {
+        chkShowAct4.checked = saved ? (saved.showSatAct4 !== false) : true;
+      }
+      const chkShowAct5 = document.getElementById('flyerInputShowSatAct5');
+      if (chkShowAct5) {
+        chkShowAct5.checked = saved ? Boolean(saved.showSatAct5) : Boolean(defaultSatAct5Name);
+      }
       setFieldValue('flyerInputElder', saved ? (saved.elder ?? defaultElder) : defaultElder);
       setFieldValue('flyerInputMotto', saved ? (saved.motto ?? globalMotto) : globalMotto);
 
@@ -5638,6 +6317,19 @@
         }
       }
 
+      // Puesta de Sol (Viernes y Sábado)
+      const sunsetFriVal = (document.getElementById('flyerInputSunsetFri')?.value || '').trim();
+      const sunsetSatVal = (document.getElementById('flyerInputSunsetSat')?.value || '').trim();
+      const pSunsetFri = document.getElementById('flyerPreviewSunsetFri');
+      const pSunsetSat = document.getElementById('flyerPreviewSunsetSat');
+      const pSunsetBox = document.getElementById('flyerPreviewSunsetBox');
+
+      if (pSunsetFri) pSunsetFri.innerText = sunsetFriVal || '--:--';
+      if (pSunsetSat) pSunsetSat.innerText = sunsetSatVal || '--:--';
+      if (pSunsetBox) {
+        pSunsetBox.style.display = (!sunsetFriVal && !sunsetSatVal) ? 'none' : 'block';
+      }
+
       // Viernes
       const fTime = document.getElementById('flyerInputFriTime')?.value || '';
       const fAct = document.getElementById('flyerInputFriAct')?.value || '';
@@ -5671,23 +6363,80 @@
       // Franja de División Mañana / Tarde
       const divText = (document.getElementById('flyerInputDividerText')?.value || 'Actividades de la Tarde').trim();
       const pDivText = document.getElementById('flyerPreviewDividerText');
+      const pDivStrip = document.getElementById('flyerPreviewDividerStrip');
       if (pDivText) pDivText.innerText = divText.toUpperCase();
 
-      // Sábado Act 3
+      // Sábado Act 3 (16:00 Fija: Espíritu de Profecía)
       const sA3Time = document.getElementById('flyerInputSatAct3Time')?.value || '';
       const sA3Name = document.getElementById('flyerInputSatAct3Name')?.value || '';
       const pSA3Time = document.getElementById('flyerPreviewSatAct3Time');
       const pSA3Name = document.getElementById('flyerPreviewSatAct3Name');
+      const rowAct3 = document.getElementById('flyerPreviewSatAct3Row');
       if (pSA3Time) pSA3Time.innerText = sA3Time;
       if (pSA3Name) pSA3Name.innerText = sA3Name;
 
-      // Sábado Act 4
-      const sA4Time = document.getElementById('flyerInputSatAct4Time')?.value || '';
-      const sA4Name = document.getElementById('flyerInputSatAct4Name')?.value || '';
+      // Sábado Act 4 (Actividades después de las 16:00 - con opción de ocultar)
+      const chkShowAct4 = document.getElementById('flyerInputShowSatAct4');
+      const isAct4Checked = chkShowAct4 ? chkShowAct4.checked : true;
+      const sA4Time = (document.getElementById('flyerInputSatAct4Time')?.value || '').trim();
+      const sA4Name = (document.getElementById('flyerInputSatAct4Name')?.value || '').trim();
       const pSA4Time = document.getElementById('flyerPreviewSatAct4Time');
       const pSA4Name = document.getElementById('flyerPreviewSatAct4Name');
+      const rowAct4 = document.getElementById('flyerPreviewSatAct4Row');
+
       if (pSA4Time) pSA4Time.innerText = sA4Time;
       if (pSA4Name) pSA4Name.innerText = sA4Name;
+
+      // Atenuar campos en formulario si está desmarcado
+      const act4Inputs = document.getElementById('flyerSatAct4InputFields');
+      if (act4Inputs) {
+        act4Inputs.style.opacity = isAct4Checked ? '1' : '0.45';
+        act4Inputs.style.pointerEvents = isAct4Checked ? 'auto' : 'none';
+      }
+
+      const shouldShowAct4 = isAct4Checked && sA4Name.length > 0;
+      if (rowAct4) {
+        rowAct4.style.display = shouldShowAct4 ? 'flex' : 'none';
+      }
+
+      // Sábado Act 5 (Actividad adicional después de la 2ª franja - con opción de adicionar/ocultar)
+      const chkShowAct5 = document.getElementById('flyerInputShowSatAct5');
+      const isAct5Checked = chkShowAct5 ? chkShowAct5.checked : false;
+      const sA5Time = (document.getElementById('flyerInputSatAct5Time')?.value || '').trim();
+      const sA5Name = (document.getElementById('flyerInputSatAct5Name')?.value || '').trim();
+      const pSA5Time = document.getElementById('flyerPreviewSatAct5Time');
+      const pSA5Name = document.getElementById('flyerPreviewSatAct5Name');
+      const rowAct5 = document.getElementById('flyerPreviewSatAct5Row');
+
+      if (pSA5Time) pSA5Time.innerText = sA5Time;
+      if (pSA5Name) pSA5Name.innerText = sA5Name;
+
+      // Atenuar campos en formulario si está desmarcado
+      const act5Inputs = document.getElementById('flyerSatAct5InputFields');
+      if (act5Inputs) {
+        act5Inputs.style.opacity = isAct5Checked ? '1' : '0.45';
+        act5Inputs.style.pointerEvents = isAct5Checked ? 'auto' : 'none';
+      }
+
+      const shouldShowAct5 = isAct5Checked && sA5Name.length > 0;
+      if (rowAct5) {
+        rowAct5.style.display = shouldShowAct5 ? 'flex' : 'none';
+        rowAct5.style.borderBottom = 'none';
+      }
+
+      // Ajuste de bordes inferiores dinámicos según cuáles franjas estén visibles
+      if (rowAct4) {
+        rowAct4.style.borderBottom = shouldShowAct5 ? '1px dashed #f1f5f9' : 'none';
+      }
+      if (rowAct3) {
+        rowAct3.style.borderBottom = (shouldShowAct4 || shouldShowAct5) ? '1px dashed #f1f5f9' : 'none';
+      }
+
+      // Ocultar franja divisoria si no hay ninguna actividad de la tarde
+      if (pDivStrip) {
+        const hasAfternoon = (sA3Name.trim().length > 0) || shouldShowAct4 || shouldShowAct5;
+        pDivStrip.style.display = hasAfternoon ? 'flex' : 'none';
+      }
 
       // Anciano y Lema
       const elderVal = document.getElementById('flyerInputElder')?.value || '';
