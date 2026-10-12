@@ -2486,12 +2486,18 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 8px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
                 <label for="flyerInputVerse" style="margin-bottom: 0;">Versículo Bíblico Inspirador:</label>
-                <button type="button" class="btn btn-outline btn-sm" onclick="rotateFlyerVerse()" style="padding: 1px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Rotar a otro versículo bíblico">
-                  Cambiar Versículo
-                </button>
+                <div style="display: flex; gap: 4px;">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="applySabbathSchoolVerse(true)" style="padding: 1px 7px; font-size: 0.7rem; border-color: #d4af37; color: #082142; font-weight: 700; background: #fefce8;" title="Cargar versículo de memoria de la Escuela Sabática para esta semana">
+                    📖 Escuela Sabática
+                  </button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="rotateFlyerVerse()" style="padding: 1px 7px; font-size: 0.7rem; border-color: #cbd5e1;" title="Rotar a otro versículo bíblico">
+                    Rotar
+                  </button>
+                </div>
               </div>
+              <div id="flyerSabbathSchoolLessonBadge" style="font-size: 0.72rem; color: #0369a1; font-weight: 700; margin-bottom: 5px; background: #e0f2fe; padding: 2px 7px; border-radius: 4px; display: none;"></div>
               <textarea id="flyerInputVerse" class="form-control" rows="2" style="font-size: 0.8rem; line-height: 1.3;" oninput="onFlyerFieldInput()">En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.</textarea>
             </div>
 
@@ -5890,6 +5896,196 @@
     // GENERADOR DE ANUNCIO SEMANAL (FLYER PDF) - ONEVOICE27
     // ==============================================================
 
+    // Versículos de Memoria Oficiales de la Escuela Sabática (IASD)
+    // 4º Trimestre 2026: "El don de profecía" (Asociación General IASD / Adventech)
+    const SABBATH_SCHOOL_LESSONS_2026_Q4 = {
+      '2026-10-03': {
+        lessonNum: 1,
+        title: 'El Creador habla',
+        verse: '«En el pasado, Dios habló muchas veces y de muchas maneras a nuestros padres mediante los profetas; pero en estos últimos días nos habló por su Hijo, a quien constituyó heredero de todo, por medio de quien hizo el universo».',
+        ref: 'Hebreos 1:1-2'
+      },
+      '2026-10-10': {
+        lessonNum: 2,
+        title: 'El llamado de un profeta',
+        verse: '«Después oí la voz del Señor, que dijo: “¿A quién enviaré? ¿Quién irá de nuestra parte?”. Entonces respondí: “Aquí estoy, envíame a mí”».',
+        ref: 'Isaías 6:8'
+      },
+      '2026-10-17': {
+        lessonNum: 3,
+        title: 'Profetas del Antiguo Testamento',
+        verse: '«Josafat se puso en pie y dijo: “Óiganme, Judá y habitantes de Jerusalén: crean al Señor su Dios y estarán seguros; crean a sus profetas y serán prosperados”».',
+        ref: '2 Crónicas 20:20'
+      },
+      '2026-10-24': {
+        lessonNum: 4,
+        title: 'Profetas del Nuevo Testamento',
+        verse: '«Ahora bien, hay diversos dones, pero el Espíritu es el mismo. Hay diversos ministerios, pero el Señor es el mismo; y hay diversas actividades, pero Dios, que efectúa todas las cosas en todos, es el mismo».',
+        ref: '1 Corintios 12:4-6'
+      },
+      '2026-10-31': {
+        lessonNum: 5,
+        title: 'Revelación e inspiración',
+        verse: '«La revelación de Jesucristo, que Dios le dio para manifestar a sus siervos lo que debe suceder pronto; y la declaró mediante su ángel a su siervo Juan. Y Juan testifica de todo lo que vio, de la palabra de Dios y del testimonio de Jesucristo».',
+        ref: 'Apocalipsis 1:1-2'
+      },
+      '2026-11-07': {
+        lessonNum: 6,
+        title: 'Los escritos proféticos',
+        verse: '«Todo lo que antes fue escrito, para nuestra enseñanza fue escrito, para que por la paciencia y el consuelo de las Escrituras tengamos esperanza».',
+        ref: 'Romanos 15:4'
+      },
+      '2026-11-14': {
+        lessonNum: 7,
+        title: '¡Escuchen esto!',
+        verse: '«Estas cosas les sucedieron por ejemplo, y fueron escritas para advertirnos a nosotros, a los que han llegado al fin del tiempo».',
+        ref: '1 Corintios 10:11'
+      },
+      '2026-11-21': {
+        lessonNum: 8,
+        title: 'Interpretación de los escritos proféticos',
+        verse: '«Y empezando desde Moisés y todos los profetas, les explicó lo que toda la Escritura decía de él».',
+        ref: 'Lucas 24:27'
+      },
+      '2026-11-28': {
+        lessonNum: 9,
+        title: 'Poniendo a prueba a los profetas',
+        verse: '«Amados, no crean a todo espíritu, sino prueben los espíritus si son de Dios; porque muchos falsos profetas han salido al mundo».',
+        ref: '1 Juan 4:1'
+      },
+      '2026-12-05': {
+        lessonNum: 10,
+        title: 'Autoridad y relevancia proféticas',
+        verse: '«Porque la palabra de Dios es viva y eficaz, más cortante que cualquier espada de dos filos. Penetra hasta partir el alma y el espíritu, las coyunturas y los tuétanos, y discierne los pensamientos y las intenciones del corazón».',
+        ref: 'Hebreos 4:12'
+      },
+      '2026-12-12': {
+        lessonNum: 11,
+        title: 'Manifestación profética en momentos cruciales',
+        verse: '«Nada hace Dios, el Señor, sin revelar su secreto a sus siervos los profetas».',
+        ref: 'Amós 3:7'
+      },
+      '2026-12-19': {
+        lessonNum: 12,
+        title: 'Revelaciones proféticas del fin de los tiempos',
+        verse: '«Después de esto derramaré mi Espíritu sobre toda carne; sus hijos e hijas profetizarán, sus ancianos tendrán sueños y sus jóvenes verán visiones; hasta sobre los siervos y las siervas derramaré mi Espíritu en esos días».',
+        ref: 'Joel 2:28-29'
+      },
+      '2026-12-26': {
+        lessonNum: 13,
+        title: 'Bendiciones de la palabra profética',
+        verse: '«Toda la Escritura es inspirada por Dios, y es útil para enseñar, reprender, enmendar e instruir en justicia, para que el hombre de Dios sea perfecto, cabalmente instruido para toda buena obra».',
+        ref: '2 Timoteo 3:16-17'
+      }
+    };
+
+    function getSabbathSchoolMemoryVerse(satStr) {
+      if (!satStr) return null;
+      if (SABBATH_SCHOOL_LESSONS_2026_Q4[satStr]) {
+        return SABBATH_SCHOOL_LESSONS_2026_Q4[satStr];
+      }
+      try {
+        const cached = localStorage.getItem('ss_verse_' + satStr);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.verse && parsed.ref) return parsed;
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    async function fetchSabbathSchoolVerseOnline(satStr) {
+      if (!satStr) return null;
+      try {
+        const parts = satStr.split('-');
+        const y = parseInt(parts[0]);
+        const m = parseInt(parts[1]);
+        const qNum = Math.floor((m - 1) / 3) + 1;
+        const qId = `${y}-0${qNum}`;
+
+        const lessonsResp = await fetch(`https://sabbath-school.adventech.io/api/v1/es/quarterlies/${qId}/lessons/index.json`);
+        if (!lessonsResp.ok) return null;
+        const lessons = await lessonsResp.json();
+        if (!Array.isArray(lessons)) return null;
+
+        const targetDate = new Date(y, m - 1, parseInt(parts[2]));
+        let matchedLesson = null;
+        for (const l of lessons) {
+          if (l.start_date && l.end_date) {
+            const [sD, sM, sY] = l.start_date.split('/').map(Number);
+            const [eD, eM, eY] = l.end_date.split('/').map(Number);
+            const startD = new Date(sY, sM - 1, sD);
+            const endD = new Date(eY, eM - 1, eD);
+            endD.setDate(endD.getDate() + 1);
+            if (targetDate >= startD && targetDate <= endD) {
+              matchedLesson = l;
+              break;
+            }
+          }
+        }
+        if (!matchedLesson && lessons.length > 0) {
+          matchedLesson = lessons[0];
+        }
+        if (!matchedLesson) return null;
+
+        const dayResp = await fetch(`https://sabbath-school.adventech.io/api/v1/es/quarterlies/${qId}/lessons/${matchedLesson.id}/days/01/read/index.json`);
+        if (!dayResp.ok) return null;
+        const dayData = await dayResp.json();
+        if (dayData && dayData.content) {
+          const bqMatch = dayData.content.match(/<blockquote>[\s\S]*?<p>Para memorizar<\/p>[\s\S]*?«([^»]+)»[\s\S]*?\(([^)]+)\)[\s\S]*?<\/blockquote>/i);
+          if (bqMatch) {
+            const cleanRef = bqMatch[2].replace(/<[^>]+>/g, '').trim();
+            const cleanVerse = `«${bqMatch[1].trim()}»`;
+            const result = {
+              lessonNum: parseInt(matchedLesson.id) || 1,
+              title: matchedLesson.title || 'Escuela Sabática',
+              verse: cleanVerse,
+              ref: cleanRef
+            };
+            try {
+              localStorage.setItem('ss_verse_' + satStr, JSON.stringify(result));
+            } catch(e){}
+            return result;
+          }
+        }
+      } catch (err) {
+        console.warn('Adventech API info:', err);
+      }
+      return null;
+    }
+
+    async function applySabbathSchoolVerse(showToastAlert = false) {
+      const select = document.getElementById('flyerWeekendSelect');
+      if (!select || !select.value) return;
+      const [friStr, satStr] = select.value.split('|');
+
+      let item = getSabbathSchoolMemoryVerse(satStr);
+      if (!item) {
+        item = await fetchSabbathSchoolVerseOnline(satStr);
+      }
+
+      const vInput = document.getElementById('flyerInputVerse');
+      const rInput = document.getElementById('flyerInputRef');
+      const badge = document.getElementById('flyerSabbathSchoolLessonBadge');
+
+      if (item && item.verse && item.ref) {
+        if (vInput) vInput.value = item.verse;
+        if (rInput) rInput.value = item.ref;
+        if (badge) {
+          badge.innerText = `📖 Lección ${item.lessonNum}: "${item.title}" — Versículo de Memoria`;
+          badge.style.display = 'block';
+        }
+        onFlyerFieldInput();
+        if (showToastAlert) {
+          showToast(`📖 Versículo de Escuela Sabática cargado: Lección ${item.lessonNum} (${item.ref})`, 'success');
+        }
+      } else {
+        if (showToastAlert) {
+          showToast('No se encontró versículo de Escuela Sabática para esta fecha.', 'warning');
+        }
+      }
+    }
+
     const BIBLE_VERSES_LIST = [
       { verse: "En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.", ref: "Proverbios 17:17" },
       { verse: "Yo me alegré con los que me decían: A la casa de Jehová iremos.", ref: "Salmos 122:1" },
@@ -6466,9 +6662,45 @@
       const globalChurch = localStorage.getItem('church_flyer_global_church') || 'Horeb';
       const globalMotto = localStorage.getItem('church_flyer_global_motto') || 'Juntos en la obra de Dios';
 
+      // Versículo y Cita: Prioridad oficial a la lección de Escuela Sabática de la semana
+      const ssVerseItem = getSabbathSchoolMemoryVerse(satStr);
+      const defaultVerse = ssVerseItem ? ssVerseItem.verse : 'En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.';
+      const defaultRef = ssVerseItem ? ssVerseItem.ref : 'Proverbios 17:17';
+
       setFieldValue('flyerInputChurch', saved ? (saved.church ?? globalChurch) : globalChurch);
-      setFieldValue('flyerInputVerse', saved ? (saved.verse ?? 'En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.') : 'En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.');
-      setFieldValue('flyerInputRef', saved ? (saved.ref ?? 'Proverbios 17:17') : 'Proverbios 17:17');
+      setFieldValue('flyerInputVerse', saved ? (saved.verse ?? defaultVerse) : defaultVerse);
+      setFieldValue('flyerInputRef', saved ? (saved.ref ?? defaultRef) : defaultRef);
+
+      const ssBadge = document.getElementById('flyerSabbathSchoolLessonBadge');
+      if (ssBadge) {
+        if (ssVerseItem) {
+          ssBadge.innerText = `📖 Lección ${ssVerseItem.lessonNum}: "${ssVerseItem.title}" — Versículo de Memoria`;
+          ssBadge.style.display = 'block';
+        } else {
+          ssBadge.style.display = 'none';
+        }
+      }
+
+      // Si no hay guardado previo ni estaba precargado localmente, buscar online en segundo plano
+      if (!saved && !ssVerseItem) {
+        fetchSabbathSchoolVerseOnline(satStr).then(onlineItem => {
+          if (onlineItem && activeFlyerWeekendKey === weekendKey) {
+            const vIn = document.getElementById('flyerInputVerse');
+            const rIn = document.getElementById('flyerInputRef');
+            if (vIn && (!vIn.value || vIn.value === 'En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia.')) {
+              vIn.value = onlineItem.verse;
+            }
+            if (rIn && (!rIn.value || rIn.value === 'Proverbios 17:17')) {
+              rIn.value = onlineItem.ref;
+            }
+            if (ssBadge) {
+              ssBadge.innerText = `📖 Lección ${onlineItem.lessonNum}: "${onlineItem.title}" — Versículo de Memoria`;
+              ssBadge.style.display = 'block';
+            }
+            updateFlyerPreview();
+          }
+        });
+      }
       setFieldValue('flyerInputWeatherTemp', saved ? (saved.weatherTemp ?? '22°C') : '22°C');
       setFieldValue('flyerInputWeatherRain', saved ? (saved.weatherRain ?? 'no') : 'no');
       setFieldValue('flyerInputSunsetFri', saved ? (saved.sunsetFri ?? defaultSunsetFri) : defaultSunsetFri);
@@ -6752,6 +6984,8 @@
       const item = BIBLE_VERSES_LIST[currentFlyerVerseIdx];
       const vInput = document.getElementById('flyerInputVerse');
       const rInput = document.getElementById('flyerInputRef');
+      const badge = document.getElementById('flyerSabbathSchoolLessonBadge');
+      if (badge) badge.style.display = 'none';
       if (vInput) vInput.value = item.verse;
       if (rInput) rInput.value = item.ref;
       onFlyerFieldInput();
