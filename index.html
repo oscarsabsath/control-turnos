@@ -1710,6 +1710,9 @@
               <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
                 Imprimir / PDF
               </button>
+              <button class="btn btn-primary btn-sm" onclick="downloadMonthImagePNG()" title="Descargar el almanaque de este mes como imagen PNG en alta resolución" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(8,33,66,0.25);">
+                Descargar Imagen (PNG)
+              </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthExcelCSV()" title="Descargar informe de este mes en formato Excel (.csv)">
                 Excel (.csv)
               </button>
@@ -4556,10 +4559,8 @@
       showToast(`Informe de ${monthName} descargado para Excel (.csv)`, 'success');
     }
 
-    function exportMonthPrintPDF() {
-      const monthName = MONTH_NAMES[currentMonth];
-      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
-
+    function buildAlmanacWeeksHtml(monthIdx, year) {
+      const weekends = getScheduleDaysForMonth(year, monthIdx);
       let weeksHtml = '';
       weekends.forEach((wk, wkIdx) => {
         const days = [
@@ -4620,12 +4621,12 @@
             `;
           });
 
-            const dayHeaderColor = '#082142';
-            const dayBgColor = d.isFri ? '#f0f7ff' : '#fefce8';
-            const dayBorderTop = d.isFri ? '3px solid #0284c7' : '3px solid #d4af37';
-            const dayBadgeColor = d.isFri ? '#0284c7' : '#b45309';
+          const dayHeaderColor = '#082142';
+          const dayBgColor = d.isFri ? '#f0f7ff' : '#fefce8';
+          const dayBorderTop = d.isFri ? '3px solid #0284c7' : '3px solid #d4af37';
+          const dayBadgeColor = d.isFri ? '#0284c7' : '#b45309';
 
-            daysTableHtml += `
+          daysTableHtml += `
             <div style="flex: 1; border: 1px solid #cbd5e1; border-top: ${dayBorderTop}; border-radius: 4px; overflow: hidden; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
               <div style="background: ${dayBgColor}; padding: 3px 6px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-weight: 800; font-size: 0.8rem; color: ${dayHeaderColor}; letter-spacing: 0.3px;">${d.name.toUpperCase()}</span>
@@ -4651,6 +4652,93 @@
           </div>
         `;
       });
+      return weeksHtml;
+    }
+
+    function downloadMonthImagePNG() {
+      if (typeof html2canvas === 'undefined') {
+        showToast('Preparando motor de imágenes...', 'info');
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload = () => downloadMonthImagePNG();
+        document.head.appendChild(s);
+        return;
+      }
+
+      showToast('Generando imagen en alta resolución del almanaque...', 'info');
+
+      const monthName = MONTH_NAMES[currentMonth];
+      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear);
+
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.left = '-9999px';
+      container.style.top = '0';
+      container.style.width = '880px';
+      container.style.padding = '14px 18px';
+      container.style.background = '#ffffff';
+      container.style.border = '2px solid #d4af37';
+      container.style.borderRadius = '8px';
+      container.style.boxSizing = 'border-box';
+      container.style.fontFamily = "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      container.style.zIndex = '-9999';
+
+      container.innerHTML = `
+        <div style="background: #05162e; border-bottom: 2px solid #d4af37; border-radius: 6px 6px 0 0; overflow: hidden; margin-bottom: 6px;">
+          <img src="banner.png" alt="OneVoice27" style="width: 100%; max-height: 75px; object-fit: cover; display: block;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.parentElement.style.display='none';}">
+        </div>
+        <div style="border-bottom: 1.5px solid #d4af37; padding-bottom: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; color: #082142; letter-spacing: -0.3px;">Programación de Turnos y Responsabilidades</div>
+            <div style="color: #64748b; font-size: 0.7rem; font-weight: 600; margin-top: 2px;">Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</div>
+          </div>
+          <div style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 800; padding: 4px 12px; border-radius: 999px; font-size: 0.88rem; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(8,33,66,0.18);">
+            ${monthName.toUpperCase()} ${currentYear}
+          </div>
+        </div>
+        <div style="height: 1.5px; background: linear-gradient(90deg, #cbd5e1, #d4af37, #cbd5e1); margin: 4px 0 6px 0; border-radius: 1px;"></div>
+        ${weeksHtml}
+        <div style="margin-top: 5px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.65rem; color: #64748b; font-weight: 600;">
+          <span>OneVoice27 &bull; Documento oficial de turnos y responsabilidades ministeriales</span>
+          <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
+        </div>
+      `;
+
+      document.body.appendChild(container);
+
+      const imgs = container.querySelectorAll('img');
+      const imgPromises = Array.from(imgs).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(res => {
+          img.onload = res;
+          img.onerror = res;
+        });
+      });
+
+      Promise.all(imgPromises).then(() => {
+        return html2canvas(container, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff'
+        });
+      }).then(canvas => {
+        if (container.parentElement) document.body.removeChild(container);
+        const link = document.createElement('a');
+        link.download = `Almanaque_${monthName}_${currentYear}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast(`Imagen del almanaque de ${monthName} descargada correctamente`, 'success');
+      }).catch(err => {
+        if (container.parentElement) document.body.removeChild(container);
+        console.error('Error al exportar imagen del almanaque:', err);
+        showToast('No se pudo generar la imagen del almanaque', 'error');
+      });
+    }
+
+    function exportMonthPrintPDF() {
+      const monthName = MONTH_NAMES[currentMonth];
+      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear);
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
@@ -4666,6 +4754,11 @@
       fontLink.rel = 'stylesheet';
       fontLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&display=swap';
       printDoc.head.appendChild(fontLink);
+
+      // Cargar html2canvas para permitir descarga como imagen desde la propia vista de impresión
+      const canvasScript = printDoc.createElement('script');
+      canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      printDoc.head.appendChild(canvasScript);
 
       const styleEl = printDoc.createElement('style');
       styleEl.textContent = `
@@ -4720,6 +4813,7 @@
             <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">94%</span>
             <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">Reducir</button>
             <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">Ampliar</button>
+            <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" title="Descargar como imagen PNG en alta resolución" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar Imagen (PNG)</button>
             <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
             <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
           </div>
@@ -4765,6 +4859,28 @@
             printStyle.textContent = '@media print { .print-container { zoom: ' + currentZoom + ' !important; } }';
             const badge = document.getElementById('zoomBadge');
             if (badge) badge.innerText = Math.round(currentZoom * 100) + '%';
+          }
+
+          function downloadPopupAlmanacImage() {
+            const el = document.getElementById('printableArea');
+            if (!el || typeof html2canvas === 'undefined') {
+              alert('Cargando motor de imagen, por favor intenta en unos segundos...');
+              return;
+            }
+            const toolbar = document.querySelector('.toolbar');
+            if (toolbar) toolbar.style.display = 'none';
+            html2canvas(el, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' })
+              .then(canvas => {
+                if (toolbar) toolbar.style.display = '';
+                const link = document.createElement('a');
+                link.download = 'Almanaque_${monthName}_${currentYear}.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+              })
+              .catch(err => {
+                if (toolbar) toolbar.style.display = '';
+                alert('No se pudo generar la imagen: ' + err);
+              });
           }
         <\/script>
       `;
