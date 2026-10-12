@@ -2501,48 +2501,54 @@
             </div>
           </div>
 
-          <!-- Previsión del Clima para el Sábado -->
-          <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
-            <div style="font-weight: 800; font-size: 0.82rem; color: #1e40af; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              Previsión del Clima (Sábado)
-            </div>
-            <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px; margin-bottom: 4px;">
-              <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Temperatura:</label>
-                <input type="text" id="flyerInputWeatherTemp" class="form-control" value="22°C" placeholder="Ej: 22°C" oninput="onFlyerFieldInput()">
+          <!-- Previsión del Clima y Puesta de Sol (Madrid) -->
+          <div style="background: #ffffff; border: 1.5px solid #d4af37; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(8,33,66,0.06);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <div style="font-weight: 800; font-size: 0.84rem; color: #082142; display: flex; align-items: center; gap: 5px;">
+                <span>📍 Clima y Puesta de Sol (Madrid)</span>
               </div>
-              <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">¿Va a llover?:</label>
-                <select id="flyerInputWeatherRain" class="form-control" onchange="onFlyerFieldInput()">
-                  <option value="no">No (Sin lluvia)</option>
-                  <option value="yes">Sí (Lluvia prevista)</option>
-                  <option value="prob">Lluvia probable</option>
-                  <option value="clouds">Nublado (Sin lluvia)</option>
-                </select>
-              </div>
+              <button type="button" class="btn btn-outline btn-sm" onclick="syncFlyerWeatherForMadrid(true)" style="padding: 2px 8px; font-size: 0.72rem; color: #082142; border: 1px solid #d4af37; background: #fefce8; font-weight: 700; cursor: pointer;" title="Consultar Open-Meteo y calcular sol de Madrid en tiempo real">
+                🔄 Sincronizar en Vivo
+              </button>
             </div>
-            <div class="hint" style="font-size: 0.7rem; color: #64748b;">
-              Se muestra debajo del versículo: solo la temperatura y si va a llover o no.
-            </div>
-          </div>
 
-          <!-- Puesta de Sol (Viernes y Sábado) -->
-          <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
-            <div style="font-weight: 800; font-size: 0.82rem; color: #b45309; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              Puesta de Sol (Viernes y Sábado)
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
-              <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Viernes:</label>
-                <input type="text" id="flyerInputSunsetFri" class="form-control" value="19:42" placeholder="Ej: 19:42" oninput="onFlyerFieldInput()">
+            <!-- Previsión Sábado -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px;">
+              <div style="font-size: 0.7rem; font-weight: 800; color: #1e40af; margin-bottom: 4px;">🌤️ Previsión del Sábado</div>
+              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 0.68rem; font-weight: 600; color: #475569;">Temperatura:</label>
+                  <input type="text" id="flyerInputWeatherTemp" class="form-control" value="22°C" placeholder="Ej: 22°C" oninput="onFlyerFieldInput()">
+                </div>
+                <div>
+                  <label style="font-size: 0.68rem; font-weight: 600; color: #475569;">¿Va a llover?:</label>
+                  <select id="flyerInputWeatherRain" class="form-control" onchange="onFlyerFieldInput()">
+                    <option value="no">No (Sin lluvia)</option>
+                    <option value="yes">Sí (Lluvia prevista)</option>
+                    <option value="prob">Lluvia probable</option>
+                    <option value="clouds">Nublado (Sin lluvia)</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label style="font-size: 0.7rem; font-weight: 600;">Sábado:</label>
-                <input type="text" id="flyerInputSunsetSat" class="form-control" value="19:43" placeholder="Ej: 19:43" oninput="onFlyerFieldInput()">
+            </div>
+
+            <!-- Puesta de Sol Viernes y Sábado -->
+            <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 6px; padding: 6px 8px;">
+              <div style="font-size: 0.7rem; font-weight: 800; color: #854d0e; margin-bottom: 4px;">🌅 Puesta de Sol (Viernes y Sábado)</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 0.68rem; font-weight: 600; color: #854d0e;">Viernes:</label>
+                  <input type="text" id="flyerInputSunsetFri" class="form-control" value="19:42" placeholder="Ej: 19:42" oninput="onFlyerFieldInput()">
+                </div>
+                <div>
+                  <label style="font-size: 0.68rem; font-weight: 600; color: #854d0e;">Sábado:</label>
+                  <input type="text" id="flyerInputSunsetSat" class="form-control" value="19:43" placeholder="Ej: 19:43" oninput="onFlyerFieldInput()">
+                </div>
               </div>
             </div>
-            <div class="hint" style="font-size: 0.7rem; color: #64748b;">
-              Se muestra debajo de la previsión del clima en la columna izquierda.
+
+            <div id="flyerWeatherStatusMsg" style="font-size: 0.68rem; color: #64748b; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+              <span>ℹ️ Datos climáticos y astronómicos calculados automáticamente para Madrid.</span>
             </div>
           </div>
 
@@ -6097,6 +6103,153 @@
       }
     }
 
+    // ==============================================================
+    // CÁLCULO SOLAR Y CLIMÁTICO AUTOMÁTICO PARA MADRID (ESPAÑA)
+    // ==============================================================
+    const MADRID_COORDS = { lat: 40.4168, lng: -3.7038, tz: 'Europe/Madrid', name: 'Madrid' };
+
+    function calculateSolarSunset(date, lat = MADRID_COORDS.lat, lng = MADRID_COORDS.lng) {
+      try {
+        const rad = Math.PI / 180;
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        const start = new Date(year, 0, 0);
+        const diff = (date - start) + ((start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000);
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+
+        const gamma = 2 * Math.PI / 365 * (dayOfYear - 1);
+        const eqtime = 229.18 * (0.000075 + 0.001868 * Math.cos(gamma) - 0.032077 * Math.sin(gamma)
+                       - 0.014615 * Math.cos(2 * gamma) - 0.040849 * Math.sin(2 * gamma));
+        const decl = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma)
+                     - 0.006758 * Math.cos(2 * gamma) + 0.000907 * Math.sin(2 * gamma);
+
+        const zenithRad = 90.833 * rad;
+        const latRad = lat * rad;
+        const cosH = (Math.cos(zenithRad) - Math.sin(latRad) * Math.sin(decl)) / (Math.cos(latRad) * Math.cos(decl));
+
+        if (cosH > 1 || cosH < -1) return '19:42';
+
+        const hourAngleDeg = Math.acos(cosH) * (180 / Math.PI);
+        const sunsetUtcMinutes = 720 - (4 * lng) - eqtime + (4 * hourAngleDeg);
+
+        // Horario peninsular de España: UTC+2 en verano (marzo-octubre), UTC+1 en invierno
+        let tzOffsetHours = 1;
+        const lastSunMarch = new Date(year, 2, 31 - (new Date(year, 2, 31).getDay() || 7), 2, 0);
+        const lastSunOct = new Date(year, 9, 31 - (new Date(year, 9, 31).getDay() || 7), 3, 0);
+        const checkDate = new Date(year, month, day, 12, 0);
+        if (checkDate >= lastSunMarch && checkDate < lastSunOct) {
+          tzOffsetHours = 2;
+        }
+
+        const localMinutes = Math.round(sunsetUtcMinutes + (tzOffsetHours * 60));
+        const hours = Math.floor(localMinutes / 60) % 24;
+        const mins = localMinutes % 60;
+        return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+      } catch (e) {
+        return '19:42';
+      }
+    }
+
+    async function fetchWeatherAndSunsetForWeekend(friStr, satStr) {
+      const friParts = friStr.split('-');
+      const satParts = satStr.split('-');
+      const friDate = new Date(parseInt(friParts[0]), parseInt(friParts[1]) - 1, parseInt(friParts[2]));
+      const satDate = new Date(parseInt(satParts[0]), parseInt(satParts[1]) - 1, parseInt(satParts[2]));
+
+      const solarFri = calculateSolarSunset(friDate);
+      const solarSat = calculateSolarSunset(satDate);
+
+      const result = {
+        sunsetFri: solarFri,
+        sunsetSat: solarSat,
+        temp: '22°C',
+        rain: 'no',
+        source: 'calc'
+      };
+
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${MADRID_COORDS.lat}&longitude=${MADRID_COORDS.lng}&daily=weather_code,temperature_2m_max,precipitation_sum,precipitation_probability_max,sunset&timezone=Europe%2FMadrid&start_date=${friStr}&end_date=${satStr}`;
+        const resp = await fetch(url);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.daily) {
+            const d = data.daily;
+            if (d.sunset && d.sunset.length >= 1 && d.sunset[0]) {
+              result.sunsetFri = d.sunset[0].split('T')[1].substring(0, 5);
+            }
+            if (d.sunset && d.sunset.length >= 2 && d.sunset[1]) {
+              result.sunsetSat = d.sunset[1].split('T')[1].substring(0, 5);
+            }
+
+            const satIdx = d.time && d.time.length > 1 ? 1 : 0;
+            if (d.temperature_2m_max && d.temperature_2m_max[satIdx] !== undefined && d.temperature_2m_max[satIdx] !== null) {
+              result.temp = `${Math.round(d.temperature_2m_max[satIdx])}°C`;
+            }
+
+            const rainProb = (d.precipitation_probability_max && d.precipitation_probability_max[satIdx]) || 0;
+            const rainSum = (d.precipitation_sum && d.precipitation_sum[satIdx]) || 0;
+            const wCode = (d.weather_code && d.weather_code[satIdx]) || 0;
+
+            if (rainProb >= 60 || rainSum >= 2.0 || [63, 65, 81, 82, 95].includes(wCode)) {
+              result.rain = 'yes';
+            } else if (rainProb >= 30 || rainSum >= 0.5 || [51, 53, 55, 61, 80].includes(wCode)) {
+              result.rain = 'prob';
+            } else if ([1, 2, 3, 45, 48].includes(wCode)) {
+              result.rain = 'clouds';
+            } else {
+              result.rain = 'no';
+            }
+            result.source = 'api';
+          }
+        }
+      } catch (err) {
+        console.warn('Open-Meteo info: usando cálculo solar astronómico para Madrid', err);
+      }
+
+      return result;
+    }
+
+    async function syncFlyerWeatherForMadrid(showToastAlert = false) {
+      const select = document.getElementById('flyerWeekendSelect');
+      if (!select || !select.value) return;
+
+      const [friStr, satStr] = select.value.split('|');
+      const statusEl = document.getElementById('flyerWeatherStatusMsg');
+      if (statusEl) {
+        statusEl.innerHTML = '<span style="color: #2563eb;">⏳ Sincronizando clima y puesta de sol para Madrid...</span>';
+      }
+
+      const result = await fetchWeatherAndSunsetForWeekend(friStr, satStr);
+
+      const tempInput = document.getElementById('flyerInputWeatherTemp');
+      const rainSelect = document.getElementById('flyerInputWeatherRain');
+      const sunFriInput = document.getElementById('flyerInputSunsetFri');
+      const sunSatInput = document.getElementById('flyerInputSunsetSat');
+
+      if (tempInput && result.temp) tempInput.value = result.temp;
+      if (rainSelect && result.rain) rainSelect.value = result.rain;
+      if (sunFriInput && result.sunsetFri) sunFriInput.value = result.sunsetFri;
+      if (sunSatInput && result.sunsetSat) sunSatInput.value = result.sunsetSat;
+
+      updateFlyerPreview();
+      saveFlyerDataLocally();
+
+      if (statusEl) {
+        if (result.source === 'api') {
+          statusEl.innerHTML = '<span style="color: #16a34a;">✓ Clima y sol de Madrid sincronizados en vivo con Open-Meteo.</span>';
+        } else {
+          statusEl.innerHTML = '<span style="color: #0369a1;">✓ Puesta de sol calculada astronómicamente para Madrid.</span>';
+        }
+      }
+
+      if (showToastAlert) {
+        showToast(`🌤️ Clima y puesta de sol actualizados para Madrid: ${result.temp}, Vie ${result.sunsetFri}, Sáb ${result.sunsetSat}`, 'success');
+      }
+    }
+
     let flyerAutoSaveTimer = null;
     let activeFlyerWeekendKey = null;
 
@@ -6302,6 +6455,14 @@
         }
       }
 
+      const friParts = friStr.split('-');
+      const satParts = satStr.split('-');
+      const friDate = new Date(parseInt(friParts[0]), parseInt(friParts[1]) - 1, parseInt(friParts[2]));
+      const satDate = new Date(parseInt(satParts[0]), parseInt(satParts[1]) - 1, parseInt(satParts[2]));
+
+      const defaultSunsetFri = calculateSolarSunset(friDate);
+      const defaultSunsetSat = calculateSolarSunset(satDate);
+
       const globalChurch = localStorage.getItem('church_flyer_global_church') || 'Horeb';
       const globalMotto = localStorage.getItem('church_flyer_global_motto') || 'Juntos en la obra de Dios';
 
@@ -6310,8 +6471,8 @@
       setFieldValue('flyerInputRef', saved ? (saved.ref ?? 'Proverbios 17:17') : 'Proverbios 17:17');
       setFieldValue('flyerInputWeatherTemp', saved ? (saved.weatherTemp ?? '22°C') : '22°C');
       setFieldValue('flyerInputWeatherRain', saved ? (saved.weatherRain ?? 'no') : 'no');
-      setFieldValue('flyerInputSunsetFri', saved ? (saved.sunsetFri ?? '19:42') : '19:42');
-      setFieldValue('flyerInputSunsetSat', saved ? (saved.sunsetSat ?? '19:43') : '19:43');
+      setFieldValue('flyerInputSunsetFri', saved ? (saved.sunsetFri ?? defaultSunsetFri) : defaultSunsetFri);
+      setFieldValue('flyerInputSunsetSat', saved ? (saved.sunsetSat ?? defaultSunsetSat) : defaultSunsetSat);
       setFieldValue('flyerInputFriTime', saved ? (saved.friTime ?? '20:00 – 21:00') : '20:00 – 21:00');
       setFieldValue('flyerInputFriAct', saved ? (saved.friAct ?? defaultFriAct) : defaultFriAct);
       setFieldValue('flyerInputFriSpeaker', saved ? (saved.friSpeaker ?? defaultFriSpeaker) : defaultFriSpeaker);
@@ -6341,6 +6502,11 @@
 
       updateFlyerPreview();
       updateFlyerSaveStatus(Boolean(saved));
+
+      // Si no hay datos climáticos personalizados guardados, consultar clima y sol en vivo para Madrid
+      if (!saved || !saved.weatherTemp || !saved.sunsetFri) {
+        syncFlyerWeatherForMadrid(false);
+      }
     }
 
     function resetFlyerFromSchedule() {
