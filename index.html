@@ -4620,16 +4620,18 @@
             `;
           });
 
-          const dayHeaderColor = d.isFri ? '#1e40af' : '#c2410c';
-          const dayBgColor = d.isFri ? '#eff6ff' : '#fff7ed';
+            const dayHeaderColor = '#082142';
+            const dayBgColor = d.isFri ? '#f0f7ff' : '#fefce8';
+            const dayBorderTop = d.isFri ? '3px solid #0284c7' : '3px solid #d4af37';
+            const dayBadgeColor = d.isFri ? '#0284c7' : '#b45309';
 
-          daysTableHtml += `
-            <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; background: #ffffff;">
-              <div style="background: ${dayBgColor}; padding: 3px 6px; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 800; font-size: 0.82rem; color: ${dayHeaderColor};">${d.name.toUpperCase()}</span>
-                <span style="font-weight: 700; font-size: 0.72rem; color: #334155; background: #ffffff; padding: 1px 5px; border-radius: 3px; border: 1px solid #e2e8f0;">${formattedDate}</span>
+            daysTableHtml += `
+            <div style="flex: 1; border: 1px solid #cbd5e1; border-top: ${dayBorderTop}; border-radius: 4px; overflow: hidden; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+              <div style="background: ${dayBgColor}; padding: 3px 6px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 800; font-size: 0.8rem; color: ${dayHeaderColor}; letter-spacing: 0.3px;">${d.name.toUpperCase()}</span>
+                <span style="font-weight: 700; font-size: 0.7rem; color: ${dayBadgeColor}; background: #ffffff; padding: 1px 6px; border-radius: 999px; border: 1px solid #cbd5e1;">${formattedDate}</span>
               </div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; line-height: 1.15;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 10px; line-height: 1.15; font-family: 'Montserrat', sans-serif;">
                 <tbody>
                   ${slotsRowsHtml}
                 </tbody>
@@ -4640,8 +4642,8 @@
 
         weeksHtml += `
           <div style="margin-bottom: 4px; page-break-inside: avoid; break-inside: avoid;">
-            <div style="background: #1e293b; color: #ffffff; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 800; margin-bottom: 2px; display: inline-block;">
-              SEMANA ${wkIdx + 1}
+            <div style="background: #082142; color: #ffffff; border-left: 3px solid #d4af37; padding: 2px 7px; border-radius: 3px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px; display: inline-flex; align-items: center; gap: 4px;">
+              <span style="color: #f6c84c;">&#9670;</span> SEMANA ${wkIdx + 1}
             </div>
             <div style="display: flex; gap: 6px;">
               ${daysTableHtml}
@@ -4659,37 +4661,47 @@
       const printDoc = printWindow.document;
       printDoc.title = `Informe_${monthName}_${currentYear}_1Pagina`;
 
+      // Cargar fuentes de Google idénticas al Flyer de Anuncio
+      const fontLink = printDoc.createElement('link');
+      fontLink.rel = 'stylesheet';
+      fontLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&display=swap';
+      printDoc.head.appendChild(fontLink);
+
       const styleEl = printDoc.createElement('style');
       styleEl.textContent = `
         @page {
           size: portrait;
-          margin: 6mm 7mm;
+          margin: 5mm 6mm;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { padding: 12px; color: #0f172a; background: #f8fafc; font-size: 11px; line-height: 1.25; }
-        .print-container { max-width: 860px; margin: 0 auto; background: #ffffff; padding: 14px 18px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); transform-origin: top center; transition: transform 0.15s ease; }
-        .header-banner { border-bottom: 2px solid #2563eb; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .header-title h1 { font-size: 1.1rem; font-weight: 800; color: #1e3a8a; line-height: 1.15; margin: 0; }
-        .header-title p { color: #64748b; font-size: 0.72rem; margin: 2px 0 0; }
-        .badge-month { background: #2563eb; color: #ffffff; font-weight: 800; padding: 3px 8px; border-radius: 4px; font-size: 0.9rem; text-align: right; white-space: nowrap; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { padding: 10px; color: #0f172a; background: #f8fafc; font-size: 10.5px; line-height: 1.25; }
+        .print-container { max-width: 860px; margin: 0 auto; background: #ffffff; padding: 12px 16px; border-radius: 6px; border: 1px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: transform 0.15s ease; }
+        .banner-top { background: #05162e; border-bottom: 2px solid #d4af37; border-radius: 4px 4px 0 0; overflow: hidden; margin-bottom: 6px; }
+        .banner-top img { width: 100%; max-height: 70px; object-fit: cover; display: block; }
+        .header-banner { border-bottom: 1.5px solid #d4af37; padding-bottom: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 800; color: #082142; line-height: 1.15; margin: 0; letter-spacing: -0.3px; }
+        .header-title p { color: #64748b; font-size: 0.68rem; font-weight: 600; margin: 2px 0 0; }
+        .badge-month { background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 800; padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; text-align: right; white-space: nowrap; letter-spacing: 0.5px; box-shadow: 0 1px 4px rgba(8,33,66,0.2); }
         .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 8px; }
-        .btn { padding: 5px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; }
-        .btn-primary { background: #2563eb; color: #ffffff; }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-outline { background: #ffffff; color: #475569; border: 1px solid #cbd5e1; }
+        .btn { padding: 5px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
+        .btn-primary { background: #082142; color: #ffffff; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(8,33,66,0.2); }
+        .btn-primary:hover { background: #0d366b; }
+        .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
         .btn-outline:hover { background: #f1f5f9; }
-        .footer-bar { margin-top: 4px; padding-top: 3px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.65rem; color: #94a3b8; }
+        .divider-gold { height: 1.5px; background: linear-gradient(90deg, #cbd5e1, #d4af37, #cbd5e1); margin: 4px 0 6px 0; border-radius: 1px; }
+        .footer-bar { margin-top: 4px; padding-top: 3px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.64rem; color: #64748b; font-weight: 600; }
         @media print {
           html, body {
             background: #ffffff !important;
             padding: 0 !important;
             margin: 0 !important;
-            font-size: 10.5px !important;
+            font-size: 10px !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
           .print-container {
             box-shadow: none !important;
+            border: 1px solid #cbd5e1 !important;
             padding: 0 !important;
             margin: 0 !important;
             max-width: 100% !important;
@@ -4704,28 +4716,34 @@
       printDoc.body.innerHTML = `
         <div class="print-container" id="printableArea">
           <div class="toolbar no-print">
-            <span style="font-size: 0.75rem; color: #64748b; margin-right: auto;">Configurado para imprimir en <strong>1 sola página</strong></span>
-            <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #1e40af; background: #dbeafe; padding: 2px 7px; border-radius: 4px;">94%</span>
+            <span style="font-size: 0.75rem; color: #082142; font-weight: 600; margin-right: auto;">Estilo Oficial OneVoice27 &bull; Configurado para <strong>1 sola página</strong></span>
+            <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">94%</span>
             <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">Reducir</button>
             <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">Ampliar</button>
             <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
             <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
           </div>
 
+          <div class="banner-top">
+            <img src="banner.png" alt="OneVoice27" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='banner-principal.png';}else{this.parentElement.style.display='none';}">
+          </div>
+
           <div class="header-banner">
             <div class="header-title">
               <h1>Programación de Turnos y Responsabilidades</h1>
-              <p>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual (Viernes y Sábados)</p>
+              <p>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</p>
             </div>
             <div class="badge-month">
               ${monthName.toUpperCase()} ${currentYear}
             </div>
           </div>
 
+          <div class="divider-gold"></div>
+
           ${weeksHtml}
 
           <div class="footer-bar">
-            <span>Documento oficial de turnos y responsabilidades ministeriales</span>
+            <span>OneVoice27 &bull; Documento oficial de turnos y responsabilidades ministeriales</span>
             <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
           </div>
         </div>
