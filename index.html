@@ -930,19 +930,29 @@
     }
 
     .flyer-pill-badge {
+      background-color: #facc15;
       background: linear-gradient(90deg, #fef08a 0%, #facc15 100%);
-      color: #0f172a;
+      color: #082142;
       padding: 5px 12px;
       border-radius: 999px;
-      font-weight: 800;
+      font-weight: 900;
       font-size: 0.76rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      display: block;
+      line-height: 1.35;
       margin-top: 8px;
       box-shadow: 0 2px 4px rgba(234, 179, 8, 0.25);
       width: 100%;
       box-sizing: border-box;
+      position: relative;
+    }
+
+    .flyer-pill-badge span {
+      display: inline-block;
+      position: relative;
+      z-index: 2;
+      color: #082142 !important;
+      font-weight: 900;
+      letter-spacing: 0.3px;
     }
 
     .flyer-row-item {
@@ -7172,19 +7182,29 @@
         }
 
         .flyer-pill-badge {
+          background-color: #facc15;
           background: linear-gradient(90deg, #fef08a 0%, #facc15 100%);
-          color: #0f172a;
+          color: #082142;
           padding: 5px 12px;
           border-radius: 999px;
-          font-weight: 800;
+          font-weight: 900;
           font-size: 0.76rem;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
+          display: block;
+          line-height: 1.35;
           margin-top: 8px;
           box-shadow: 0 2px 4px rgba(234, 179, 8, 0.25);
           width: 100%;
           box-sizing: border-box;
+          position: relative;
+        }
+
+        .flyer-pill-badge span {
+          display: inline-block;
+          position: relative;
+          z-index: 2;
+          color: #082142 !important;
+          font-weight: 900;
+          letter-spacing: 0.3px;
         }
 
         .flyer-row-item {
@@ -7335,7 +7355,34 @@
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        onclone: (clonedDoc) => {
+          const badges = clonedDoc.querySelectorAll('.flyer-pill-badge');
+          badges.forEach(b => {
+            b.style.display = 'block';
+            b.style.backgroundColor = '#facc15';
+            b.style.color = '#082142';
+            b.style.lineHeight = '1.35';
+            b.style.position = 'relative';
+            b.style.zIndex = '1';
+          });
+          const friEl = clonedDoc.getElementById('flyerPreviewFriBadge');
+          const satEl = clonedDoc.getElementById('flyerPreviewSatBadge');
+          if (friEl) {
+            friEl.style.display = 'inline-block';
+            friEl.style.color = '#082142';
+            friEl.style.fontWeight = '900';
+            friEl.style.position = 'relative';
+            friEl.style.zIndex = '10';
+          }
+          if (satEl) {
+            satEl.style.display = 'inline-block';
+            satEl.style.color = '#082142';
+            satEl.style.fontWeight = '900';
+            satEl.style.position = 'relative';
+            satEl.style.zIndex = '10';
+          }
+        }
       }).then(canvas => {
         noPrintEls.forEach(el => el.style.display = '');
         const link = document.createElement('a');
