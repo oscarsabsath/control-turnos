@@ -50,6 +50,18 @@
       --audio-text: #6d28d9;
       --audio-badge: #7c3aed;
 
+      /* 6. ESPECIAL ESCUELA SABÁTICA (Turquesa Esmeralda Sólido) */
+      --esp-es-bg: #ccfbf1;
+      --esp-es-border: #5eead4;
+      --esp-es-text: #0f766e;
+      --esp-es-badge: #0d9488;
+
+      /* 7. ESPECIAL CULTO DIVINO (Coral Ámbar Sólido) */
+      --esp-cd-bg: #ffedd5;
+      --esp-cd-border: #fdba74;
+      --esp-cd-text: #c2410c;
+      --esp-cd-badge: #ea580c;
+
       --danger: #ef4444;
       --danger-bg: #fee2e2;
       --danger-border: #fca5a5;
@@ -379,6 +391,18 @@
       border: 1.5px solid var(--audio-border);
     }
 
+    .area-especial_es {
+      background-color: var(--esp-es-bg);
+      color: var(--esp-es-text);
+      border: 1.5px solid var(--esp-es-border);
+    }
+
+    .area-especial_cd {
+      background-color: var(--esp-cd-bg);
+      color: var(--esp-cd-text);
+      border: 1.5px solid var(--esp-cd-border);
+    }
+
     .badge-multidisciplinar {
       background-color: #dcfce7;
       color: #15803d;
@@ -671,6 +695,20 @@
       border-color: #ddd6fe;
       border-left-color: #7c3aed;
       color: #6d28d9;
+    }
+
+    .slot-especial_es {
+      background: #ccfbf1;
+      border-color: #99f6e4;
+      border-left-color: #0d9488;
+      color: #0f766e;
+    }
+
+    .slot-especial_cd {
+      background: #ffedd5;
+      border-color: #fed7aa;
+      border-left-color: #ea580c;
+      color: #c2410c;
     }
 
     .btn-slot-empty {
@@ -1020,7 +1058,7 @@
     /* Stats bar */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
       gap: 8px;
       margin-bottom: 14px;
     }
@@ -1631,7 +1669,7 @@
     <header>
       <div class="header-info">
         <h1>Gestión de Responsabilidades y Turnos</h1>
-        <p>Organización compartida para <strong>Anciano de Turno (Sábados), Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual</strong>.</p>
+        <p>Organización compartida para <strong>Anciano de Turno (Sábados), Predicación, Alabanza, Especial Escuela Sabática, Especial Culto Divino, Diaconisas, Diáconos y Audiovisual</strong>.</p>
       </div>
       <div class="auth-bar" id="authBar">
         <!-- Renderizado dinámico vía JavaScript -->
@@ -1655,6 +1693,14 @@
       <div class="stat-card" style="border-top-color: var(--alab-badge);">
         <div class="stat-label" style="color: var(--alab-text);">Alabanza</div>
         <div class="stat-value" id="statAlabanza" style="color: var(--alab-text);">0</div>
+      </div>
+      <div class="stat-card" style="border-top-color: var(--esp-es-badge);">
+        <div class="stat-label" style="color: var(--esp-es-text);" title="Especial Escuela Sabática">Especial E.S.</div>
+        <div class="stat-value" id="statEspecialES" style="color: var(--esp-es-text);">0</div>
+      </div>
+      <div class="stat-card" style="border-top-color: var(--esp-cd-badge);">
+        <div class="stat-label" style="color: var(--esp-cd-text);" title="Especial Culto Divino">Especial C.D.</div>
+        <div class="stat-value" id="statEspecialCD" style="color: var(--esp-cd-text);">0</div>
       </div>
       <div class="stat-card" style="border-top-color: var(--diac-fem-badge);">
         <div class="stat-label" style="color: var(--diac-fem-text);">Diaconisas</div>
@@ -1708,6 +1754,8 @@
                 <option value="anciano">Anciano de Turno</option>
                 <option value="predicaciones">Predicación</option>
                 <option value="alabanza">Alabanza</option>
+                <option value="especial_es">Especial Escuela Sabática</option>
+                <option value="especial_cd">Especial Culto Divino</option>
                 <option value="diaconisas">Diaconisas</option>
                 <option value="diaconos">Diáconos</option>
                 <option value="audiovisual">Audiovisual</option>
@@ -1745,6 +1793,14 @@
               <span style="font-weight: 700; color: var(--alab-text);">Alabanza</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--esp-es-badge); border: 1px solid var(--esp-es-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--esp-es-text);">Especial Escuela Sabática</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="width: 12px; height: 12px; background: var(--esp-cd-badge); border: 1px solid var(--esp-cd-border); border-radius: 3px; display: inline-block;"></span>
+              <span style="font-weight: 700; color: var(--esp-cd-text);">Especial Culto Divino</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
               <span style="width: 12px; height: 12px; background: var(--diac-fem-badge); border: 1px solid var(--diac-fem-border); border-radius: 3px; display: inline-block;"></span>
               <span style="font-weight: 700; color: var(--diac-fem-text);">Diaconisas</span>
             </div>
@@ -1757,7 +1813,7 @@
               <span style="font-weight: 700; color: var(--audio-text);">Audiovisual</span>
             </div>
           </div>
-          <div style="color: #1e3a8a; font-size: 0.76rem; font-weight: 700; background: #e0f2fe; padding: 4px 10px; border-radius: 6px; border: 1px solid #7dd3fc;">
+          <div id="calendarColsInfoBadge" style="color: #1e3a8a; font-size: 0.76rem; font-weight: 700; background: #e0f2fe; padding: 4px 10px; border-radius: 6px; border: 1px solid #7dd3fc;">
             8 Columnas: Los 8 días de turno del mes (Viernes y Sábado)
           </div>
         </div>
@@ -1845,7 +1901,7 @@
           </div>
 
           <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; color: #15803d; margin-bottom: 12px;">
-            <strong>Cualquier hermano(a)</strong> puede ser seleccionado para <strong>Predicación, Alabanza, Diaconisas, Diáconos o Audiovisual</strong>.
+            <strong>Cualquier hermano(a)</strong> puede ser seleccionado para <strong>Predicación, Alabanza, Especial Escuela Sabática, Especial Culto Divino, Diaconisas, Diáconos o Audiovisual</strong>.
           </div>
 
           <div id="conflictAlert" class="alert alert-danger" style="display: none;">
@@ -1863,6 +1919,8 @@
                 <option value="anciano">Anciano de Turno (Solo Sábados)</option>
                 <option value="predicaciones">Predicación</option>
                 <option value="alabanza">Alabanza</option>
+                <option value="especial_es">Especial Escuela Sabática</option>
+                <option value="especial_cd">Especial Culto Divino</option>
                 <option value="diaconisas">Diaconisas</option>
                 <option value="diaconos">Diáconos</option>
                 <option value="audiovisual">Audiovisual</option>
@@ -1901,7 +1959,7 @@
         <div class="card" style="background: #f8fafc;">
           <div class="card-title">Reglas de Asignación y Bloqueo</div>
           <div style="font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px;">
-            <p><strong>1. Flexibilidad total de áreas:</strong> Cualquier hermano(a) registrado puede participar indistintamente en <strong>Predicación, Alabanza, Diaconisas o Diáconos</strong>.</p>
+            <p><strong>1. Flexibilidad total de áreas:</strong> Cualquier hermano(a) registrado puede participar indistintamente en <strong>Predicación, Alabanza, Especial Escuela Sabática, Especial Culto Divino, Diaconisas, Diáconos o Audiovisual</strong>.</p>
             <p><strong>2. Bloqueo estricto del mismo día:</strong> Un hermano no puede tener dos responsabilidades en la misma fecha (incluso si son de áreas distintas).</p>
             <div style="background: #fee2e2; border-left: 3px solid #ef4444; padding: 6px 10px; border-radius: 4px; color: #991b1b; font-weight: 600; font-size: 0.78rem;">
               "Tiene que cambiar la fecha para este colaborador porque ya tiene un turno asignado ese día."
@@ -1946,7 +2004,7 @@
             </div>
 
             <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 9px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; color: #1e40af; margin-bottom: 14px;">
-              <strong>Habilitación universal:</strong> Queda disponible de inmediato para las 5 áreas (Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual).
+              <strong>Habilitación universal:</strong> Queda disponible de inmediato para todas las áreas (Predicación, Alabanza, Especial Escuela Sabática, Especial Culto Divino, Diaconisas, Diáconos y Audiovisual).
             </div>
 
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 4px;">
@@ -2002,11 +2060,13 @@
         <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
           <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
             <input type="text" id="searchShiftInput" class="form-control" style="max-width: 220px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
-            <select id="filterShiftDept" class="form-control" style="max-width: 200px;" onchange="renderShiftsTable()">
+            <select id="filterShiftDept" class="form-control" style="max-width: 220px;" onchange="renderShiftsTable()">
               <option value="ALL">Todas las Áreas</option>
               <option value="anciano">Anciano de Turno</option>
               <option value="predicaciones">Predicación</option>
               <option value="alabanza">Alabanza</option>
+              <option value="especial_es">Especial Escuela Sabática</option>
+              <option value="especial_cd">Especial Culto Divino</option>
               <option value="diaconisas">Diaconisas</option>
               <option value="diaconos">Diáconos</option>
               <option value="audiovisual">Audiovisual</option>
@@ -2370,6 +2430,8 @@
             <option value="Salud y Temperancia">
             <option value="Ministerio de la Mujer / Dorcas">
             <option value="Alabanza y Música">
+            <option value="Especial Escuela Sabática">
+            <option value="Especial Culto Divino">
             <option value="Diaconía (Diáconos / Diaconisas)">
             <option value="Audiovisual y Comunicaciones">
             <option value="Ancianos / Junta de Iglesia">
@@ -2919,6 +2981,8 @@
       'anciano': { id: 'anciano', name: 'Anciano de Turno', icon: '', badgeClass: 'area-anciano', color: '#475569', saturdayOnly: true },
       'predicaciones': { id: 'predicaciones', name: 'Predicación', icon: '', badgeClass: 'area-predicaciones', color: '#2563eb' },
       'alabanza': { id: 'alabanza', name: 'Alabanza', icon: '', badgeClass: 'area-alabanza', color: '#d97706' },
+      'especial_es': { id: 'especial_es', name: 'Especial Escuela Sabática', icon: '', badgeClass: 'area-especial_es', color: '#0d9488', saturdayOnly: true },
+      'especial_cd': { id: 'especial_cd', name: 'Especial Culto Divino', icon: '', badgeClass: 'area-especial_cd', color: '#ea580c', saturdayOnly: true },
       'diaconisas': { id: 'diaconisas', name: 'Diaconisas', icon: '', badgeClass: 'area-diaconisas', color: '#db2777' },
       'diaconos': { id: 'diaconos', name: 'Diáconos', icon: '', badgeClass: 'area-diaconos', color: '#16a34a' },
       'audiovisual': { id: 'audiovisual', name: 'Audiovisual', icon: '', badgeClass: 'area-audiovisual', color: '#7c3aed' }
@@ -3911,7 +3975,7 @@
         return;
       }
 
-      if (DEPARTMENTS[departmentId] && DEPARTMENTS[departmentId].saturdayOnly && !isSaturday(date)) {
+      if ( departmentId === 'anciano' && !isSaturday(date)) {
         alert('ATENCIÓN: El cargo de "Anciano de Turno" solo se puede asignar para los días SÁBADO.');
         return;
       }
@@ -3971,7 +4035,7 @@
       renderCalendar();
     }
 
-    const DEPT_ORDER = ['anciano', 'predicaciones', 'alabanza', 'diaconisas', 'diaconos', 'audiovisual'];
+    const DEPT_ORDER = ['anciano', 'predicaciones', 'alabanza', 'especial_es', 'especial_cd', 'diaconisas', 'diaconos', 'audiovisual'];
 
     function renderCalendar() {
       document.getElementById('calendarMonthTitle').innerText = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
@@ -3982,26 +4046,10 @@
       const today = new Date();
       const todayStr = formatDateKey(today);
 
-      let cursor = new Date(currentYear, currentMonth, 1);
-      if (cursor.getDay() === 6) {
-        cursor.setDate(cursor.getDate() - 1);
-      } else {
-        while (cursor.getDay() !== 5) {
-          cursor.setDate(cursor.getDate() + 1);
-        }
-      }
+      // Obtenemos todas las semanas del mes (4 o 5 semanas según el mes completo, ej. Octubre)
+      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
 
-      // Estrictamente 4 semanas = exactamente 8 columnas (Viernes y Sábado x 4)
-      const weekends = [];
-      while (weekends.length < 4) {
-        const fri = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
-        const sat = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
-
-        weekends.push({ friday: fri, saturday: sat });
-        cursor.setDate(cursor.getDate() + 7);
-      }
-
-      // Las 8 columnas corresponden a: Viernes, Sábado, Viernes, Sábado... (los 8 días de las 4 semanas)
+      // Las columnas corresponden a todos los Viernes y Sábados del mes (8 o 10 columnas)
       const allDays = [];
       weekends.forEach((wk, wkIdx) => {
         allDays.push({
@@ -4020,13 +4068,20 @@
         });
       });
 
-      const gridTemplate = 'repeat(8, minmax(135px, 1fr))';
+      const totalCols = allDays.length;
+      const colsBadge = document.getElementById('calendarColsInfoBadge');
+      if (colsBadge) {
+        colsBadge.innerText = `${totalCols} Columnas: Los ${totalCols} días de turno de ${MONTH_NAMES[currentMonth]} (${weekends.length} semanas • Viernes y Sábado)`;
+      }
+
+      const gridTemplate = `repeat(${totalCols}, minmax(135px, 1fr))`;
 
       const scrollContainer = document.createElement('div');
       scrollContainer.className = 'calendar-8days-container';
 
       const wrapper = document.createElement('div');
       wrapper.className = 'calendar-8days-wrapper';
+      wrapper.style.minWidth = `${totalCols * 145}px`;
 
       // 1. Fila de Cabeceras: 8 Columnas (Viernes, Sábado, Viernes, Sábado...)
       const headerRow = document.createElement('div');
@@ -4095,21 +4150,21 @@
 
       let slotsHTML = '<div class="col-ministry-slots">';
 
-      // Mostramos los 4 ministerios para cada día
+      // Mostramos los ministerios para cada día
       DEPT_ORDER.forEach(deptKey => {
         const dept = DEPARTMENTS[deptKey];
         if (!dept) return;
-
-        // "Anciano de Turno" es exclusivamente para los días Sábado
-        if (isFri && dept.saturdayOnly) {
-          return;
-        }
 
         if (deptFilter !== 'ALL' && deptFilter !== deptKey) {
           return;
         }
 
         const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+
+        // Cargos exclusivos de sábado no muestran ranura vacía los viernes
+        if (isFri && dept.saturdayOnly && deptShifts.length === 0) {
+          return;
+        }
 
         if (deptShifts.length > 0) {
           deptShifts.forEach(shift => {
@@ -4356,6 +4411,14 @@
       }
       document.getElementById('statPredicaciones').innerText = shifts.filter(s => s.departmentId === 'predicaciones').length;
       document.getElementById('statAlabanza').innerText = shifts.filter(s => s.departmentId === 'alabanza').length;
+      const statEspES = document.getElementById('statEspecialES');
+      if (statEspES) {
+        statEspES.innerText = shifts.filter(s => s.departmentId === 'especial_es').length;
+      }
+      const statEspCD = document.getElementById('statEspecialCD');
+      if (statEspCD) {
+        statEspCD.innerText = shifts.filter(s => s.departmentId === 'especial_cd').length;
+      }
       document.getElementById('statDiaconisas').innerText = shifts.filter(s => s.departmentId === 'diaconisas').length;
       document.getElementById('statDiaconos').innerText = shifts.filter(s => s.departmentId === 'diaconos').length;
       const statAudio = document.getElementById('statAudiovisual');
@@ -4498,9 +4561,12 @@
       }
 
       const weekends = [];
-      while (weekends.length < 4) {
+      while (true) {
         const fri = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
         const sat = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
+        if (fri.getMonth() !== month && sat.getMonth() !== month) {
+          break;
+        }
         weekends.push({ friday: fri, saturday: sat });
         cursor.setDate(cursor.getDate() + 7);
       }
@@ -4528,9 +4594,9 @@
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
             if (!dept) return;
-            if (d.name === 'Viernes' && dept.saturdayOnly) return;
 
             const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+            if (d.name === 'Viernes' && dept.saturdayOnly && deptShifts.length === 0) return;
 
             if (deptShifts.length > 0) {
               deptShifts.forEach(shift => {
@@ -4600,9 +4666,9 @@
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
             if (!dept) return;
-            if (d.isFri && dept.saturdayOnly) return;
 
             const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+            if (d.isFri && dept.saturdayOnly && deptShifts.length === 0) return;
 
             let assignedText = '<span style="color: #94a3b8; font-style: italic;">Sin asignar</span>';
             let notesText = '<span style="color: #94a3b8;">-</span>';
@@ -4630,13 +4696,13 @@
 
             slotsRowsHtml += `
               <tr>
-                <td style="padding: 2px 5px; font-weight: 700; width: 25%; border-bottom: 1px solid #f1f5f9; color: ${dept.color}; white-space: nowrap; vertical-align: top;">
+                <td style="padding: 1.5px 5px; font-weight: 700; width: 32%; border-bottom: 1px solid #f1f5f9; color: ${dept.color}; white-space: nowrap; vertical-align: top;">
                   ${dept.icon} ${dept.name}
                 </td>
-                <td style="padding: 2px 5px; border-bottom: 1px solid #f1f5f9; color: #0f172a; width: 45%; vertical-align: top;">
+                <td style="padding: 1.5px 5px; border-bottom: 1px solid #f1f5f9; color: #0f172a; width: 40%; vertical-align: top;">
                   ${assignedText}
                 </td>
-                <td style="padding: 2px 5px; border-bottom: 1px solid #f1f5f9; color: #475569; font-size: 0.88em; width: 30%; vertical-align: top;">
+                <td style="padding: 1.5px 5px; border-bottom: 1px solid #f1f5f9; color: #475569; font-size: 0.88em; width: 28%; vertical-align: top;">
                   ${notesText}
                 </td>
               </tr>
@@ -4712,7 +4778,7 @@
         <div style="border-bottom: 1.5px solid #d4af37; padding-bottom: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
           <div>
             <div style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; color: #082142; letter-spacing: -0.3px;">Programación de Turnos y Responsabilidades</div>
-            <div style="color: #64748b; font-size: 0.7rem; font-weight: 600; margin-top: 2px;">Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</div>
+            <div style="color: #64748b; font-size: 0.7rem; font-weight: 600; margin-top: 2px;">Predicación, Alabanza, Especial Escuela Sabática, Especial Culto Divino, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</div>
           </div>
           <div style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 800; padding: 4px 12px; border-radius: 999px; font-size: 0.88rem; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(8,33,66,0.18);">
             ${monthName.toUpperCase()} ${currentYear}
@@ -4760,6 +4826,9 @@
 
     function exportMonthPrintPDF() {
       const monthName = MONTH_NAMES[currentMonth];
+      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
+      const defaultZoom = weekends.length >= 5 ? 0.80 : 0.90;
+      const defaultZoomPct = Math.round(defaultZoom * 100);
       const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear);
 
       const printWindow = window.open('', '_blank');
@@ -4821,7 +4890,7 @@
             margin: 0 !important;
             max-width: 100% !important;
             width: 100% !important;
-            zoom: 0.94;
+            zoom: ${defaultZoom};
           }
           .no-print { display: none !important; }
         }
@@ -4831,8 +4900,8 @@
       printDoc.body.innerHTML = `
         <div class="print-container" id="printableArea">
           <div class="toolbar no-print">
-            <span style="font-size: 0.75rem; color: #082142; font-weight: 600; margin-right: auto;">Estilo Oficial OneVoice27 &bull; Configurado para <strong>1 sola página</strong></span>
-            <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">94%</span>
+            <span style="font-size: 0.75rem; color: #082142; font-weight: 600; margin-right: auto;">Estilo Oficial OneVoice27 &bull; Configurado para <strong>1 sola página (${weekends.length} semanas)</strong></span>
+            <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">${defaultZoomPct}%</span>
             <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">Reducir</button>
             <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">Ampliar</button>
             <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" title="Descargar como imagen PNG en alta resolución" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar Imagen (PNG)</button>
@@ -4847,7 +4916,7 @@
           <div class="header-banner">
             <div class="header-title">
               <h1>Programación de Turnos y Responsabilidades</h1>
-              <p>Predicación, Alabanza, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</p>
+              <p>Predicación, Alabanza, Especial Escuela Sabática, Especial Culto Divino, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</p>
             </div>
             <div class="badge-month">
               ${monthName.toUpperCase()} ${currentYear}
@@ -4865,7 +4934,7 @@
         </div>
 
         <script>
-          let currentZoom = 0.94;
+          let currentZoom = ${defaultZoom};
           function zoomDoc(delta) {
             currentZoom = Math.max(0.65, Math.min(1.2, parseFloat((currentZoom + delta).toFixed(2))));
             const area = document.getElementById('printableArea');
@@ -5425,6 +5494,8 @@
       'dorcas': { icon: '', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
       'alabanza y música': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
       'alabanza': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+      'especial escuela sabática': { icon: '', color: '#0f766e', bg: '#ccfbf1', border: '#5eead4' },
+      'especial culto divino': { icon: '', color: '#c2410c', bg: '#ffedd5', border: '#fdba74' },
       'diaconía (diáconos / diaconisas)': { icon: '', color: '#0f766e', bg: '#ccfbf1', border: '#99f6e4' },
       'diáconos': { icon: '', color: '#16a34a', bg: '#dcfce7', border: '#bbf7d0' },
       'diaconisas': { icon: '', color: '#db2777', bg: '#fce7f3', border: '#fbcfe8' },
@@ -6267,23 +6338,8 @@
 
       select.innerHTML = '';
       
-      // Obtenemos los fines de semana del mes visible en el calendario
-      let cursor = new Date(currentYear, currentMonth, 1);
-      if (cursor.getDay() === 6) {
-        cursor.setDate(cursor.getDate() - 1);
-      } else {
-        while (cursor.getDay() !== 5) {
-          cursor.setDate(cursor.getDate() + 1);
-        }
-      }
-
-      const weekendsList = [];
-      while (weekendsList.length < 5) {
-        const fri = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
-        const sat = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
-        weekendsList.push({ friday: fri, saturday: sat });
-        cursor.setDate(cursor.getDate() + 7);
-      }
+      // Obtenemos todos los fines de semana del mes visible en el calendario (4 o 5 semanas)
+      const weekendsList = getScheduleDaysForMonth(currentYear, currentMonth);
 
       const todayStr = formatDateKey(new Date());
       let selectedIdx = 0;
