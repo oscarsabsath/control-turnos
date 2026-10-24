@@ -1876,9 +1876,9 @@
             <strong>Cualquier hermano(a)</strong> puede ser seleccionado para <strong>Predicación, Alabanza, Especial, Diaconisas, Diáconos o Audiovisual</strong>.
           </div>
 
-          <div id="conflictAlert" class="alert alert-danger" style="display: none;">
+          <div id="conflictAlert" class="alert" style="display: none; background-color: #fef3c7; border: 1px solid #fcd34d; color: #92400e;">
             <div>
-              <strong>Conflicto detectado:</strong>
+              <strong>Aviso de responsabilidad existente:</strong>
               <div id="conflictAlertMessage" style="margin-top: 3px;"></div>
             </div>
           </div>
@@ -1928,12 +1928,12 @@
         </div>
 
         <div class="card" style="background: #f8fafc;">
-          <div class="card-title">Reglas de Asignación y Bloqueo</div>
+          <div class="card-title">Reglas de Asignación</div>
           <div style="font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px;">
             <p><strong>1. Flexibilidad total de áreas:</strong> Cualquier hermano(a) registrado puede participar indistintamente en <strong>Predicación, Alabanza, Especial, Diaconisas, Diáconos o Audiovisual</strong>.</p>
-            <p><strong>2. Bloqueo estricto del mismo día:</strong> Un hermano no puede tener dos responsabilidades en la misma fecha (incluso si son de áreas distintas).</p>
-            <div style="background: #fee2e2; border-left: 3px solid #ef4444; padding: 6px 10px; border-radius: 4px; color: #991b1b; font-weight: 600; font-size: 0.78rem;">
-              "Tiene que cambiar la fecha para este colaborador porque ya tiene un turno asignado ese día."
+            <p><strong>2. Múltiples responsabilidades el mismo día:</strong> Se permite asignar varias responsabilidades a una misma persona en la misma fecha.</p>
+            <div style="background: #fef3c7; border-left: 3px solid #f59e0b; padding: 6px 10px; border-radius: 4px; color: #92400e; font-weight: 600; font-size: 0.78rem;">
+              Si el hermano(a) ya está destinado(a) en otra responsabilidad ese día, el sistema mostrará una ventana de confirmación advirtiéndolo antes de guardar.
             </div>
             <p><strong>3. Exclusivo Viernes y Sábado:</strong> No se pueden programar turnos de domingo a jueves.</p>
           </div>
@@ -2118,6 +2118,29 @@
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeDayModal()">Cerrar</button>
         <button class="btn btn-primary admin-only" id="btnModalAddShift">Asignar responsabilidad</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMACIÓN DE MÚLTIPLES RESPONSABILIDADES EL MISMO DÍA -->
+  <div id="confirmMultiAssignModal" class="modal-backdrop" onclick="if (event.target === this) closeConfirmMultiAssignModal()">
+    <div class="modal" style="max-width: 460px; border-top: 4px solid #f59e0b;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #92400e; display: flex; align-items: center; gap: 8px;">
+          ⚠️ Persona ya destinada ese día
+        </h3>
+        <button class="modal-close" onclick="closeConfirmMultiAssignModal()">&times;</button>
+      </div>
+      <div id="confirmMultiAssignMessage" style="font-size: 0.9rem; color: var(--text); line-height: 1.5; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+      </div>
+      <p style="font-size: 0.84rem; color: var(--text-muted); font-weight: 600;">
+        ¿Deseas confirmar y asignarle también esta nueva responsabilidad en el mismo día?
+      </p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeConfirmMultiAssignModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnConfirmMultiAssignYes" style="background: linear-gradient(135deg, #b45309 0%, #d97706 100%); border-color: #b45309;">
+          Sí, Asignar de Todas Formas
+        </button>
       </div>
     </div>
   </div>
@@ -3847,6 +3870,17 @@
     }
 
     function onDepartmentSelected() {
+      const deptVal = document.getElementById('assignDepartment').value;
+      const notesInput = document.getElementById('assignNotes');
+      if (notesInput) {
+        if (deptVal === 'especial') {
+          if (!notesInput.value.trim()) {
+            notesInput.value = 'Escuela y Culto';
+          }
+        } else if (notesInput.value.trim() === 'Escuela y Culto') {
+          notesInput.value = '';
+        }
+      }
       validateShiftDateAndDepartment();
       checkRealtimeConflict();
     }
@@ -3900,8 +3934,12 @@
 
       alertBox.style.display = 'none';
 
-      // Si ya hay error de validación de sábado para anciano, no reactivar botón
+      // Si ya hay error de validación de fecha o de sábado para anciano, mantener deshabilitado
       const deptVal = document.getElementById('assignDepartment').value;
+      if (dateVal && !isFridayOrSaturday(dateVal)) {
+        submitBtn.disabled = true;
+        return false;
+      }
       if (deptVal === 'anciano' && dateVal && !isSaturday(dateVal)) {
         submitBtn.disabled = true;
         return false;
@@ -3911,23 +3949,67 @@
 
       if (!colabId || !dateVal) return false;
 
-      const conflict = shifts.find(s => s.collaboratorId === colabId && s.date === dateVal);
-      if (conflict) {
+      const existingShifts = shifts.filter(s => s.collaboratorId === colabId && s.date === dateVal);
+      if (existingShifts.length > 0) {
         const colab = collaborators.find(c => c.id === colabId);
         const colabName = colab ? colab.name : 'Este hermano(a)';
-        const assignedArea = DEPARTMENTS[conflict.departmentId] ? `${DEPARTMENTS[conflict.departmentId].icon} ${DEPARTMENTS[conflict.departmentId].name}` : conflict.departmentId;
+        const assignedAreas = existingShifts.map(s => {
+          return DEPARTMENTS[s.departmentId] ? DEPARTMENTS[s.departmentId].name : s.departmentId;
+        }).join(', ');
 
         alertMsg.innerHTML = `
-          El hermano(a) <strong>${colabName}</strong> ya tiene una responsabilidad asignada para la fecha <strong>${dateVal}</strong> en <strong>${assignedArea}</strong>.<br>
-          <span style="font-weight: 700; color: #b91c1c; font-size: 0.95rem; display: block; margin-top: 4px;">
-            TIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.
+          El hermano(a) <strong>${colabName}</strong> ya está destinado(a) en la fecha <strong>${dateVal}</strong> en: <strong>${assignedAreas}</strong>.<br>
+          <span style="font-weight: 700; color: #b45309; font-size: 0.82rem; display: block; margin-top: 4px;">
+            Puedes continuar: al pulsar "Confirmar y Asignar" se mostrará una ventana de confirmación.
           </span>
         `;
         alertBox.style.display = 'block';
-        submitBtn.disabled = true;
         return true;
       }
       return false;
+    }
+
+    let pendingMultiAssignData = null;
+
+    function openConfirmMultiAssignModal(shiftData, colabName, existingAreasText, newAreaName) {
+      pendingMultiAssignData = shiftData;
+      const msgEl = document.getElementById('confirmMultiAssignMessage');
+      if (msgEl) {
+        msgEl.innerHTML = `
+          El hermano(a) <strong>${colabName}</strong> ya está destinado(a) en otra responsabilidad el <strong>${shiftData.dayOfWeek} ${shiftData.date}</strong>:<br>
+          <div style="margin: 8px 0; padding: 6px 10px; background: #fef3c7; border-left: 3px solid #d97706; border-radius: 4px; font-weight: 700; color: #92400e;">
+            Responsabilidad actual: ${existingAreasText}
+          </div>
+          Nueva responsabilidad a agregar: <strong style="color: #0f172a;">${newAreaName}</strong>
+        `;
+      }
+      const btnYes = document.getElementById('btnConfirmMultiAssignYes');
+      if (btnYes) {
+        btnYes.onclick = confirmAndSaveMultiAssign;
+      }
+      const modal = document.getElementById('confirmMultiAssignModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeConfirmMultiAssignModal() {
+      const modal = document.getElementById('confirmMultiAssignModal');
+      if (modal) modal.classList.remove('open');
+      pendingMultiAssignData = null;
+    }
+
+    function confirmAndSaveMultiAssign() {
+      if (!pendingMultiAssignData) return;
+      const dataToSave = pendingMultiAssignData;
+      closeConfirmMultiAssignModal();
+      finalizeShiftAssignment(dataToSave);
+    }
+
+    function finalizeShiftAssignment(shiftObj) {
+      shifts.push(shiftObj);
+      saveData();
+      resetAssignForm();
+      showToast('Responsabilidad asignada con éxito', 'success');
+      switchTab('calendarTab');
     }
 
     function handleAssignShift(e) {
@@ -3936,39 +4018,45 @@
       const departmentId = document.getElementById('assignDepartment').value;
       const collaboratorId = document.getElementById('assignCollaborator').value;
       const date = document.getElementById('assignDate').value;
-      const notes = document.getElementById('assignNotes').value.trim();
+      let notes = document.getElementById('assignNotes').value.trim();
+
+      if (departmentId === 'especial' && !notes) {
+        notes = 'Escuela y Culto';
+      }
 
       if (!isFridayOrSaturday(date)) {
         alert('Solo se pueden asignar responsabilidades en días Viernes o Sábado.');
         return;
       }
 
-      if ( departmentId === 'anciano' && !isSaturday(date)) {
+      if (departmentId === 'anciano' && !isSaturday(date)) {
         alert('ATENCIÓN: El cargo de "Anciano de Turno" solo se puede asignar para los días SÁBADO.');
         return;
       }
 
-      const conflict = shifts.find(s => s.collaboratorId === collaboratorId && s.date === date);
-      if (conflict) {
-        const colab = collaborators.find(c => c.id === collaboratorId);
-        const conflictArea = DEPARTMENTS[conflict.departmentId] ? DEPARTMENTS[conflict.departmentId].name : conflict.departmentId;
-        alert(`ATENCIÓN: El hermano(a) ${colab ? colab.name : ''} ya tiene asignación en ${conflictArea} para esa fecha.\n\nTIENE QUE CAMBIAR LA FECHA PARA ESTE COLABORADOR.`);
-        return;
-      }
-
-      shifts.push({
+      const newShift = {
         id: 'shift_' + Date.now(),
         collaboratorId,
         departmentId,
         date,
         dayOfWeek: getDayOfWeekName(date),
         notes
-      });
+      };
 
-      saveData();
-      resetAssignForm();
-      showToast('Responsabilidad asignada con éxito', 'success');
-      switchTab('calendarTab');
+      const existingShifts = shifts.filter(s => s.collaboratorId === collaboratorId && s.date === date);
+      if (existingShifts.length > 0) {
+        const colab = collaborators.find(c => c.id === collaboratorId);
+        const colabName = colab ? colab.name : 'Este hermano(a)';
+        const existingAreasText = existingShifts.map(s => {
+          return DEPARTMENTS[s.departmentId] ? DEPARTMENTS[s.departmentId].name : s.departmentId;
+        }).join(', ');
+        const newAreaName = DEPARTMENTS[departmentId] ? DEPARTMENTS[departmentId].name : departmentId;
+
+        openConfirmMultiAssignModal(newShift, colabName, existingAreasText, newAreaName);
+        return;
+      }
+
+      finalizeShiftAssignment(newShift);
     }
 
     function resetAssignForm() {
@@ -4252,11 +4340,10 @@
     function quickAssignDate(dateStr, departmentId = null) {
       if (!ensureAuth(() => quickAssignDate(dateStr, departmentId))) return;
       switchTab('assignTab');
-      if (departmentId) {
-        const deptSelect = document.getElementById('assignDepartment');
-        if (deptSelect) {
-          deptSelect.value = departmentId;
-        }
+      const deptSelect = document.getElementById('assignDepartment');
+      if (departmentId && deptSelect) {
+        deptSelect.value = departmentId;
+        onDepartmentSelected();
       }
       const dateInput = document.getElementById('assignDate');
       if (dateInput) {
