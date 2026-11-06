@@ -1372,36 +1372,37 @@
     }
 
     /* ==========================================================
-       PROGRAMA TRIMESTRAL DE ACTIVIDADES (ESTILOS)
+       PROGRAMA TRIMESTRAL DE ACTIVIDADES (ESTILOS COMPACTOS)
        ========================================================== */
     .quarter-controls {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-      background: #f8fafc;
-      padding: 12px 16px;
+      gap: 10px;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      padding: 10px 14px;
       border-radius: var(--radius);
       border: 1.5px solid #cbd5e1;
+      box-shadow: 0 1px 3px rgba(32, 63, 93, 0.05);
     }
 
     .quarter-buttons {
       display: inline-flex;
       background: #e2e8f0;
-      padding: 3px;
-      border-radius: 8px;
-      gap: 3px;
+      padding: 2px;
+      border-radius: 7px;
+      gap: 2px;
     }
 
     .quarter-btn {
-      padding: 6px 13px;
-      font-size: 0.82rem;
+      padding: 5px 11px;
+      font-size: 0.78rem;
       font-weight: 700;
       border: none;
       background: transparent;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       color: #475569;
       transition: all 0.15s ease;
@@ -1409,23 +1410,55 @@
 
     .quarter-btn:hover {
       color: #0f172a;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.65);
     }
 
     .quarter-btn.active {
       background: linear-gradient(135deg, #203f5d 0%, #38628b 100%);
       color: #ffffff;
       border: 1px solid #d4af37;
-      box-shadow: 0 2px 6px rgba(32, 63, 93, 0.25);
+      box-shadow: 0 2px 5px rgba(32, 63, 93, 0.22);
+    }
+
+    .quarter-view-toggle {
+      display: inline-flex;
+      background: #e2e8f0;
+      padding: 2px;
+      border-radius: 6px;
+      gap: 2px;
+    }
+
+    .quarter-view-btn {
+      padding: 4px 9px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.15s ease;
+    }
+
+    .quarter-view-btn.active {
+      background: #ffffff;
+      color: #1e3a8a;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .quarter-months-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 10px;
+      align-items: start;
     }
 
-    @media (max-width: 960px) {
+    .quarter-months-grid.table-mode {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 980px) {
       .quarter-months-grid {
         grid-template-columns: 1fr;
       }
@@ -1435,19 +1468,19 @@
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
       border-radius: var(--radius);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 6px rgba(32, 63, 93, 0.06);
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
     .quarter-month-header {
-      background: linear-gradient(135deg, #203f5d 0%, #2b4f73 50%, #38628b 100%);
-      border-bottom: 2.5px solid #d4af37;
+      background: linear-gradient(135deg, #203f5d 0%, #2b4f73 55%, #38628b 100%);
+      border-bottom: 2px solid #d4af37;
       color: #ffffff;
-      padding: 10px 14px;
+      padding: 7px 12px;
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 0.98rem;
+      font-size: 0.9rem;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -1456,20 +1489,21 @@
     }
 
     .quarter-month-count {
-      background: rgba(255, 255, 255, 0.25);
-      padding: 2px 8px;
+      font-family: 'Montserrat', sans-serif;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 1px 7px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
     }
 
     .quarter-activities-list {
-      padding: 12px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 5px;
       flex: 1;
-      min-height: 200px;
       background: #f8fafc;
     }
 
@@ -1478,106 +1512,202 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       color: #94a3b8;
-      font-size: 0.82rem;
-      padding: 40px 14px;
+      font-size: 0.78rem;
+      padding: 24px 12px;
       text-align: center;
       font-weight: 500;
-      height: 100%;
     }
 
     .activity-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-left: 4px solid #2563eb;
-      border-radius: 8px;
-      padding: 10px 12px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      border-left: 3.5px solid #2563eb;
+      border-radius: 6px;
+      padding: 6px 8px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      transition: all 0.12s ease;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 8px;
+      align-items: center;
     }
 
     .activity-card:hover {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 3px 8px rgba(32, 63, 93, 0.1);
       border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .act-cal-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 3px 2px;
+      line-height: 1.05;
+      min-height: 38px;
+      text-align: center;
+    }
+
+    .act-cal-box.is-sat {
+      background: #fef3c7;
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+
+    .act-cal-box.is-fri {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1e40af;
+    }
+
+    .act-cal-box.is-sun {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
+    }
+
+    .act-cal-dow {
+      font-size: 0.58rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      opacity: 0.85;
+    }
+
+    .act-cal-num {
+      font-size: 0.96rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .act-body-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
     }
 
     .activity-meta-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 4px;
       flex-wrap: wrap;
     }
 
-    .activity-date-badge {
-      font-size: 0.76rem;
+    .activity-time-badge {
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #bae6fd;
+      white-space: nowrap;
+    }
+
+    .activity-duration-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #0f766e;
+      background: #ccfbf1;
+      padding: 1px 5px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #99f6e4;
+      white-space: nowrap;
+    }
+
+    .activity-dept-badge {
+      font-size: 0.68rem;
       font-weight: 800;
-      color: #1e293b;
-      background: #f1f5f9;
-      padding: 3px 8px;
+      padding: 1px 7px;
       border-radius: 4px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .activity-time-badge {
-      font-size: 0.74rem;
-      font-weight: 700;
-      color: #0369a1;
-      background: #e0f2fe;
-      padding: 2px 7px;
-      border-radius: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      border: 1px solid #bae6fd;
-    }
-
-    .activity-duration-badge {
-      font-size: 0.74rem;
-      font-weight: 700;
-      color: #0f766e;
-      background: #ccfbf1;
-      padding: 2px 7px;
-      border-radius: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      border: 1px solid #99f6e4;
-    }
-
-    .activity-dept-badge {
-      font-size: 0.76rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
       width: fit-content;
+      max-width: 100%;
     }
 
     .activity-notes-text {
-      font-size: 0.84rem;
-      color: #1e293b;
-      line-height: 1.4;
-      font-weight: 500;
+      font-size: 0.77rem;
+      color: #0f172a;
+      line-height: 1.3;
+      font-weight: 600;
       word-break: break-word;
     }
 
     .activity-card-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-      margin-top: 4px;
-      border-top: 1px dashed #e2e8f0;
-      padding-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: auto;
+    }
+
+    .act-mini-btn {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .act-mini-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .act-mini-btn.danger {
+      color: #dc2626;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .act-mini-btn.danger:hover {
+      background: #fee2e2;
+    }
+
+    /* Tabla compacta del trimestre */
+    .quarter-compact-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.76rem;
+      background: #ffffff;
+    }
+
+    .quarter-compact-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 6px 10px;
+      border-bottom: 1.5px solid #cbd5e1;
+    }
+
+    .quarter-compact-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+
+    .quarter-compact-table tr:hover td {
+      background: #f8fafc;
     }
 
     @media (max-width: 640px) {
@@ -1819,10 +1949,14 @@
           </div>
 
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <div class="quarter-view-toggle" title="Cambiar modo de visualización">
+              <button type="button" class="quarter-view-btn active" id="qViewColsBtn" onclick="setQuarterViewMode('cols')">3 Columnas</button>
+              <button type="button" class="quarter-view-btn" id="qViewTableBtn" onclick="setQuarterViewMode('table')">Tabla Compacta</button>
+            </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <label style="font-weight: 600; font-size: 0.8rem; margin: 0;">Filtrar:</label>
-              <select id="filterQuarterDept" class="form-control" style="width: auto; font-size: 0.82rem;" onchange="renderQuarterlyActivities()">
-                <option value="ALL">Todos los Departamentos</option>
+              <label style="font-weight: 600; font-size: 0.78rem; margin: 0;">Depto:</label>
+              <select id="filterQuarterDept" class="form-control" style="width: auto; font-size: 0.78rem; padding: 4px 8px;" onchange="renderQuarterlyActivities()">
+                <option value="ALL">Todos</option>
               </select>
             </div>
 
@@ -5901,6 +6035,14 @@
       }
     }
 
+    let quarterViewMode = localStorage.getItem('church_quarter_view_mode') || 'cols';
+
+    function setQuarterViewMode(mode) {
+      quarterViewMode = mode === 'table' ? 'table' : 'cols';
+      try { localStorage.setItem('church_quarter_view_mode', quarterViewMode); } catch (e) {}
+      renderQuarterlyActivities();
+    }
+
     function renderQuarterlyActivities() {
       for (let i = 1; i <= 4; i++) {
         const btn = document.getElementById(`qBtn${i}`);
@@ -5908,6 +6050,13 @@
           if (i === selectedQuarter) btn.classList.add('active');
           else btn.classList.remove('active');
         }
+      }
+
+      const colsBtn = document.getElementById('qViewColsBtn');
+      const tableBtn = document.getElementById('qViewTableBtn');
+      if (colsBtn && tableBtn) {
+        colsBtn.classList.toggle('active', quarterViewMode === 'cols');
+        tableBtn.classList.toggle('active', quarterViewMode === 'table');
       }
 
       populateQuarterYearSelect();
@@ -5922,6 +6071,8 @@
       const filterDept = document.getElementById('filterQuarterDept')?.value || 'ALL';
       const grid = document.getElementById('quarterMonthsGrid');
       if (!grid) return;
+
+      grid.classList.toggle('table-mode', quarterViewMode === 'table');
 
       const qMonths = getQuarterMonths(selectedQuarter);
       let gridHtml = '';
@@ -5943,66 +6094,127 @@
           return (a.time || '').localeCompare(b.time || '');
         });
 
-        let activitiesCardsHtml = '';
+        let monthBodyHtml = '';
         if (monthActivities.length === 0) {
-          activitiesCardsHtml = `
-            <div class="quarter-empty-state">
-              <div>Sin actividades programadas para ${monthName}</div>
-              ${isAuthenticated ? `
-                <button class="btn btn-outline btn-sm" style="margin-top: 8px;" onclick="openAddActivityModal(${monthIdx})">
-                  Programar en ${monthName}
-                </button>
-              ` : ''}
+          monthBodyHtml = `
+            <div class="quarter-activities-list">
+              <div class="quarter-empty-state">
+                <div>Sin actividades en ${monthName}</div>
+                ${isAuthenticated ? `
+                  <button class="btn btn-outline btn-sm" style="margin-top: 4px; padding: 3px 8px; font-size: 0.72rem;" onclick="openAddActivityModal(${monthIdx})">
+                    + Programar en ${monthName}
+                  </button>
+                ` : ''}
+              </div>
             </div>
           `;
-        } else {
+        } else if (quarterViewMode === 'table') {
+          let rowsHtml = '';
           monthActivities.forEach(act => {
             const style = getDepartmentStyle(act.department);
             const dateObj = new Date(act.date + 'T00:00:00');
-            const dayNum = dateObj.getDate();
-            const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][dateObj.getDay()];
+            const dayNum = String(dateObj.getDate()).padStart(2, '0');
+            const dowIdx = dateObj.getDay();
+            const dayFull = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][dowIdx];
+            const showTime = act.time && act.time !== '-' ? act.time : '—';
+
+            rowsHtml += `
+              <tr>
+                <td style="white-space: nowrap; font-weight: 800; color: #1e3a8a; width: 95px;">${escapeHtml(act.date)}</td>
+                <td style="white-space: nowrap; font-weight: 700; color: ${dowIdx === 6 ? '#92400e' : (dowIdx === 5 ? '#1e40af' : '#475569')}; width: 95px;">${dayFull} ${dayNum}</td>
+                <td style="white-space: nowrap; width: 130px;">
+                  <span class="activity-time-badge">${escapeHtml(showTime)}</span>
+                  ${act.duration ? `<span class="activity-duration-badge" style="margin-left: 3px;">${escapeHtml(act.duration)}</span>` : ''}
+                </td>
+                <td style="width: 170px;">
+                  <span class="activity-dept-badge" style="background: ${style.bg}; color: ${style.color}; border: 1px solid ${style.border};">
+                    ${escapeHtml(act.department || 'General')}
+                  </span>
+                </td>
+                <td class="activity-notes-text">${escapeHtml(act.notes || '')}</td>
+                ${isAuthenticated ? `
+                  <td style="white-space: nowrap; text-align: right; width: 70px;">
+                    <button class="act-mini-btn" onclick="openEditActivityModal('${act.id}')" title="Editar">✎</button>
+                    <button class="act-mini-btn danger" onclick="handleDeleteActivity('${act.id}')" title="Eliminar">&times;</button>
+                  </td>
+                ` : ''}
+              </tr>
+            `;
+          });
+          monthBodyHtml = `
+            <div style="overflow-x: auto;">
+              <table class="quarter-compact-table">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Día</th>
+                    <th>Hora</th>
+                    <th>Departamento</th>
+                    <th>Actividad / Tema</th>
+                    ${isAuthenticated ? '<th style="text-align: right;">Acción</th>' : ''}
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            </div>
+          `;
+        } else {
+          let activitiesCardsHtml = '';
+          monthActivities.forEach(act => {
+            const style = getDepartmentStyle(act.department);
+            const dateObj = new Date(act.date + 'T00:00:00');
+            const dayNum = String(dateObj.getDate()).padStart(2, '0');
+            const dowIdx = dateObj.getDay();
+            const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][dowIdx];
+            const calClass = dowIdx === 6 ? 'is-sat' : (dowIdx === 5 ? 'is-fri' : (dowIdx === 0 ? 'is-sun' : ''));
+            const hasTime = act.time && act.time.trim() !== '' && act.time.trim() !== '-';
 
             activitiesCardsHtml += `
               <div class="activity-card" style="border-left-color: ${style.color};">
-                <div class="activity-meta-row">
-                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                    <span class="activity-date-badge">${dayName} ${dayNum}</span>
-                    <span class="activity-time-badge">${escapeHtml(act.time || 'Hora por definir')}</span>
-                    ${act.duration ? `<span class="activity-duration-badge">${escapeHtml(act.duration)}</span>` : ''}
-                  </div>
-                  <div class="activity-dept-badge" style="background: ${style.bg}; color: ${style.color}; border: 1px solid ${style.border};">
-                    <span>${escapeHtml(act.department || 'General')}</span>
-                  </div>
+                <div class="act-cal-box ${calClass}">
+                  <span class="act-cal-dow">${dayName}</span>
+                  <span class="act-cal-num">${dayNum}</span>
                 </div>
 
-                <div class="activity-notes-text">
-                  ${escapeHtml(act.notes || 'Sin observaciones')}
-                </div>
-
-                ${isAuthenticated ? `
-                  <div class="activity-card-actions">
-                    <button class="btn btn-outline btn-sm" style="padding: 2px 7px; font-size: 0.72rem;" onclick="openEditActivityModal('${act.id}')" title="Editar actividad">
-                      Editar
-                    </button>
-                    <button class="btn btn-danger btn-sm" style="padding: 2px 7px; font-size: 0.72rem;" onclick="handleDeleteActivity('${act.id}')" title="Eliminar actividad">
-                      Eliminar
-                    </button>
+                <div class="act-body-col">
+                  <div class="activity-meta-row">
+                    <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                      <span class="activity-dept-badge" style="background: ${style.bg}; color: ${style.color}; border: 1px solid ${style.border};">
+                        ${escapeHtml(act.department || 'General')}
+                      </span>
+                      ${hasTime ? `<span class="activity-time-badge">${escapeHtml(act.time)}</span>` : ''}
+                      ${act.duration ? `<span class="activity-duration-badge">${escapeHtml(act.duration)}</span>` : ''}
+                    </div>
+                    ${isAuthenticated ? `
+                      <div class="activity-card-actions">
+                        <button class="act-mini-btn" onclick="openEditActivityModal('${act.id}')" title="Editar actividad">✎</button>
+                        <button class="act-mini-btn danger" onclick="handleDeleteActivity('${act.id}')" title="Eliminar actividad">&times;</button>
+                      </div>
+                    ` : ''}
                   </div>
-                ` : ''}
+
+                  <div class="activity-notes-text">
+                    ${escapeHtml(act.notes || 'Sin observaciones')}
+                  </div>
+                </div>
               </div>
             `;
           });
+          monthBodyHtml = `<div class="quarter-activities-list">${activitiesCardsHtml}</div>`;
         }
 
         gridHtml += `
           <div class="quarter-month-col">
             <div class="quarter-month-header">
               <span>${monthName.toUpperCase()} ${selectedQuarterYear}</span>
-              <span class="quarter-month-count">${monthActivities.length} ${monthActivities.length === 1 ? 'actividad' : 'actividades'}</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="quarter-month-count">${monthActivities.length} ${monthActivities.length === 1 ? 'evento' : 'eventos'}</span>
+                ${isAuthenticated ? `
+                  <button type="button" onclick="openAddActivityModal(${monthIdx})" title="Agregar actividad en ${monthName}" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; border-radius: 4px; padding: 0 6px; font-size: 0.78rem; font-weight: 800; cursor: pointer; line-height: 1.3;">+</button>
+                ` : ''}
+              </div>
             </div>
-            <div class="quarter-activities-list">
-              ${activitiesCardsHtml}
-            </div>
+            ${monthBodyHtml}
           </div>
         `;
       });
