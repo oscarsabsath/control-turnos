@@ -490,72 +490,73 @@
     }
 
     /* =========================================================
-       ALMANAQUE EN 8 COLUMNAS (LOS 8 DÍAS DE ASIGNACIÓN DEL MES)
-       VIERNES - SÁBADO - VIERNES - SÁBADO - VIERNES - SÁBADO - VIERNES - SÁBADO
+       ALMANAQUE EN 8/10 COLUMNAS COMPACTO (DÍAS DE ASIGNACIÓN DEL MES)
        ========================================================= */
     .calendar-8days-container {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      padding-bottom: 16px;
-      margin-top: 10px;
+      padding-bottom: 10px;
+      margin-top: 6px;
     }
 
     .calendar-8days-wrapper {
-      min-width: 1200px;
+      min-width: 920px;
     }
 
     .calendar-8days-header-row {
       display: grid;
-      gap: 10px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 4px;
     }
 
     .col-8days-header {
-      padding: 10px 8px;
-      border-radius: 8px 8px 0 0;
+      padding: 6px 6px;
+      border-radius: 7px 7px 0 0;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      gap: 1px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 
     .col-8days-header.is-friday {
       background: linear-gradient(135deg, #38628b 0%, #4c7aa7 100%);
       color: #ffffff;
-      border: 1.5px solid #2d5175;
+      border: 1px solid #2d5175;
       border-bottom: none;
     }
 
     .col-8days-header.is-saturday {
       background: linear-gradient(135deg, #203f5d 0%, #30567e 100%);
       color: #ffffff;
-      border: 1.5px solid #d4af37;
+      border: 1px solid #d4af37;
       border-bottom: none;
     }
 
     .col-8days-day-name {
-      font-size: 0.95rem;
+      font-size: 0.76rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
     }
 
     .col-8days-week-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #e2e8f0;
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      line-height: 1.1;
     }
 
     .col-8days-date-badge {
-      font-size: 0.74rem;
+      font-size: 0.68rem;
       font-weight: 800;
       background: #ffffff;
-      color: #38628b;
-      padding: 3px 10px;
+      color: #203f5d;
+      padding: 1px 7px;
       border-radius: 999px;
-      margin-top: 3px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      margin-top: 2px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
     }
 
     .col-8days-header.is-saturday .col-8days-date-badge {
@@ -566,43 +567,43 @@
 
     .calendar-8days-grid {
       display: grid;
-      gap: 10px;
+      gap: 6px;
       align-items: stretch;
     }
 
     .col-8days-card {
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 0 0 8px 8px;
-      padding: 10px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 0 0 7px 7px;
+      padding: 6px 5px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-height: 420px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-      transition: all 0.15s ease;
+      gap: 4px;
+      min-height: 220px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: all 0.12s ease;
       cursor: pointer;
     }
 
     .col-8days-card:hover {
-      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
       border-color: #94a3b8;
     }
 
     .col-8days-card.is-friday {
-      border-top: 4px solid #38628b;
+      border-top: 3px solid #38628b;
       background: #ffffff;
     }
 
     .col-8days-card.is-saturday {
-      border-top: 4px solid #d4af37;
+      border-top: 3px solid #d4af37;
       background: #ffffff;
     }
 
     .col-8days-card.is-today {
-      border: 2.5px solid #2563eb !important;
-      border-top: 4px solid #2563eb !important;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+      border: 2px solid #2563eb !important;
+      border-top: 3px solid #2563eb !important;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
     }
 
     .col-8days-card.other-month {
@@ -614,12 +615,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 6px;
-      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #f1f5f9;
     }
 
     .col-big-day {
-      font-size: 1.35rem;
+      font-size: 0.95rem;
       font-weight: 800;
       line-height: 1;
     }
@@ -627,20 +628,20 @@
     .col-ministry-slots {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       flex: 1;
     }
 
     .slot-item {
-      border-radius: 6px;
-      padding: 7px 8px;
-      font-size: 0.74rem;
+      border-radius: 5px;
+      padding: 4px 6px;
+      font-size: 0.68rem;
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      gap: 1px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
       border: 1px solid;
-      border-left: 4px solid;
+      border-left: 3px solid;
     }
 
     .slot-anciano {
@@ -694,19 +695,19 @@
 
     .btn-slot-empty {
       width: 100%;
-      padding: 6px 7px;
-      font-size: 0.72rem;
+      padding: 3px 5px;
+      font-size: 0.64rem;
       font-weight: 700;
       background: #ffffff;
-      border: 1.5px dashed #94a3b8;
-      border-radius: 6px;
-      color: #334155;
+      border: 1px dashed #cbd5e1;
+      border-radius: 4px;
+      color: #64748b;
       cursor: pointer;
       text-align: left;
       display: flex;
       align-items: center;
-      gap: 5px;
-      transition: all 0.15s ease;
+      gap: 3px;
+      transition: all 0.12s ease;
     }
 
     .btn-slot-empty:hover {
@@ -717,16 +718,16 @@
 
     .btn-col-add-more {
       margin-top: auto;
-      padding: 7px 8px;
-      font-size: 0.74rem;
+      padding: 4px 6px;
+      font-size: 0.66rem;
       font-weight: 800;
       background: #2563eb;
       color: #ffffff;
       border: 1px solid #1d4ed8;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       text-align: center;
-      transition: all 0.15s ease;
+      transition: all 0.12s ease;
     }
 
     .btn-col-add-more:hover {
@@ -4523,16 +4524,16 @@
         colsBadge.innerText = `${totalCols} Columnas: Los ${totalCols} días de turno de ${MONTH_NAMES[currentMonth]} (${weekends.length} semanas • Viernes y Sábado)`;
       }
 
-      const gridTemplate = `repeat(${totalCols}, minmax(135px, 1fr))`;
+      const gridTemplate = `repeat(${totalCols}, minmax(105px, 1fr))`;
 
       const scrollContainer = document.createElement('div');
       scrollContainer.className = 'calendar-8days-container';
 
       const wrapper = document.createElement('div');
       wrapper.className = 'calendar-8days-wrapper';
-      wrapper.style.minWidth = `${totalCols * 145}px`;
+      wrapper.style.minWidth = `${totalCols * 112}px`;
 
-      // 1. Fila de Cabeceras: 8 Columnas (Viernes, Sábado, Viernes, Sábado...)
+      // 1. Fila de Cabeceras: Columnas (Viernes, Sábado...)
       const headerRow = document.createElement('div');
       headerRow.className = 'calendar-8days-header-row';
       headerRow.style.gridTemplateColumns = gridTemplate;
@@ -4541,16 +4542,16 @@
         const isFri = d.dayName === 'Viernes';
         const colHeader = document.createElement('div');
         colHeader.className = `col-8days-header ${isFri ? 'is-friday' : 'is-saturday'}`;
+        const shortMonth = MONTH_NAMES[d.date.getMonth()].slice(0, 3);
         colHeader.innerHTML = `
-          <div class="col-8days-day-name">${isFri ? 'VIERNES' : 'SÁBADO'}</div>
-          <div class="col-8days-week-label">Semana ${d.weekNum} &bull; Columna ${idx + 1}</div>
-          <div class="col-8days-date-badge">${d.date.getDate()} de ${MONTH_NAMES[d.date.getMonth()]}</div>
+          <div class="col-8days-day-name">${isFri ? 'VIERNES' : 'SÁBADO'} <span style="font-weight: 600; opacity: 0.85; font-size: 0.62rem;">• S${d.weekNum}</span></div>
+          <div class="col-8days-date-badge">${d.date.getDate()} ${shortMonth}</div>
         `;
         headerRow.appendChild(colHeader);
       });
       wrapper.appendChild(headerRow);
 
-      // 2. Fila de Tarjetas: 8 Columnas con las responsabilidades de cada día
+      // 2. Fila de Tarjetas: Columnas con las responsabilidades de cada día
       const cardsGrid = document.createElement('div');
       cardsGrid.className = 'calendar-8days-grid';
       cardsGrid.style.gridTemplateColumns = gridTemplate;
@@ -4582,24 +4583,24 @@
       }
 
       const dayColor = isFri ? '#1e40af' : '#9a3412';
-      const todayBadge = isToday ? `<span style="background: var(--primary); color: white; padding: 1px 6px; border-radius: 999px; font-size: 0.65rem; font-weight: 800;">HOY</span>` : '';
+      const todayBadge = isToday ? `<span style="background: var(--primary); color: white; padding: 0 5px; border-radius: 999px; font-size: 0.58rem; font-weight: 800;">HOY</span>` : '';
 
       let topHTML = `
         <div class="col-top-bar">
-          <div style="display: flex; align-items: baseline; gap: 4px;">
+          <div style="display: flex; align-items: baseline; gap: 3px;">
             <span class="col-big-day" style="color: ${dayColor};">${d.date.getDate()}</span>
-            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">${d.dayName}</span>
+            <span style="font-size: 0.64rem; color: var(--text-muted); font-weight: 700;">${isFri ? 'Vie' : 'Sáb'}</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 3px;">
             ${todayBadge}
-            <span class="badge-day ${isFri ? 'badge-viernes' : 'badge-sabado'}">${dayShifts.length} turno(s)</span>
+            <span class="badge-day ${isFri ? 'badge-viernes' : 'badge-sabado'}" style="padding: 1px 5px; font-size: 0.62rem;">${dayShifts.length}</span>
           </div>
         </div>
       `;
 
       let slotsHTML = '<div class="col-ministry-slots">';
 
-      // Mostramos los ministerios para cada día
+      // Mostramos los ministerios agrupados por área para cada día
       DEPT_ORDER.forEach(deptKey => {
         const dept = DEPARTMENTS[deptKey];
         if (!dept) return;
@@ -4616,21 +4617,38 @@
         }
 
         if (deptShifts.length > 0) {
+          let peopleRowsHTML = '';
+          const distinctNotes = new Set();
+
           deptShifts.forEach(shift => {
             const colab = collaborators.find(c => c.id === shift.collaboratorId);
             const colabName = colab ? colab.name : 'Responsable';
+            const note = (shift.notes || '').trim();
+            if (note && note !== 'Servicio de Diaconisas' && note !== 'Servicio de Diáconos') {
+              distinctNotes.add(note);
+            }
 
-            slotsHTML += `
-              <div class="slot-item slot-${deptKey}">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2px;">
-                  <span style="font-weight: 800; font-size: 0.72rem;">${dept.name}</span>
-                  <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); deleteShift('${shift.id}')" style="padding: 1px 4px; font-size: 0.65rem; line-height: 1; border-radius: 3px;" title="Eliminar responsabilidad">✕</button>
-                </div>
-                <div style="font-weight: 700; font-size: 0.78rem; color: #0f172a; margin-top: 2px;">${colabName}</div>
-                ${shift.notes ? `<div style="font-size: 0.68rem; color: #475569; margin-top: 1px;">${shift.notes}</div>` : ''}
+            peopleRowsHTML += `
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 3px; line-height: 1.2;">
+                <span style="font-weight: 700; font-size: 0.7rem; color: #0f172a; overflow: hidden; text-overflow: ellipsis;">${deptShifts.length > 1 ? '• ' : ''}${colabName}</span>
+                <button class="btn btn-danger btn-sm admin-only" onclick="event.stopPropagation(); deleteShift('${shift.id}')" style="padding: 0 3px; font-size: 0.58rem; line-height: 1.1; border-radius: 3px; flex-shrink: 0;" title="Eliminar responsabilidad">✕</button>
               </div>
             `;
           });
+
+          const notesStr = Array.from(distinctNotes).join(' • ');
+
+          slotsHTML += `
+            <div class="slot-item slot-${deptKey}">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 2px;">
+                <span style="font-weight: 800; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.02em; opacity: 0.9;">${dept.name}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 1px; margin-top: 1px;">
+                ${peopleRowsHTML}
+              </div>
+              ${notesStr ? `<div style="font-size: 0.62rem; color: #475569; margin-top: 1px; line-height: 1.15; font-weight: 500;">${notesStr}</div>` : ''}
+            </div>
+          `;
         } else {
           // Ranura disponible para asignar directamente con 1 clic (requiere autenticación)
           slotsHTML += `
@@ -4645,7 +4663,7 @@
 
       const addBtn = `
         <button class="btn-col-add-more admin-only" onclick="event.stopPropagation(); quickAssignDate('${d.dateStr}')">
-          Asignar turno
+          + Turno
         </button>
       `;
 
