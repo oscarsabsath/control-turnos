@@ -3040,15 +3040,208 @@
       'shifts_data'
     ], getDemoShifts());
 
+    const PREDICACIONES_NOV_DEC_2026 = [
+      { date: '2026-11-21', dayOfWeek: 'Sábado', notes: 'Culto Divino', speaker: 'Maria Antonia' },
+      { date: '2026-11-27', dayOfWeek: 'Viernes', notes: 'Viernes Joven', speaker: 'Min Joven' },
+      { date: '2026-11-28', dayOfWeek: 'Sábado', notes: 'Culto Divino', speaker: 'Manuel Arias' },
+      { date: '2026-12-04', dayOfWeek: 'Viernes', notes: 'Culto de Recepción', speaker: 'Igor Domingos' },
+      { date: '2026-12-05', dayOfWeek: 'Sábado', notes: 'Sábado de Alabanza', speaker: 'Min Música' },
+      { date: '2026-12-11', dayOfWeek: 'Viernes', notes: 'Culto de Recepción', speaker: 'Pedro Camacho' },
+      { date: '2026-12-12', dayOfWeek: 'Sábado', notes: 'Culto Divino', speaker: 'Igor Domingos' },
+      { date: '2026-12-18', dayOfWeek: 'Viernes', notes: 'Culto de Recepción', speaker: 'Min Joven' },
+      { date: '2026-12-19', dayOfWeek: 'Sábado', notes: 'Énfasis en Salud', speaker: 'Jean Philippe' },
+      { date: '2026-12-25', dayOfWeek: 'Viernes', notes: 'Culto de Recepción', speaker: 'Jaime' },
+      { date: '2026-12-26', dayOfWeek: 'Sábado', notes: 'Culto Divino', speaker: 'Min Infantil' }
+    ];
+
+    function normalizePersonName(str) {
+      return String(str || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/^(pr\.?|pastor|hno\.?|hna\.?|hermano|hermana)\s+/i, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function findOrCreateSpeakerCollaborator(colabsList, speakerName) {
+      const targetNorm = normalizePersonName(speakerName);
+      let found = colabsList.find(c => normalizePersonName(c.name) === targetNorm);
+      if (!found) {
+        found = colabsList.find(c => {
+          const cNorm = normalizePersonName(c.name);
+          return cNorm.startsWith(targetNorm + ' ') || cNorm.endsWith(' ' + targetNorm) || cNorm === targetNorm;
+        });
+      }
+      if (found) return found.id;
+
+      const slug = targetNorm.replace(/[^a-z0-9]+/g, '_');
+      const newId = 'colab_pred_' + slug;
+      const existingById = colabsList.find(c => c.id === newId);
+      if (existingById) return existingById.id;
+
+      colabsList.push({
+        id: newId,
+        name: speakerName,
+        email: '',
+        phone: ''
+      });
+      return newId;
+    }
+
+    function mergePredicacionesNovDec2026(colabsList, shiftsList) {
+      const safeColabs = Array.isArray(colabsList) ? [...colabsList] : [];
+      const safeShifts = Array.isArray(shiftsList) ? [...shiftsList] : [];
+
+      PREDICACIONES_NOV_DEC_2026.forEach(item => {
+        const colabId = findOrCreateSpeakerCollaborator(safeColabs, item.speaker);
+        const existingIdx = safeShifts.findIndex(s => s && s.departmentId === 'predicaciones' && s.date === item.date);
+        if (existingIdx !== -1) {
+          safeShifts[existingIdx] = {
+            ...safeShifts[existingIdx],
+            collaboratorId: colabId,
+            dayOfWeek: item.dayOfWeek,
+            notes: item.notes
+          };
+        } else {
+          safeShifts.push({
+            id: 'shift_pred_' + item.date.replace(/-/g, '_'),
+            collaboratorId: colabId,
+            departmentId: 'predicaciones',
+            date: item.date,
+            dayOfWeek: item.dayOfWeek,
+            notes: item.notes
+          });
+        }
+      });
+
+      return { collaborators: safeColabs, shifts: safeShifts };
+    }
+
+    const DIACONOS_NOV_2026 = [
+      {
+        date: '2026-11-07',
+        dayOfWeek: 'Sábado',
+        diaconisas: ['Norma Reyes', 'Nora Mendoza'],
+        diaconos: ['César Dias', 'Edwin Valenzuela']
+      },
+      {
+        date: '2026-11-14',
+        dayOfWeek: 'Sábado',
+        diaconisas: ['Alisón Dragut', 'Lucia Rios'],
+        diaconos: ['Jhonatan Restrepo', 'Ever Guerrero']
+      },
+      {
+        date: '2026-11-21',
+        dayOfWeek: 'Sábado',
+        diaconisas: ['Candy Zhumi', 'Marleny Rodriguez'],
+        diaconos: ['Juan Velasquez', 'Abner Sánchez']
+      },
+      {
+        date: '2026-11-28',
+        dayOfWeek: 'Sábado',
+        diaconisas: ['Aslhey Villalba', 'Teresa Martinez'],
+        diaconos: ['Manuel Arias', 'Daniel Bálcazar']
+      }
+    ];
+
+    function mergeDiaconosNov2026(colabsList, shiftsList) {
+      const safeColabs = Array.isArray(colabsList) ? [...colabsList] : [];
+      const targetDates = new Set(DIACONOS_NOV_2026.map(d => d.date));
+      let safeShifts = (Array.isArray(shiftsList) ? [...shiftsList] : []).filter(s => {
+        if (!s) return false;
+        if (targetDates.has(s.date) && (s.departmentId === 'diaconisas' || s.departmentId === 'diaconos')) {
+          return false;
+        }
+        return true;
+      });
+
+      DIACONOS_NOV_2026.forEach(item => {
+        item.diaconisas.forEach((name, idx) => {
+          const colabId = findOrCreateSpeakerCollaborator(safeColabs, name);
+          safeShifts.push({
+            id: `shift_diaconisas_${item.date.replace(/-/g, '_')}_${idx + 1}`,
+            collaboratorId: colabId,
+            departmentId: 'diaconisas',
+            date: item.date,
+            dayOfWeek: item.dayOfWeek,
+            notes: 'Servicio de Diaconisas'
+          });
+        });
+        item.diaconos.forEach((name, idx) => {
+          const colabId = findOrCreateSpeakerCollaborator(safeColabs, name);
+          safeShifts.push({
+            id: `shift_diaconos_${item.date.replace(/-/g, '_')}_${idx + 1}`,
+            collaboratorId: colabId,
+            departmentId: 'diaconos',
+            date: item.date,
+            dayOfWeek: item.dayOfWeek,
+            notes: 'Servicio de Diáconos'
+          });
+        });
+      });
+
+      return { collaborators: safeColabs, shifts: safeShifts };
+    }
+
+    if (localStorage.getItem('church_pred_nov_dec_2026_v1') !== 'true') {
+      const mergedPred = mergePredicacionesNovDec2026(collaborators, shifts);
+      collaborators = mergedPred.collaborators;
+      shifts = mergedPred.shifts;
+      try {
+        localStorage.setItem('church_collaborators_v4', JSON.stringify(collaborators));
+        localStorage.setItem('church_assignments_v4', JSON.stringify(shifts));
+        localStorage.setItem('church_pred_nov_dec_2026_v1', 'true');
+      } catch (e) {}
+    }
+
+    if (localStorage.getItem('church_diaconos_nov_2026_v1') !== 'true') {
+      const mergedDiac = mergeDiaconosNov2026(collaborators, shifts);
+      collaborators = mergedDiac.collaborators;
+      shifts = mergedDiac.shifts;
+      try {
+        localStorage.setItem('church_collaborators_v4', JSON.stringify(collaborators));
+        localStorage.setItem('church_assignments_v4', JSON.stringify(shifts));
+        localStorage.setItem('church_diaconos_nov_2026_v1', 'true');
+      } catch (e) {}
+    }
+
+    const NOV_DEC_2026_ACTIVITIES = [
+      // Noviembre 2026
+      { id: 'act_2026_11_04', date: '2026-11-04', time: '20:00', duration: '', department: 'JAE', notes: 'Formación juvenil 1: Identidad adventista y testimonio cristiano' },
+      { id: 'act_2026_11_06', date: '2026-11-06', time: '20:00', duration: '', department: 'Familia', notes: 'Viernes de Hogar y Familia' },
+      { id: 'act_2026_11_07_1', date: '2026-11-07', time: '16:00', duration: '', department: 'Mayordomía / JA', notes: 'Discipulado de Mayordomía (tierra, templo, tiempo, tesoro y talento)' },
+      { id: 'act_2026_11_07_2', date: '2026-11-07', time: '20:00', duration: 'Del 7 al 14 Nov', department: 'Iglesia General', notes: 'Semana de Oración (Cultos presenciales y por Zoom)' },
+      { id: 'act_2026_11_08', date: '2026-11-08', time: '-', duration: '', department: 'JAE / Pioneros', notes: 'Convivencia de JAE y Pioneros' },
+      { id: 'act_2026_11_14', date: '2026-11-14', time: '11:00', duration: '', department: 'Iglesia General', notes: 'Santa Cena (Tema: Daniel 7)' },
+      { id: 'act_2026_11_15', date: '2026-11-15', time: '09:00', duration: '', department: 'Exploradores', notes: 'Caminata y convivencia conjunta Exploradores' },
+      { id: 'act_2026_11_18', date: '2026-11-18', time: '20:00', duration: '', department: 'JAE', notes: 'Formación juvenil 2: Discipulado y testimonio personal' },
+      { id: 'act_2026_11_21', date: '2026-11-21', time: '16:00', duration: '', department: 'Mayordomía / Mujer', notes: '2ª Sesión de Mayordomía / Culto Min. Mujer / JA (17h)' },
+      { id: 'act_2026_11_27', date: '2026-11-27', time: '20:00', duration: '', department: 'Jóvenes', notes: 'Viernes Joven en Horeb' },
+      { id: 'act_2026_11_28', date: '2026-11-28', time: '-', duration: '', department: 'Administración', notes: 'Reunión Administrativa (Planes y método de asambleas)' },
+      { id: 'act_2026_11_29', date: '2026-11-29', time: '09:00', duration: '', department: 'Exploradores', notes: 'Caminata y convivencia conjunta Exploradores' },
+      // Diciembre 2026
+      { id: 'act_2026_12_05', date: '2026-12-05', time: 'Todo el día', duration: '', department: 'Música / ES', notes: 'Sábado de Alabanza / 18h Formación Maestros Escuela Sabática' },
+      { id: 'act_2026_12_06', date: '2026-12-06', time: '-', duration: '', department: 'JAE / Pioneros', notes: 'Convivencia JAE y Pioneros' },
+      { id: 'act_2026_12_12', date: '2026-12-12', time: '16:00', duration: '', department: 'Administración', notes: '16h Reunión Administrativa / 18h Junta de Iglesia' },
+      { id: 'act_2026_12_19', date: '2026-12-19', time: '16:00', duration: '', department: 'Salud / Música', notes: 'Sábado de Salud / Testificación musical fuera de la iglesia' },
+      { id: 'act_2026_12_26', date: '2026-12-26', time: 'Todo el día', duration: '', department: 'Infantil / Clubes', notes: 'Culto Min Infantil / Tarde: Investidura Exploradores y Pioneros' },
+      { id: 'act_2026_12_31', date: '2026-12-31', time: '18:00 - 21:00', duration: '', department: 'Dorcas / Familia / JAE', notes: 'Programa especial despedida de año' }
+    ];
+
+    function mergeNovDec2026Activities(existingList) {
+      const safeList = Array.isArray(existingList) ? existingList : [];
+      const kept = safeList.filter(a => a && a.date && !a.date.startsWith('2026-11-') && !a.date.startsWith('2026-12-'));
+      return [...kept, ...NOV_DEC_2026_ACTIVITIES];
+    }
+
     function getDemoQuarterlyActivities() {
-      const yr = new Date().getFullYear();
+      const yr = 2026;
       return [
         { id: 'act_1', date: `${yr}-10-10`, time: '09:30 AM', duration: '1h 30m', department: 'Escuela Sabática', notes: 'Día de la Educación Adventista y énfasis en Grupos Pequeños' },
         { id: 'act_2', date: `${yr}-10-17`, time: '11:00 AM', duration: '1h 15m', department: 'Ministerio Personal', notes: 'Lanzamiento de Campaña Misionera Distrital' },
         { id: 'act_3', date: `${yr}-10-24`, time: '04:30 PM', duration: '1h 30m', department: 'Jóvenes (JA)', notes: 'Culto Joven Especial y Confraternidad Espiritual' },
-        { id: 'act_4', date: `${yr}-11-07`, time: '11:00 AM', duration: '1h 30m', department: 'Mayordomía Cristiana', notes: 'Semana de Mayordomía: ¡Viva la Entrega!' },
-        { id: 'act_5', date: `${yr}-11-21`, time: '09:30 AM', duration: '2 horas', department: 'Ministerio Infantil', notes: 'Día del Niño Adventista y Ceremonia de Aventureros' },
-        { id: 'act_6', date: `${yr}-12-12`, time: '10:30 AM', duration: '2 horas', department: 'Alabanza y Música', notes: 'Concierto Especial de Gratitud y Alabanza de Fin de Año' }
+        ...NOV_DEC_2026_ACTIVITIES
       ];
     }
 
@@ -3057,6 +3250,16 @@
       'church_quarterly_activities_v1',
       'church_quarterly_activities'
     ], quarterlyWasInitialized ? [] : getDemoQuarterlyActivities());
+
+    if (localStorage.getItem('church_nov_dec_2026_v1') !== 'true') {
+      quarterlyActivities = mergeNovDec2026Activities(quarterlyActivities);
+      try {
+        localStorage.setItem('church_quarterly_activities_v1', JSON.stringify(quarterlyActivities));
+        localStorage.setItem('church_quarterly_activities', JSON.stringify(quarterlyActivities));
+        localStorage.setItem('church_quarterly_initialized', 'true');
+        localStorage.setItem('church_nov_dec_2026_v1', 'true');
+      } catch (e) {}
+    }
 
     let selectedQuarter = Math.floor(new Date().getMonth() / 3) + 1; // 1 a 4
     let selectedQuarterYear = new Date().getFullYear();
@@ -3154,6 +3357,59 @@
               try { localStorage.setItem('church_quarterly_activities_v1', JSON.stringify([])); } catch(e){}
               try { localStorage.setItem('church_quarterly_initialized', 'true'); } catch(e){}
             }
+            if (val.predicacionesNovDec2026Version !== 1) {
+              const mergedPred = mergePredicacionesNovDec2026(collaborators, shifts);
+              collaborators = mergedPred.collaborators;
+              shifts = mergedPred.shifts;
+              try {
+                localStorage.setItem('church_collaborators_v4', JSON.stringify(collaborators));
+                localStorage.setItem('church_assignments_v4', JSON.stringify(shifts));
+                localStorage.setItem('church_pred_nov_dec_2026_v1', 'true');
+              } catch(e){}
+              if (db) {
+                db.ref('church_turnos').update({
+                  collaborators: collaborators,
+                  shifts: shifts,
+                  predicacionesNovDec2026Version: 1,
+                  updatedAt: Date.now()
+                }).catch(() => {});
+              }
+            }
+            if (val.diaconosNov2026Version !== 1) {
+              const mergedDiac = mergeDiaconosNov2026(collaborators, shifts);
+              collaborators = mergedDiac.collaborators;
+              shifts = mergedDiac.shifts;
+              try {
+                localStorage.setItem('church_collaborators_v4', JSON.stringify(collaborators));
+                localStorage.setItem('church_assignments_v4', JSON.stringify(shifts));
+                localStorage.setItem('church_diaconos_nov_2026_v1', 'true');
+              } catch(e){}
+              if (db) {
+                db.ref('church_turnos').update({
+                  collaborators: collaborators,
+                  shifts: shifts,
+                  diaconosNov2026Version: 1,
+                  updatedAt: Date.now()
+                }).catch(() => {});
+              }
+            }
+            if (val.novDec2026AgendaVersion !== 1) {
+              quarterlyActivities = mergeNovDec2026Activities(quarterlyActivities);
+              try {
+                localStorage.setItem('church_quarterly_activities_v1', JSON.stringify(quarterlyActivities));
+                localStorage.setItem('church_quarterly_activities', JSON.stringify(quarterlyActivities));
+                localStorage.setItem('church_quarterly_initialized', 'true');
+                localStorage.setItem('church_nov_dec_2026_v1', 'true');
+              } catch(e){}
+              if (db) {
+                db.ref('church_turnos').update({
+                  quarterlyActivities: quarterlyActivities,
+                  quarterlyActivitiesCleared: false,
+                  novDec2026AgendaVersion: 1,
+                  updatedAt: Date.now()
+                }).catch(() => {});
+              }
+            }
             if (val.flyersData && typeof val.flyersData === 'object' && !Array.isArray(val.flyersData)) {
               if (!flyersData) flyersData = {};
               Object.assign(flyersData, val.flyersData);
@@ -3223,6 +3479,9 @@
         shifts: shifts,
         quarterlyActivities: isQuarterlyEmpty ? null : quarterlyActivities,
         quarterlyActivitiesCleared: isQuarterlyEmpty,
+        novDec2026AgendaVersion: 1,
+        predicacionesNovDec2026Version: 1,
+        diaconosNov2026Version: 1,
         flyersData: cleanFlyers,
         updatedAt: Date.now()
       }).catch(err => {
@@ -5534,16 +5793,26 @@
       'ministerio personal': { icon: '', color: '#b45309', bg: '#fef3c7', border: '#fde68a' },
       'jóvenes (ja)': { icon: '', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
       'jovenes': { icon: '', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
+      'jóvenes': { icon: '', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
+      'jae': { icon: '', color: '#ea580c', bg: '#ffedd5', border: '#fdba74' },
       'ministerio infantil': { icon: '', color: '#047857', bg: '#d1fae5', border: '#a7f3d0' },
+      'infantil': { icon: '', color: '#047857', bg: '#d1fae5', border: '#a7f3d0' },
       'club de conquistadores / aventureros': { icon: '', color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
       'conquistadores': { icon: '', color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
+      'exploradores': { icon: '', color: '#047857', bg: '#d1fae5', border: '#6ee7b7' },
+      'pioneros': { icon: '', color: '#b91c1c', bg: '#fee2e2', border: '#fca5a5' },
+      'familia': { icon: '', color: '#0369a1', bg: '#e0f2fe', border: '#7dd3fc' },
+      'iglesia general': { icon: '', color: '#1e3a8a', bg: '#dbeafe', border: '#93c5fd' },
+      'administración': { icon: '', color: '#334155', bg: '#f1f5f9', border: '#cbd5e1' },
       'mayordomía cristiana': { icon: '', color: '#7e22ce', bg: '#f3e8ff', border: '#e9d5ff' },
       'mayordomía': { icon: '', color: '#7e22ce', bg: '#f3e8ff', border: '#e9d5ff' },
       'salud y temperancia': { icon: '', color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
       'salud': { icon: '', color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
       'ministerio de la mujer / dorcas': { icon: '', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
+      'mujer': { icon: '', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
       'dorcas': { icon: '', color: '#be185d', bg: '#fce7f3', border: '#fbcfe8' },
       'alabanza y música': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+      'música': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
       'alabanza': { icon: '', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
       'especial': { icon: '', color: '#0f766e', bg: '#ccfbf1', border: '#5eead4' },
       'diaconía (diáconos / diaconisas)': { icon: '', color: '#0f766e', bg: '#ccfbf1', border: '#99f6e4' },
