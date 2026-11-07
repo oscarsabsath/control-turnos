@@ -5109,100 +5109,162 @@
       showToast(`Informe de ${monthName} descargado para Excel (.csv)`, 'success');
     }
 
-    function buildAlmanacWeeksHtml(monthIdx, year) {
+    function buildAlmanacWeeksHtml(monthIdx, year, mode = 'matrix') {
       const weekends = getScheduleDaysForMonth(year, monthIdx);
-      let weeksHtml = '';
-      weekends.forEach((wk, wkIdx) => {
-        const days = [
-          { date: wk.friday, name: 'Viernes', isFri: true },
-          { date: wk.saturday, name: 'Sábado', isFri: false }
-        ];
 
-        let daysTableHtml = '';
-        days.forEach(d => {
-          const dateStr = formatDateKey(d.date);
-          const dayShifts = shifts.filter(s => s.date === dateStr);
-          const formattedDate = `${d.date.getDate()} de ${MONTH_NAMES[d.date.getMonth()]}`;
+      function renderDeptCellContent(deptKey, d, dayShifts) {
+        const dept = DEPARTMENTS[deptKey];
+        if (!dept) return '<span style="color:#cbd5e1;">—</span>';
+        const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
+        if (d.isFri && dept.saturdayOnly && deptShifts.length === 0) {
+          return '<span style="color:#cbd5e1; font-size:0.65rem;">—</span>';
+        }
+        if (deptShifts.length === 0) {
+          return '<span style="color:#cbd5e1; font-size:0.65rem;">—</span>';
+        }
+        const isMulti = deptShifts.length > 1;
+        const namesHtml = deptShifts.map(s => {
+          const colab = collaborators.find(c => c.id === s.collaboratorId);
+          const colabName = colab ? colab.name : 'Responsable';
+          const dot = isMulti ? `<span style="color:${dept.color}; font-weight:900; margin-right:2px;">•</span>` : '';
+          return `<div style="font-weight:700; color:#0f172a; line-height:1.18; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${dot}${escapeHtml(colabName)}</div>`;
+        }).join('');
 
-          let slotsRowsHtml = '';
+        const customNotes = [];
+        deptShifts.forEach(s => {
+          const n = (s.notes || '').trim();
+          if (n && n !== 'Servicio de Diaconisas' && n !== 'Servicio de Diáconos' && n !== 'Escuela y Culto' && !customNotes.includes(n)) {
+            customNotes.push(n);
+          }
+        });
+        const notesHtml = customNotes.length > 0
+          ? `<div style="font-size:0.6rem; color:${dept.color}; font-weight:700; line-height:1.1; margin-top:1px;">${escapeHtml(customNotes.join(' • '))}</div>`
+          : '';
+
+        return `${namesHtml}${notesHtml}`;
+      }
+
+      if (mode === 'cards') {
+        let cardsHtml = '<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 7px;">';
+        weekends.forEach((wk, wkIdx) => {
+          const friStr = formatDateKey(wk.friday);
+          const satStr = formatDateKey(wk.saturday);
+          const friShifts = shifts.filter(s => s.date === friStr);
+          const satShifts = shifts.filter(s => s.date === satStr);
+          const friLabel = `Vie ${wk.friday.getDate()} ${MONTH_NAMES[wk.friday.getMonth()].slice(0, 3)}`;
+          const satLabel = `Sáb ${wk.saturday.getDate()} ${MONTH_NAMES[wk.saturday.getMonth()].slice(0, 3)}`;
+
+          let rowsHtml = '';
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
             if (!dept) return;
-
-            const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
-            if (d.isFri && dept.saturdayOnly && deptShifts.length === 0) return;
-
-            let assignedText = '<span style="color: #94a3b8; font-style: italic;">Sin asignar</span>';
-            let notesText = '<span style="color: #94a3b8;">-</span>';
-
-            if (deptShifts.length > 0) {
-              const isMulti = deptShifts.length > 1;
-              assignedText = deptShifts.map(s => {
-                const colab = collaborators.find(c => c.id === s.collaboratorId);
-                const colabName = colab ? colab.name : 'Responsable';
-                const phone = (colab && colab.phone && colab.phone !== 'Sin teléfono') ? ` <small style="color: #64748b; font-weight: normal;">(${colab.phone})</small>` : '';
-                const bullet = isMulti ? '<span style="color: #64748b; margin-right: 3px;">•</span>' : '';
-                return `<div style="line-height: 1.25; margin-bottom: ${isMulti ? '2px' : '0'}; display: block;">${bullet}<strong>${colabName}</strong>${phone}</div>`;
-              }).join('');
-
-              const hasAnyNotes = deptShifts.some(s => s.notes && s.notes.trim() !== '');
-              if (hasAnyNotes) {
-                notesText = deptShifts.map(s => {
-                  const noteContent = s.notes ? `<em>${s.notes}</em>` : '<span style="color: #cbd5e1;">-</span>';
-                  return `<div style="line-height: 1.25; margin-bottom: ${isMulti ? '2px' : '0'}; display: block;">${noteContent}</div>`;
-                }).join('');
-              } else {
-                notesText = '<span style="color: #94a3b8;">-</span>';
-              }
-            }
-
-            slotsRowsHtml += `
+            const friCell = renderDeptCellContent(deptKey, { isFri: true }, friShifts);
+            const satCell = renderDeptCellContent(deptKey, { isFri: false }, satShifts);
+            rowsHtml += `
               <tr>
-                <td style="padding: 1.5px 5px; font-weight: 700; width: 32%; border-bottom: 1px solid #f1f5f9; color: ${dept.color}; white-space: nowrap; vertical-align: top;">
-                  ${dept.icon} ${dept.name}
-                </td>
-                <td style="padding: 1.5px 5px; border-bottom: 1px solid #f1f5f9; color: #0f172a; width: 40%; vertical-align: top;">
-                  ${assignedText}
-                </td>
-                <td style="padding: 1.5px 5px; border-bottom: 1px solid #f1f5f9; color: #475569; font-size: 0.88em; width: 28%; vertical-align: top;">
-                  ${notesText}
-                </td>
+                <td style="padding:2px 5px; font-weight:800; color:${dept.color}; border-bottom:1px solid #f1f5f9; white-space:nowrap; width:26%; font-size:0.64rem;">${dept.name}</td>
+                <td style="padding:2px 5px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f1f5f9; width:34%; background:#f8fbff; font-size:0.66rem;">${friCell}</td>
+                <td style="padding:2px 5px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f1f5f9; width:40%; background:#fffdf5; font-size:0.66rem;">${satCell}</td>
               </tr>
             `;
           });
 
-          const dayHeaderColor = '#082142';
-          const dayBgColor = d.isFri ? '#f0f7ff' : '#fefce8';
-          const dayBorderTop = d.isFri ? '3px solid #0284c7' : '3px solid #d4af37';
-          const dayBadgeColor = d.isFri ? '#0284c7' : '#b45309';
-
-          daysTableHtml += `
-            <div style="flex: 1; border: 1px solid #cbd5e1; border-top: ${dayBorderTop}; border-radius: 4px; overflow: hidden; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-              <div style="background: ${dayBgColor}; padding: 3px 6px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 800; font-size: 0.8rem; color: ${dayHeaderColor}; letter-spacing: 0.3px;">${d.name.toUpperCase()}</span>
-                <span style="font-weight: 700; font-size: 0.7rem; color: ${dayBadgeColor}; background: #ffffff; padding: 1px 6px; border-radius: 999px; border: 1px solid #cbd5e1;">${formattedDate}</span>
+          cardsHtml += `
+            <div style="border:1px solid #cbd5e1; border-top:2.5px solid #082142; border-radius:5px; overflow:hidden; background:#fff;">
+              <div style="background:linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color:#fff; padding:3px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.66rem; font-weight:800;">
+                <span style="color:#f6c84c;">◆ SEMANA ${wkIdx + 1}</span>
+                <span>${friLabel} &bull; ${satLabel}</span>
               </div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 10px; line-height: 1.15; font-family: 'Montserrat', sans-serif;">
-                <tbody>
-                  ${slotsRowsHtml}
-                </tbody>
+              <table style="width:100%; border-collapse:collapse; font-family:'Montserrat',sans-serif;">
+                <thead>
+                  <tr style="background:#f1f5f9; font-size:0.6rem; font-weight:800; color:#334155; text-transform:uppercase;">
+                    <th style="padding:2px 5px; text-align:left; border-bottom:1px solid #cbd5e1;">Ministerio</th>
+                    <th style="padding:2px 5px; text-align:left; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1; color:#1e40af;">${friLabel}</th>
+                    <th style="padding:2px 5px; text-align:left; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1; color:#92400e;">${satLabel}</th>
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
               </table>
             </div>
           `;
         });
+        cardsHtml += '</div>';
+        return cardsHtml;
+      }
 
-        weeksHtml += `
-          <div style="margin-bottom: 4px; page-break-inside: avoid; break-inside: avoid;">
-            <div style="background: #082142; color: #ffffff; border-left: 3px solid #d4af37; padding: 2px 7px; border-radius: 3px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px; display: inline-flex; align-items: center; gap: 4px;">
-              <span style="color: #f6c84c;">&#9670;</span> SEMANA ${wkIdx + 1}
-            </div>
-            <div style="display: flex; gap: 6px;">
-              ${daysTableHtml}
-            </div>
-          </div>
-        `;
+      // Modo por defecto: Cuadrante Matricial Compacto (todas las semanas en una sola tabla ejecutiva)
+      let bodyRowsHtml = '';
+      weekends.forEach((wk, wkIdx) => {
+        const days = [
+          { date: wk.friday, shortDay: 'VIE', isFri: true },
+          { date: wk.saturday, shortDay: 'SÁB', isFri: false }
+        ];
+
+        days.forEach((d, dIdx) => {
+          const dateStr = formatDateKey(d.date);
+          const dayShifts = shifts.filter(s => s.date === dateStr);
+          const dayNum = String(d.date.getDate()).padStart(2, '0');
+          const shortMonth = MONTH_NAMES[d.date.getMonth()].slice(0, 3);
+          const rowBg = d.isFri ? '#f8fbff' : '#fffdf7';
+          const bottomBorder = dIdx === 1 ? '2px solid #cbd5e1' : '1px solid #e2e8f0';
+
+          const dateBadgeStyle = d.isFri
+            ? 'background:#dbeafe; color:#1e40af; border:1px solid #93c5fd;'
+            : 'background:#fef3c7; color:#92400e; border:1px solid #fcd34d;';
+
+          let deptCellsHtml = '';
+          DEPT_ORDER.forEach(deptKey => {
+            deptCellsHtml += `
+              <td style="padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #e2e8f0; vertical-align: middle;">
+                ${renderDeptCellContent(deptKey, d, dayShifts)}
+              </td>
+            `;
+          });
+
+          bodyRowsHtml += `
+            <tr style="background: ${rowBg};">
+              ${dIdx === 0 ? `
+                <td rowspan="2" style="background: #082142; color: #f6c84c; font-weight: 900; font-size: 0.72rem; text-align: center; vertical-align: middle; border-bottom: 2px solid #d4af37; width: 38px; letter-spacing: 0.5px;">
+                  S${wkIdx + 1}
+                </td>
+              ` : ''}
+              <td style="padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #cbd5e1; white-space: nowrap; vertical-align: middle; width: 88px;">
+                <span style="${dateBadgeStyle} display: inline-block; font-weight: 800; font-size: 0.64rem; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.2px;">
+                  ${d.shortDay} ${dayNum} ${shortMonth}
+                </span>
+              </td>
+              ${deptCellsHtml}
+            </tr>
+          `;
+        });
       });
-      return weeksHtml;
+
+      const headerColsHtml = DEPT_ORDER.map(deptKey => {
+        const dept = DEPARTMENTS[deptKey];
+        const shortTitle = deptKey === 'anciano' ? 'Anciano' : dept.name;
+        return `
+          <th style="padding: 5px 6px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; border-left: 1px solid rgba(255,255,255,0.16);">
+            <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:${dept.color === '#475569' ? '#cbd5e1' : '#f6c84c'}; margin-right:3px; vertical-align:middle;"></span>${shortTitle}
+          </th>
+        `;
+      }).join('');
+
+      return `
+        <div style="border: 1.5px solid #082142; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 6px rgba(8,33,66,0.06);">
+          <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; font-family: 'Montserrat', sans-serif;">
+            <thead>
+              <tr style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border-bottom: 2px solid #d4af37;">
+                <th style="padding: 5px 4px; text-align: center; font-size: 0.62rem; font-weight: 800; color: #f6c84c; text-transform: uppercase;">Sem</th>
+                <th style="padding: 5px 6px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #ffffff; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,0.16);">Día / Fecha</th>
+                ${headerColsHtml}
+              </tr>
+            </thead>
+            <tbody>
+              ${bodyRowsHtml}
+            </tbody>
+          </table>
+        </div>
+      `;
     }
 
     function downloadMonthImagePNG() {
@@ -5215,17 +5277,17 @@
         return;
       }
 
-      showToast('Generando imagen en alta resolución del almanaque...', 'info');
+      showToast('Generando imagen compacta del cuadrante mensual...', 'info');
 
       const monthName = MONTH_NAMES[currentMonth];
-      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear);
+      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'matrix');
 
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.left = '-9999px';
       container.style.top = '0';
-      container.style.width = '880px';
-      container.style.padding = '14px 18px';
+      container.style.width = '980px';
+      container.style.padding = '12px 16px';
       container.style.background = '#ffffff';
       container.style.border = '2px solid #d4af37';
       container.style.borderRadius = '8px';
@@ -5234,23 +5296,22 @@
       container.style.zIndex = '-9999';
 
       container.innerHTML = `
-        <div style="background: #05162e; border-bottom: 2px solid #d4af37; border-radius: 6px 6px 0 0; overflow: hidden; margin-bottom: 6px;">
-          <img src="banner.png" alt="OneVoice27" style="width: 100%; max-height: 75px; object-fit: cover; display: block;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.parentElement.style.display='none';}">
-        </div>
-        <div style="border-bottom: 1.5px solid #d4af37; padding-bottom: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; color: #082142; letter-spacing: -0.3px;">Programación de Turnos y Responsabilidades</div>
-            <div style="color: #64748b; font-size: 0.7rem; font-weight: 600; margin-top: 2px;">Predicación, Alabanza, Especial, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 8px 14px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="banner.png" alt="OneVoice27" style="height: 42px; width: auto; max-width: 180px; object-fit: contain; border-radius: 4px;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
+            <div>
+              <div style="font-family: 'Playfair Display', serif; font-size: 1.12rem; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.15;">Cuadrante Mensual de Roles y Responsabilidades</div>
+              <div style="color: #cbd5e1; font-size: 0.66rem; font-weight: 600; margin-top: 2px;">Iglesia Adventista del Séptimo Día Horeb &bull; Viernes y Sábados</div>
+            </div>
           </div>
-          <div style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 800; padding: 4px 12px; border-radius: 999px; font-size: 0.88rem; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(8,33,66,0.18);">
+          <div style="background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 0.85rem; letter-spacing: 0.6px;">
             ${monthName.toUpperCase()} ${currentYear}
           </div>
         </div>
-        <div style="height: 1.5px; background: linear-gradient(90deg, #cbd5e1, #d4af37, #cbd5e1); margin: 4px 0 6px 0; border-radius: 1px;"></div>
         ${weeksHtml}
-        <div style="margin-top: 5px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.65rem; color: #64748b; font-weight: 600;">
-          <span>OneVoice27 &bull; Documento oficial de turnos y responsabilidades ministeriales</span>
-          <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
+        <div style="margin-top: 6px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.62rem; color: #64748b; font-weight: 600;">
+          <span>OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos ministeriales</span>
+          <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
         </div>
       `;
 
@@ -5275,10 +5336,10 @@
       }).then(canvas => {
         if (container.parentElement) document.body.removeChild(container);
         const link = document.createElement('a');
-        link.download = `Almanaque_${monthName}_${currentYear}.png`;
+        link.download = `Roles_${monthName}_${currentYear}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        showToast(`Imagen del almanaque de ${monthName} descargada correctamente`, 'success');
+        showToast(`Imagen de roles de ${monthName} descargada correctamente`, 'success');
       }).catch(err => {
         if (container.parentElement) document.body.removeChild(container);
         console.error('Error al exportar imagen del almanaque:', err);
@@ -5289,9 +5350,10 @@
     function exportMonthPrintPDF() {
       const monthName = MONTH_NAMES[currentMonth];
       const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
-      const defaultZoom = weekends.length >= 5 ? 0.80 : 0.90;
-      const defaultZoomPct = Math.round(defaultZoom * 100);
-      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear);
+      const defaultZoom = 1.0;
+      const defaultZoomPct = 100;
+      const matrixHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'matrix');
+      const cardsHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'cards');
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
@@ -5300,15 +5362,13 @@
       }
 
       const printDoc = printWindow.document;
-      printDoc.title = `Informe_${monthName}_${currentYear}_1Pagina`;
+      printDoc.title = `Roles_${monthName}_${currentYear}`;
 
-      // Cargar fuentes de Google idénticas al Flyer de Anuncio
       const fontLink = printDoc.createElement('link');
       fontLink.rel = 'stylesheet';
       fontLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&display=swap';
       printDoc.head.appendChild(fontLink);
 
-      // Cargar html2canvas para permitir descarga como imagen desde la propia vista de impresión
       const canvasScript = printDoc.createElement('script');
       canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
       printDoc.head.appendChild(canvasScript);
@@ -5316,26 +5376,26 @@
       const styleEl = printDoc.createElement('style');
       styleEl.textContent = `
         @page {
-          size: portrait;
-          margin: 5mm 6mm;
+          size: landscape;
+          margin: 6mm 8mm;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { padding: 10px; color: #0f172a; background: #f8fafc; font-size: 10.5px; line-height: 1.25; }
-        .print-container { max-width: 860px; margin: 0 auto; background: #ffffff; padding: 12px 16px; border-radius: 6px; border: 1px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: transform 0.15s ease; }
-        .banner-top { background: #05162e; border-bottom: 2px solid #d4af37; border-radius: 4px 4px 0 0; overflow: hidden; margin-bottom: 6px; }
-        .banner-top img { width: 100%; max-height: 70px; object-fit: cover; display: block; }
-        .header-banner { border-bottom: 1.5px solid #d4af37; padding-bottom: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
-        .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 800; color: #082142; line-height: 1.15; margin: 0; letter-spacing: -0.3px; }
-        .header-title p { color: #64748b; font-size: 0.68rem; font-weight: 600; margin: 2px 0 0; }
-        .badge-month { background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 800; padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; text-align: right; white-space: nowrap; letter-spacing: 0.5px; box-shadow: 0 1px 4px rgba(8,33,66,0.2); }
-        .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 8px; }
-        .btn { padding: 5px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
+        body { padding: 12px; color: #0f172a; background: #f1f5f9; font-size: 10.5px; line-height: 1.25; }
+        .print-container { max-width: 980px; margin: 0 auto; background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: transform 0.15s ease; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 8px 14px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-left img { height: 40px; width: auto; max-width: 170px; object-fit: contain; border-radius: 4px; }
+        .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
+        .header-title p { color: #cbd5e1; font-size: 0.65rem; font-weight: 600; margin: 2px 0 0; }
+        .badge-month { background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 0.84rem; text-align: right; white-space: nowrap; letter-spacing: 0.5px; }
+        .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+        .btn { padding: 5px 10px; font-size: 0.75rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
         .btn-primary { background: #082142; color: #ffffff; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(8,33,66,0.2); }
         .btn-primary:hover { background: #0d366b; }
         .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
         .btn-outline:hover { background: #f1f5f9; }
-        .divider-gold { height: 1.5px; background: linear-gradient(90deg, #cbd5e1, #d4af37, #cbd5e1); margin: 4px 0 6px 0; border-radius: 1px; }
-        .footer-bar { margin-top: 4px; padding-top: 3px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.64rem; color: #64748b; font-weight: 600; }
+        .btn-outline.active { background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; }
+        .footer-bar { margin-top: 6px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.62rem; color: #64748b; font-weight: 600; }
         @media print {
           html, body {
             background: #ffffff !important;
@@ -5362,43 +5422,60 @@
       printDoc.body.innerHTML = `
         <div class="print-container" id="printableArea">
           <div class="toolbar no-print">
-            <span style="font-size: 0.75rem; color: #082142; font-weight: 600; margin-right: auto;">Estilo Oficial OneVoice27 &bull; Configurado para <strong>1 sola página (${weekends.length} semanas)</strong></span>
-            <span id="zoomBadge" style="font-size: 0.75rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">${defaultZoomPct}%</span>
-            <button class="btn btn-outline" onclick="zoomDoc(-0.04)" title="Reducir tamaño para asegurar que entre en 1 hoja">Reducir</button>
-            <button class="btn btn-outline" onclick="zoomDoc(0.04)" title="Aumentar tamaño de letra">Ampliar</button>
-            <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" title="Descargar como imagen PNG en alta resolución" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar Imagen (PNG)</button>
+            <span style="font-size: 0.74rem; color: #082142; font-weight: 700; margin-right: auto;">Cuadrante Mensual Compacto (${weekends.length} semanas &bull; 1 página)</span>
+            <button class="btn btn-outline active" id="btnModeMatrix" onclick="switchReportMode('matrix')">Vista Cuadrante (Tabla)</button>
+            <button class="btn btn-outline" id="btnModeCards" onclick="switchReportMode('cards')">Vista Bloques (2x2)</button>
+            <span id="zoomBadge" style="font-size: 0.73rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">${defaultZoomPct}%</span>
+            <button class="btn btn-outline" onclick="zoomDoc(-0.05)" title="Reducir tamaño">−</button>
+            <button class="btn btn-outline" onclick="zoomDoc(0.05)" title="Aumentar tamaño">+</button>
+            <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar PNG</button>
             <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
-            <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar en PDF</button>
+            <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
           </div>
 
-          <div class="banner-top">
-            <img src="banner.png" alt="OneVoice27" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='banner-principal.png';}else{this.parentElement.style.display='none';}">
-          </div>
-
-          <div class="header-banner">
-            <div class="header-title">
-              <h1>Programación de Turnos y Responsabilidades</h1>
-              <p>Predicación, Alabanza, Especial, Diaconisas, Diáconos y Audiovisual &bull; Viernes y Sábados</p>
+          <div class="header-bar">
+            <div class="header-left">
+              <img src="banner.png" alt="OneVoice27" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
+              <div class="header-title">
+                <h1>Cuadrante Mensual de Roles y Responsabilidades</h1>
+                <p>Iglesia Adventista del Séptimo Día Horeb &bull; Viernes y Sábados</p>
+              </div>
             </div>
             <div class="badge-month">
               ${monthName.toUpperCase()} ${currentYear}
             </div>
           </div>
 
-          <div class="divider-gold"></div>
-
-          ${weeksHtml}
+          <div id="reportViewMatrix">${matrixHtml}</div>
+          <div id="reportViewCards" style="display: none;">${cardsHtml}</div>
 
           <div class="footer-bar">
-            <span>OneVoice27 &bull; Documento oficial de turnos y responsabilidades ministeriales</span>
+            <span>OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos y responsabilidades ministeriales</span>
             <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
           </div>
         </div>
 
         <script>
           let currentZoom = ${defaultZoom};
+          function switchReportMode(mode) {
+            const mEl = document.getElementById('reportViewMatrix');
+            const cEl = document.getElementById('reportViewCards');
+            const bM = document.getElementById('btnModeMatrix');
+            const bC = document.getElementById('btnModeCards');
+            if (mode === 'cards') {
+              mEl.style.display = 'none';
+              cEl.style.display = 'block';
+              bM.classList.remove('active');
+              bC.classList.add('active');
+            } else {
+              mEl.style.display = 'block';
+              cEl.style.display = 'none';
+              bM.classList.add('active');
+              bC.classList.remove('active');
+            }
+          }
           function zoomDoc(delta) {
-            currentZoom = Math.max(0.65, Math.min(1.2, parseFloat((currentZoom + delta).toFixed(2))));
+            currentZoom = Math.max(0.65, Math.min(1.25, parseFloat((currentZoom + delta).toFixed(2))));
             const area = document.getElementById('printableArea');
             if (area) {
               area.style.zoom = currentZoom;
@@ -5426,7 +5503,7 @@
               .then(canvas => {
                 if (toolbar) toolbar.style.display = '';
                 const link = document.createElement('a');
-                link.download = 'Almanaque_${monthName}_${currentYear}.png';
+                link.download = 'Roles_${monthName}_${currentYear}.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
               })
@@ -5437,7 +5514,7 @@
           }
         <\/script>
       `;
-      showToast(`Informe de ${monthName} listo para imprimir en 1 página`, 'success');
+      showToast(`Informe compacto de ${monthName} listo`, 'success');
     }
 
     // ==============================================================
