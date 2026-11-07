@@ -4544,8 +4544,9 @@
         colHeader.className = `col-8days-header ${isFri ? 'is-friday' : 'is-saturday'}`;
         const shortMonth = MONTH_NAMES[d.date.getMonth()].slice(0, 3);
         colHeader.innerHTML = `
-          <div class="col-8days-day-name">${isFri ? 'VIERNES' : 'SÁBADO'} <span style="font-weight: 600; opacity: 0.85; font-size: 0.62rem;">• S${d.weekNum}</span></div>
-          <div class="col-8days-date-badge">${d.date.getDate()} ${shortMonth}</div>
+          <div class="col-8days-day-name" style="white-space: nowrap;">${isFri ? 'VIERNES' : 'SÁBADO'}</div>
+          <div class="col-8days-week-label" style="white-space: nowrap;">Semana ${d.weekNum}</div>
+          <div class="col-8days-date-badge" style="white-space: nowrap;">${d.date.getDate()} ${shortMonth}</div>
         `;
         headerRow.appendChild(colHeader);
       });
@@ -5192,7 +5193,7 @@
         return cardsHtml;
       }
 
-      // Modo por defecto: Cuadrante Matricial Compacto (todas las semanas en una sola tabla ejecutiva)
+      // Modo por defecto: Cuadrante Matricial Compacto (todas las semanas en una sola tabla ejecutiva sin rowspan para evitar desalineación)
       let bodyRowsHtml = '';
       weekends.forEach((wk, wkIdx) => {
         const days = [
@@ -5206,7 +5207,8 @@
           const dayNum = String(d.date.getDate()).padStart(2, '0');
           const shortMonth = MONTH_NAMES[d.date.getMonth()].slice(0, 3);
           const rowBg = d.isFri ? '#f8fbff' : '#fffdf7';
-          const bottomBorder = dIdx === 1 ? '2px solid #cbd5e1' : '1px solid #e2e8f0';
+          const bottomBorder = dIdx === 1 ? '2px solid #94a3b8' : '1px solid #e2e8f0';
+          const semBottomBorder = dIdx === 1 ? '2px solid #d4af37' : '1px solid #1e3a8a';
 
           const dateBadgeStyle = d.isFri
             ? 'background:#dbeafe; color:#1e40af; border:1px solid #93c5fd;'
@@ -5215,7 +5217,7 @@
           let deptCellsHtml = '';
           DEPT_ORDER.forEach(deptKey => {
             deptCellsHtml += `
-              <td style="padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #e2e8f0; vertical-align: middle;">
+              <td style="padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #e2e8f0; vertical-align: middle; overflow: hidden;">
                 ${renderDeptCellContent(deptKey, d, dayShifts)}
               </td>
             `;
@@ -5223,13 +5225,13 @@
 
           bodyRowsHtml += `
             <tr style="background: ${rowBg};">
-              ${dIdx === 0 ? `
-                <td rowspan="2" style="background: #082142; color: #f6c84c; font-weight: 900; font-size: 0.72rem; text-align: center; vertical-align: middle; border-bottom: 2px solid #d4af37; width: 38px; letter-spacing: 0.5px;">
-                  S${wkIdx + 1}
-                </td>
-              ` : ''}
-              <td style="padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #cbd5e1; white-space: nowrap; vertical-align: middle; width: 88px;">
-                <span style="${dateBadgeStyle} display: inline-block; font-weight: 800; font-size: 0.64rem; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.2px;">
+              <td style="background: #082142; color: #f6c84c; font-weight: 800; font-size: 0.65rem; text-align: center; vertical-align: middle; border-bottom: ${semBottomBorder}; width: 52px; white-space: nowrap; padding: 4px 3px;">
+                <span style="display: inline-block; background: ${d.isFri ? 'rgba(246,200,76,0.18)' : 'transparent'}; border: ${d.isFri ? '1px solid #d4af37' : '1px solid rgba(212,175,55,0.35)'}; color: ${d.isFri ? '#f6c84c' : '#e2e8f0'}; border-radius: 4px; padding: 1px 5px; font-size: 0.62rem; font-weight: 800; line-height: 1.2;">
+                  SEM ${wkIdx + 1}
+                </span>
+              </td>
+              <td style="padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #cbd5e1; white-space: nowrap; vertical-align: middle; width: 92px;">
+                <span style="${dateBadgeStyle} display: inline-block; font-weight: 800; font-size: 0.64rem; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.2px; line-height: 1.2;">
                   ${d.shortDay} ${dayNum} ${shortMonth}
                 </span>
               </td>
@@ -5239,11 +5241,22 @@
         });
       });
 
+      const colWidths = {
+        anciano: '11%',
+        predicaciones: '16%',
+        alabanza: '11%',
+        especial: '10%',
+        diaconisas: '13%',
+        diaconos: '13%',
+        audiovisual: '11%'
+      };
+
       const headerColsHtml = DEPT_ORDER.map(deptKey => {
         const dept = DEPARTMENTS[deptKey];
         const shortTitle = deptKey === 'anciano' ? 'Anciano' : dept.name;
+        const w = colWidths[deptKey] || '12%';
         return `
-          <th style="padding: 5px 6px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; border-left: 1px solid rgba(255,255,255,0.16);">
+          <th style="width: ${w}; padding: 5px 6px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; border-left: 1px solid rgba(255,255,255,0.16); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:${dept.color === '#475569' ? '#cbd5e1' : '#f6c84c'}; margin-right:3px; vertical-align:middle;"></span>${shortTitle}
           </th>
         `;
@@ -5251,11 +5264,11 @@
 
       return `
         <div style="border: 1.5px solid #082142; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 6px rgba(8,33,66,0.06);">
-          <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; font-family: 'Montserrat', sans-serif;">
+          <table style="width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 10.5px; font-family: 'Montserrat', sans-serif;">
             <thead>
               <tr style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border-bottom: 2px solid #d4af37;">
-                <th style="padding: 5px 4px; text-align: center; font-size: 0.62rem; font-weight: 800; color: #f6c84c; text-transform: uppercase;">Sem</th>
-                <th style="padding: 5px 6px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #ffffff; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,0.16);">Día / Fecha</th>
+                <th style="width: 54px; padding: 5px 4px; text-align: center; font-size: 0.62rem; font-weight: 800; color: #f6c84c; text-transform: uppercase; white-space: nowrap;">Semana</th>
+                <th style="width: 94px; padding: 5px 6px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #ffffff; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,0.16); white-space: nowrap;">Día / Fecha</th>
                 ${headerColsHtml}
               </tr>
             </thead>
