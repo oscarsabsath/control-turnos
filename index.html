@@ -1872,11 +1872,14 @@
               <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #203f5d 0%, #38628b 100%); border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(32,63,93,0.3);">
                 Anuncio Semanal (Flyer PDF)
               </button>
-              <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes">
+              <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes (Vertical o Ancho)">
                 Imprimir / PDF
               </button>
-              <button class="btn btn-primary btn-sm" onclick="downloadMonthImagePNG()" title="Descargar el almanaque de este mes como imagen PNG en alta resolución" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(8,33,66,0.25);">
-                Descargar Imagen (PNG)
+              <button class="btn btn-primary btn-sm" onclick="downloadMonthImagePNG('mobile')" title="Descargar en formato vertical optimizado para celular y WhatsApp" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(15,118,110,0.25);">
+                📱 PNG Vertical (Celular)
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="downloadMonthImagePNG('matrix')" title="Descargar el cuadrante en formato horizontal ancho para PC o pantalla" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(8,33,66,0.25);">
+                🖥️ PNG Ancho (PC)
               </button>
               <button class="btn btn-outline btn-sm" onclick="exportMonthExcelCSV()" title="Descargar informe de este mes en formato Excel (.csv)">
                 Excel (.csv)
@@ -5113,7 +5116,7 @@
     function buildAlmanacWeeksHtml(monthIdx, year, mode = 'matrix') {
       const weekends = getScheduleDaysForMonth(year, monthIdx);
 
-      function renderDeptCellContent(deptKey, d, dayShifts) {
+      function renderDeptCellContent(deptKey, d, dayShifts, allowWrap = false) {
         const dept = DEPARTMENTS[deptKey];
         if (!dept) return '<span style="color:#cbd5e1;">—</span>';
         const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
@@ -5124,11 +5127,14 @@
           return '<span style="color:#cbd5e1; font-size:0.65rem;">—</span>';
         }
         const isMulti = deptShifts.length > 1;
+        const wrapStyle = allowWrap
+          ? 'white-space:normal; word-break:break-word;'
+          : 'white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
         const namesHtml = deptShifts.map(s => {
           const colab = collaborators.find(c => c.id === s.collaboratorId);
           const colabName = colab ? colab.name : 'Responsable';
-          const dot = isMulti ? `<span style="color:${dept.color}; font-weight:900; margin-right:2px;">•</span>` : '';
-          return `<div style="font-weight:700; color:#0f172a; line-height:1.18; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${dot}${escapeHtml(colabName)}</div>`;
+          const dot = isMulti ? `<span style="color:${dept.color}; font-weight:900; margin-right:3px;">•</span>` : '';
+          return `<div style="font-weight:700; color:#0f172a; line-height:1.22; ${wrapStyle}">${dot}${escapeHtml(colabName)}</div>`;
         }).join('');
 
         const customNotes = [];
@@ -5139,10 +5145,62 @@
           }
         });
         const notesHtml = customNotes.length > 0
-          ? `<div style="font-size:0.6rem; color:${dept.color}; font-weight:700; line-height:1.1; margin-top:1px;">${escapeHtml(customNotes.join(' • '))}</div>`
+          ? `<div style="font-size:0.64rem; color:${dept.color}; font-weight:700; line-height:1.15; margin-top:2px;">${escapeHtml(customNotes.join(' • '))}</div>`
           : '';
 
         return `${namesHtml}${notesHtml}`;
+      }
+
+      if (mode === 'mobile') {
+        let mobileHtml = '<div style="display:flex; flex-direction:column; gap:10px;">';
+        weekends.forEach((wk, wkIdx) => {
+          const friStr = formatDateKey(wk.friday);
+          const satStr = formatDateKey(wk.saturday);
+          const friShifts = shifts.filter(s => s.date === friStr);
+          const satShifts = shifts.filter(s => s.date === satStr);
+          const friDayNum = String(wk.friday.getDate()).padStart(2, '0');
+          const satDayNum = String(wk.saturday.getDate()).padStart(2, '0');
+          const friLabel = `VIE ${friDayNum} ${MONTH_NAMES[wk.friday.getMonth()].slice(0, 3).toUpperCase()}`;
+          const satLabel = `SÁB ${satDayNum} ${MONTH_NAMES[wk.saturday.getMonth()].slice(0, 3).toUpperCase()}`;
+
+          let rowsHtml = '';
+          DEPT_ORDER.forEach(deptKey => {
+            const dept = DEPARTMENTS[deptKey];
+            if (!dept) return;
+            const friCell = renderDeptCellContent(deptKey, { isFri: true }, friShifts, true);
+            const satCell = renderDeptCellContent(deptKey, { isFri: false }, satShifts, true);
+            rowsHtml += `
+              <tr>
+                <td style="padding:5px 8px; font-weight:800; color:${dept.color}; border-bottom:1px solid #e2e8f0; width:26%; font-size:0.74rem; vertical-align:middle; background:#ffffff;">
+                  <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:${dept.color}; margin-right:5px; vertical-align:middle;"></span>${dept.name}
+                </td>
+                <td style="padding:5px 8px; border-bottom:1px solid #e2e8f0; border-left:1px solid #e2e8f0; width:36%; background:#f8fbff; font-size:0.76rem; vertical-align:middle;">${friCell}</td>
+                <td style="padding:5px 8px; border-bottom:1px solid #e2e8f0; border-left:1px solid #e2e8f0; width:38%; background:#fffdf5; font-size:0.76rem; vertical-align:middle;">${satCell}</td>
+              </tr>
+            `;
+          });
+
+          mobileHtml += `
+            <div style="border:1.5px solid #94a3b8; border-top:3px solid #082142; border-radius:7px; overflow:hidden; background:#ffffff; box-shadow:0 2px 5px rgba(8,33,66,0.06);">
+              <div style="background:linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color:#ffffff; padding:6px 10px; display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #d4af37;">
+                <span style="background:rgba(246,200,76,0.18); border:1px solid #d4af37; color:#f6c84c; font-weight:900; font-size:0.74rem; padding:2px 8px; border-radius:4px; letter-spacing:0.4px;">◆ SEMANA ${wkIdx + 1}</span>
+                <span style="font-size:0.75rem; font-weight:800; color:#f8fafc; letter-spacing:0.2px;">${friLabel} &nbsp;&bull;&nbsp; ${satLabel}</span>
+              </div>
+              <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-family:'Montserrat',sans-serif;">
+                <thead>
+                  <tr style="background:#f1f5f9; font-size:0.68rem; font-weight:800; color:#334155; text-transform:uppercase;">
+                    <th style="width:26%; padding:4px 8px; text-align:left; border-bottom:1.5px solid #cbd5e1;">Ministerio</th>
+                    <th style="width:36%; padding:4px 8px; text-align:left; border-bottom:1.5px solid #cbd5e1; border-left:1px solid #cbd5e1; color:#1e40af; background:#eff6ff;">${friLabel}</th>
+                    <th style="width:38%; padding:4px 8px; text-align:left; border-bottom:1.5px solid #cbd5e1; border-left:1px solid #cbd5e1; color:#92400e; background:#fef3c7;">${satLabel}</th>
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            </div>
+          `;
+        });
+        mobileHtml += '</div>';
+        return mobileHtml;
       }
 
       if (mode === 'cards') {
@@ -5280,27 +5338,28 @@
       `;
     }
 
-    function downloadMonthImagePNG() {
+    function downloadMonthImagePNG(mode = 'mobile') {
       if (typeof html2canvas === 'undefined') {
         showToast('Preparando motor de imágenes...', 'info');
         const s = document.createElement('script');
         s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-        s.onload = () => downloadMonthImagePNG();
+        s.onload = () => downloadMonthImagePNG(mode);
         document.head.appendChild(s);
         return;
       }
 
-      showToast('Generando imagen compacta del cuadrante mensual...', 'info');
+      const isMobile = mode === 'mobile';
+      showToast(isMobile ? 'Generando imagen vertical para celular...' : 'Generando imagen ancha para PC...', 'info');
 
       const monthName = MONTH_NAMES[currentMonth];
-      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'matrix');
+      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, isMobile ? 'mobile' : 'matrix');
 
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.left = '-9999px';
       container.style.top = '0';
-      container.style.width = '980px';
-      container.style.padding = '12px 16px';
+      container.style.width = isMobile ? '540px' : '980px';
+      container.style.padding = isMobile ? '12px' : '12px 16px';
       container.style.background = '#ffffff';
       container.style.border = '2px solid #d4af37';
       container.style.borderRadius = '8px';
@@ -5309,21 +5368,21 @@
       container.style.zIndex = '-9999';
 
       container.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 8px 14px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <img src="banner.png" alt="OneVoice27" style="height: 42px; width: auto; max-width: 180px; object-fit: contain; border-radius: 4px;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
-            <div>
-              <div style="font-family: 'Playfair Display', serif; font-size: 1.12rem; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.15;">Cuadrante Mensual de Roles y Responsabilidades</div>
-              <div style="color: #cbd5e1; font-size: 0.66rem; font-weight: 600; margin-top: 2px;">Iglesia Adventista del Séptimo Día Horeb &bull; Viernes y Sábados</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: ${isMobile ? '8px 10px' : '8px 14px'}; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+            <img src="banner.png" alt="OneVoice27" style="height: ${isMobile ? '34px' : '42px'}; width: auto; max-width: ${isMobile ? '120px' : '180px'}; object-fit: contain; border-radius: 4px; flex-shrink: 0;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
+            <div style="min-width: 0;">
+              <div style="font-family: 'Playfair Display', serif; font-size: ${isMobile ? '0.94rem' : '1.12rem'}; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.15;">${isMobile ? 'Roles Mensuales Vie y Sáb' : 'Cuadrante Mensual de Roles y Responsabilidades'}</div>
+              <div style="color: #cbd5e1; font-size: ${isMobile ? '0.62rem' : '0.66rem'}; font-weight: 600; margin-top: 2px;">IASD Horeb &bull; Turnos de Viernes y Sábados</div>
             </div>
           </div>
-          <div style="background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 0.85rem; letter-spacing: 0.6px;">
+          <div style="background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: ${isMobile ? '3px 9px' : '4px 12px'}; border-radius: 999px; font-size: ${isMobile ? '0.74rem' : '0.85rem'}; letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0;">
             ${monthName.toUpperCase()} ${currentYear}
           </div>
         </div>
         ${weeksHtml}
-        <div style="margin-top: 6px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.62rem; color: #64748b; font-weight: 600;">
-          <span>OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos ministeriales</span>
+        <div style="margin-top: 6px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.6rem; color: #64748b; font-weight: 600;">
+          <span>OneVoice27 &bull; IASD Horeb</span>
           <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
         </div>
       `;
@@ -5349,10 +5408,11 @@
       }).then(canvas => {
         if (container.parentElement) document.body.removeChild(container);
         const link = document.createElement('a');
-        link.download = `Roles_${monthName}_${currentYear}.png`;
+        const suffix = isMobile ? 'Vertical' : 'Ancho';
+        link.download = `Roles_${suffix}_${monthName}_${currentYear}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        showToast(`Imagen de roles de ${monthName} descargada correctamente`, 'success');
+        showToast(`Imagen ${isMobile ? 'vertical (Celular)' : 'ancha (PC)'} de ${monthName} descargada`, 'success');
       }).catch(err => {
         if (container.parentElement) document.body.removeChild(container);
         console.error('Error al exportar imagen del almanaque:', err);
@@ -5366,6 +5426,7 @@
       const defaultZoom = 1.0;
       const defaultZoomPct = 100;
       const matrixHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'matrix');
+      const mobileHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'mobile');
       const cardsHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'cards');
 
       const printWindow = window.open('', '_blank');
@@ -5394,15 +5455,16 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { padding: 12px; color: #0f172a; background: #f1f5f9; font-size: 10.5px; line-height: 1.25; }
-        .print-container { max-width: 980px; margin: 0 auto; background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: transform 0.15s ease; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 8px 14px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px; }
-        .header-left { display: flex; align-items: center; gap: 12px; }
+        .print-container { max-width: 980px; margin: 0 auto; background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: max-width 0.2s ease, transform 0.15s ease; }
+        .print-container.mode-mobile { max-width: 540px; padding: 12px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 8px 14px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px; gap: 10px; }
+        .header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
         .header-left img { height: 40px; width: auto; max-width: 170px; object-fit: contain; border-radius: 4px; }
         .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
         .header-title p { color: #cbd5e1; font-size: 0.65rem; font-weight: 600; margin: 2px 0 0; }
         .badge-month { background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 0.84rem; text-align: right; white-space: nowrap; letter-spacing: 0.5px; }
-        .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-        .btn { padding: 5px 10px; font-size: 0.75rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
+        .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; max-width: 980px; margin-left: auto; margin-right: auto; background: #ffffff; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .btn { padding: 5px 10px; font-size: 0.74rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
         .btn-primary { background: #082142; color: #ffffff; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(8,33,66,0.2); }
         .btn-primary:hover { background: #0d366b; }
         .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
@@ -5422,7 +5484,7 @@
             box-shadow: none !important;
             border: 1px solid #cbd5e1 !important;
             padding: 0 !important;
-            margin: 0 !important;
+            margin: 0 auto !important;
             max-width: 100% !important;
             width: 100% !important;
             zoom: ${defaultZoom};
@@ -5433,19 +5495,20 @@
       printDoc.head.appendChild(styleEl);
 
       printDoc.body.innerHTML = `
-        <div class="print-container" id="printableArea">
-          <div class="toolbar no-print">
-            <span style="font-size: 0.74rem; color: #082142; font-weight: 700; margin-right: auto;">Cuadrante Mensual Compacto (${weekends.length} semanas &bull; 1 página)</span>
-            <button class="btn btn-outline active" id="btnModeMatrix" onclick="switchReportMode('matrix')">Vista Cuadrante (Tabla)</button>
-            <button class="btn btn-outline" id="btnModeCards" onclick="switchReportMode('cards')">Vista Bloques (2x2)</button>
-            <span id="zoomBadge" style="font-size: 0.73rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">${defaultZoomPct}%</span>
-            <button class="btn btn-outline" onclick="zoomDoc(-0.05)" title="Reducir tamaño">−</button>
-            <button class="btn btn-outline" onclick="zoomDoc(0.05)" title="Aumentar tamaño">+</button>
-            <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar PNG</button>
-            <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
-            <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
-          </div>
+        <div class="toolbar no-print">
+          <span style="font-size: 0.74rem; color: #082142; font-weight: 800; margin-right: auto;">Roles (${weekends.length} sem.)</span>
+          <button class="btn btn-outline" id="btnModeMobile" onclick="switchReportMode('mobile')">📱 Vertical (Celular)</button>
+          <button class="btn btn-outline active" id="btnModeMatrix" onclick="switchReportMode('matrix')">🖥️ Ancho (Tabla PC)</button>
+          <button class="btn btn-outline" id="btnModeCards" onclick="switchReportMode('cards')">Bloques (2x2)</button>
+          <span id="zoomBadge" style="font-size: 0.73rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">${defaultZoomPct}%</span>
+          <button class="btn btn-outline" onclick="zoomDoc(-0.05)" title="Reducir tamaño">−</button>
+          <button class="btn btn-outline" onclick="zoomDoc(0.05)" title="Aumentar tamaño">+</button>
+          <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar PNG</button>
+          <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
+          <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+        </div>
 
+        <div class="print-container" id="printableArea">
           <div class="header-bar">
             <div class="header-left">
               <img src="banner.png" alt="OneVoice27" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
@@ -5460,32 +5523,49 @@
           </div>
 
           <div id="reportViewMatrix">${matrixHtml}</div>
+          <div id="reportViewMobile" style="display: none;">${mobileHtml}</div>
           <div id="reportViewCards" style="display: none;">${cardsHtml}</div>
 
           <div class="footer-bar">
-            <span>OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos y responsabilidades ministeriales</span>
+            <span>OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos ministeriales</span>
             <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
           </div>
         </div>
 
         <script>
           let currentZoom = ${defaultZoom};
+          let currentMode = 'matrix';
           function switchReportMode(mode) {
+            currentMode = mode;
             const mEl = document.getElementById('reportViewMatrix');
+            const mobEl = document.getElementById('reportViewMobile');
             const cEl = document.getElementById('reportViewCards');
             const bM = document.getElementById('btnModeMatrix');
+            const bMob = document.getElementById('btnModeMobile');
             const bC = document.getElementById('btnModeCards');
-            if (mode === 'cards') {
-              mEl.style.display = 'none';
-              cEl.style.display = 'block';
-              bM.classList.remove('active');
-              bC.classList.add('active');
-            } else {
-              mEl.style.display = 'block';
-              cEl.style.display = 'none';
-              bM.classList.add('active');
-              bC.classList.remove('active');
+            const area = document.getElementById('printableArea');
+
+            mEl.style.display = mode === 'matrix' ? 'block' : 'none';
+            mobEl.style.display = mode === 'mobile' ? 'block' : 'none';
+            cEl.style.display = mode === 'cards' ? 'block' : 'none';
+
+            bM.classList.toggle('active', mode === 'matrix');
+            bMob.classList.toggle('active', mode === 'mobile');
+            bC.classList.toggle('active', mode === 'cards');
+
+            if (area) {
+              area.classList.toggle('mode-mobile', mode === 'mobile');
             }
+
+            let pageStyle = document.getElementById('dynamicPageOrientation');
+            if (!pageStyle) {
+              pageStyle = document.createElement('style');
+              pageStyle.id = 'dynamicPageOrientation';
+              document.head.appendChild(pageStyle);
+            }
+            pageStyle.textContent = mode === 'mobile'
+              ? '@page { size: portrait; margin: 6mm 8mm; }'
+              : '@page { size: landscape; margin: 6mm 8mm; }';
           }
           function zoomDoc(delta) {
             currentZoom = Math.max(0.65, Math.min(1.25, parseFloat((currentZoom + delta).toFixed(2))));
@@ -5510,18 +5590,15 @@
               alert('Cargando motor de imagen, por favor intenta en unos segundos...');
               return;
             }
-            const toolbar = document.querySelector('.toolbar');
-            if (toolbar) toolbar.style.display = 'none';
             html2canvas(el, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' })
               .then(canvas => {
-                if (toolbar) toolbar.style.display = '';
                 const link = document.createElement('a');
-                link.download = 'Roles_${monthName}_${currentYear}.png';
+                const suffix = currentMode === 'mobile' ? 'Vertical' : (currentMode === 'cards' ? 'Bloques' : 'Ancho');
+                link.download = 'Roles_' + suffix + '_${monthName}_${currentYear}.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
               })
               .catch(err => {
-                if (toolbar) toolbar.style.display = '';
                 alert('No se pudo generar la imagen: ' + err);
               });
           }
