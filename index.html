@@ -1855,10 +1855,11 @@
           </div>
 
           <div class="calendar-filters" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <label style="font-weight: 600; font-size: 0.8rem;">Filtrar Área:</label>
-              <select id="filterDepartment" class="form-control" style="width: auto;" onchange="renderCalendar()">
-                <option value="ALL">Todas las Áreas</option>
+            <div style="display: flex; align-items: center; gap: 6px; background: #f8fafc; padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
+              <label for="filterDepartment" style="font-weight: 700; font-size: 0.76rem; color: #082142; white-space: nowrap;">Dpto / Área:</label>
+              <select id="filterDepartment" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.78rem; font-weight: 700;" onchange="renderCalendar()" title="Selecciona un departamento para filtrar la vista y descargar el informe mensual de ese departamento">
+                <option value="ALL">Todas las Áreas (Mes Completo)</option>
+                <option value="diaconado">Diaconado (Diaconisas y Diáconos)</option>
                 <option value="anciano">Anciano de Turno</option>
                 <option value="predicaciones">Predicación</option>
                 <option value="alabanza">Alabanza</option>
@@ -1868,20 +1869,20 @@
                 <option value="audiovisual">Audiovisual</option>
               </select>
             </div>
-            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
               <button class="btn btn-primary btn-sm admin-only" onclick="openFlyerModal()" title="Generar anuncio o cartel semanal en PDF con diseño exclusivo OneVoice27" style="background: linear-gradient(135deg, #203f5d 0%, #38628b 100%); border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(32,63,93,0.3);">
-                Anuncio Semanal (Flyer PDF)
+                Anuncio Semanal
               </button>
-              <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Imprimir o guardar en PDF el informe de este mes (Vertical o Ancho)">
-                Imprimir / PDF
+              <button class="btn btn-outline btn-sm" onclick="exportMonthPrintPDF()" title="Abrir vista previa para elegir Departamento, Mes y formato (PDF o PNG)" style="font-weight: 800; border-color: #082142; color: #082142;">
+                📄 Informe PDF / Por Dpto
               </button>
-              <button class="btn btn-primary btn-sm" onclick="downloadMonthImagePNG('mobile')" title="Descargar en formato vertical optimizado para celular y WhatsApp" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(15,118,110,0.25);">
-                📱 PNG Vertical (Celular)
+              <button class="btn btn-primary btn-sm" id="btnPngMobile" onclick="downloadMonthImagePNG('mobile')" title="Descargar imagen vertical optimizada para celular/WhatsApp (del mes completo o del departamento seleccionado)" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(15,118,110,0.25);">
+                📱 PNG Vertical
               </button>
-              <button class="btn btn-primary btn-sm" onclick="downloadMonthImagePNG('matrix')" title="Descargar el cuadrante en formato horizontal ancho para PC o pantalla" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(8,33,66,0.25);">
-                🖥️ PNG Ancho (PC)
+              <button class="btn btn-primary btn-sm" id="btnPngMatrix" onclick="downloadMonthImagePNG('matrix')" title="Descargar imagen horizontal ancha para PC (del mes completo o del departamento seleccionado)" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%); border: 1px solid #d4af37; color: #ffffff; box-shadow: 0 2px 4px rgba(8,33,66,0.25);">
+                🖥️ PNG Ancho
               </button>
-              <button class="btn btn-outline btn-sm" onclick="exportMonthExcelCSV()" title="Descargar informe de este mes en formato Excel (.csv)">
+              <button class="btn btn-outline btn-sm" onclick="exportMonthExcelCSV()" title="Descargar informe en Excel (.csv) del mes y departamento seleccionado">
                 Excel (.csv)
               </button>
             </div>
@@ -2168,9 +2169,10 @@
 
         <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
           <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-            <input type="text" id="searchShiftInput" class="form-control" style="max-width: 220px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
-            <select id="filterShiftDept" class="form-control" style="max-width: 220px;" onchange="renderShiftsTable()">
+            <input type="text" id="searchShiftInput" class="form-control" style="max-width: 190px;" placeholder="Buscar hermano(a)..." oninput="renderShiftsTable()">
+            <select id="filterShiftDept" class="form-control" style="max-width: 210px;" onchange="renderShiftsTable()">
               <option value="ALL">Todas las Áreas</option>
+              <option value="diaconado">Diaconado (Diaconisas y Diáconos)</option>
               <option value="anciano">Anciano de Turno</option>
               <option value="predicaciones">Predicación</option>
               <option value="alabanza">Alabanza</option>
@@ -2178,6 +2180,21 @@
               <option value="diaconisas">Diaconisas</option>
               <option value="diaconos">Diáconos</option>
               <option value="audiovisual">Audiovisual</option>
+            </select>
+            <select id="filterShiftMonth" class="form-control" style="max-width: 175px;" onchange="renderShiftsTable()">
+              <option value="ALL">Todos los Meses</option>
+              <option value="01">Enero</option>
+              <option value="02">Febrero</option>
+              <option value="03">Marzo</option>
+              <option value="04">Abril</option>
+              <option value="05">Mayo</option>
+              <option value="06">Junio</option>
+              <option value="07">Julio</option>
+              <option value="08">Agosto</option>
+              <option value="09">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
             </select>
             <span id="shiftsFilteredCount" style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-left: 4px;"></span>
           </div>
@@ -4582,7 +4599,9 @@
       card.className = cardClasses.join(' ');
 
       let dayShifts = shifts.filter(s => s.date === d.dateStr);
-      if (deptFilter !== 'ALL') {
+      if (deptFilter === 'diaconado') {
+        dayShifts = dayShifts.filter(s => s.departmentId === 'diaconisas' || s.departmentId === 'diaconos');
+      } else if (deptFilter !== 'ALL') {
         dayShifts = dayShifts.filter(s => s.departmentId === deptFilter);
       }
 
@@ -4609,7 +4628,9 @@
         const dept = DEPARTMENTS[deptKey];
         if (!dept) return;
 
-        if (deptFilter !== 'ALL' && deptFilter !== deptKey) {
+        if (deptFilter === 'diaconado') {
+          if (deptKey !== 'diaconisas' && deptKey !== 'diaconos') return;
+        } else if (deptFilter !== 'ALL' && deptFilter !== deptKey) {
           return;
         }
 
@@ -4821,11 +4842,17 @@
       tbody.innerHTML = '';
 
       const filterDept = document.getElementById('filterShiftDept')?.value || 'ALL';
+      const filterMonth = document.getElementById('filterShiftMonth')?.value || 'ALL';
       const searchTerm = (document.getElementById('searchShiftInput')?.value || '').toLowerCase().trim();
 
       let filtered = shifts.slice();
-      if (filterDept !== 'ALL') {
+      if (filterDept === 'diaconado') {
+        filtered = filtered.filter(s => s.departmentId === 'diaconisas' || s.departmentId === 'diaconos');
+      } else if (filterDept !== 'ALL') {
         filtered = filtered.filter(s => s.departmentId === filterDept);
+      }
+      if (filterMonth !== 'ALL') {
+        filtered = filtered.filter(s => (s.date || '').slice(5, 7) === filterMonth);
       }
       if (searchTerm) {
         filtered = filtered.filter(s => {
@@ -5039,12 +5066,24 @@
       return weekends;
     }
 
-    function exportMonthExcelCSV() {
-      const monthName = MONTH_NAMES[currentMonth];
-      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
+    function getDeptFilterLabel(deptFilter) {
+      if (!deptFilter || deptFilter === 'ALL') return 'Todas las Áreas';
+      if (deptFilter === 'diaconado') return 'Diaconisas y Diáconos';
+      return DEPARTMENTS[deptFilter] ? DEPARTMENTS[deptFilter].name : deptFilter;
+    }
+
+    function exportMonthExcelCSV(customDept, customMonth, customYear) {
+      const targetMonth = typeof customMonth === 'number' ? customMonth : currentMonth;
+      const targetYear = typeof customYear === 'number' ? customYear : currentYear;
+      const deptFilter = customDept || document.getElementById('filterDepartment')?.value || 'ALL';
+      const monthName = MONTH_NAMES[targetMonth];
+      const weekends = getScheduleDaysForMonth(targetYear, targetMonth);
+
+      const activeDepts = deptFilter === 'ALL'
+        ? DEPT_ORDER
+        : (deptFilter === 'diaconado' ? ['diaconisas', 'diaconos'] : [deptFilter]);
 
       const rows = [];
-      // Encabezado del reporte
       rows.push(['Mes', 'Semana', 'Fecha', 'Día', 'Área / Ministerio', 'Hermano(a) Responsable', 'Teléfono Contacto', 'Notas / Observaciones']);
 
       weekends.forEach((wk, wkIdx) => {
@@ -5057,7 +5096,7 @@
           const dateStr = formatDateKey(d.date);
           const dayShifts = shifts.filter(s => s.date === dateStr);
 
-          DEPT_ORDER.forEach(deptKey => {
+          activeDepts.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
             if (!dept) return;
 
@@ -5068,7 +5107,7 @@
               deptShifts.forEach(shift => {
                 const colab = collaborators.find(c => c.id === shift.collaboratorId);
                 rows.push([
-                  `${monthName} ${currentYear}`,
+                  `${monthName} ${targetYear}`,
                   `Semana ${wkIdx + 1}`,
                   dateStr,
                   d.name,
@@ -5080,7 +5119,7 @@
               });
             } else {
               rows.push([
-                `${monthName} ${currentYear}`,
+                `${monthName} ${targetYear}`,
                 `Semana ${wkIdx + 1}`,
                 dateStr,
                 d.name,
@@ -5094,47 +5133,50 @@
         });
       });
 
-      // Formato CSV con delimitador ';' compatible directamente con Microsoft Excel
       const csvString = rows.map(r => r.map(field => {
         const str = String(field || '').replace(/"/g, '""');
         return `"${str}"`;
       }).join(';')).join('\r\n');
 
-      // BOM UTF-8 (\uFEFF) para que Excel reconozca tildes y caracteres en español
+      const deptSlug = deptFilter === 'ALL'
+        ? 'Completo'
+        : getDeptFilterLabel(deptFilter).replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_');
+
       const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Informe_Turnos_${monthName}_${currentYear}.csv`;
+      a.download = `Informe_Roles_${deptSlug}_${monthName}_${targetYear}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast(`Informe de ${monthName} descargado para Excel (.csv)`, 'success');
+      showToast(`Informe Excel (${getDeptFilterLabel(deptFilter)} - ${monthName}) descargado`, 'success');
     }
 
-    function buildAlmanacWeeksHtml(monthIdx, year, mode = 'matrix') {
+    function buildAlmanacWeeksHtml(monthIdx, year, mode = 'matrix', deptFilter = 'ALL') {
       const weekends = getScheduleDaysForMonth(year, monthIdx);
 
-      function renderDeptCellContent(deptKey, d, dayShifts, allowWrap = false) {
+      function renderDeptCellContent(deptKey, d, dayShifts, allowWrap = false, centered = false) {
         const dept = DEPARTMENTS[deptKey];
         if (!dept) return '<span style="color:#cbd5e1;">—</span>';
         const deptShifts = dayShifts.filter(s => s.departmentId === deptKey);
         if (d.isFri && dept.saturdayOnly && deptShifts.length === 0) {
-          return '<span style="color:#cbd5e1; font-size:0.65rem;">—</span>';
+          return '<span style="color:#cbd5e1; font-size:0.62rem;">—</span>';
         }
         if (deptShifts.length === 0) {
-          return '<span style="color:#cbd5e1; font-size:0.65rem;">—</span>';
+          return '<span style="color:#cbd5e1; font-size:0.62rem;">—</span>';
         }
         const isMulti = deptShifts.length > 1;
         const wrapStyle = allowWrap
           ? 'white-space:normal; word-break:break-word;'
           : 'white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
+        const alignStyle = centered ? 'text-align:center;' : '';
         const namesHtml = deptShifts.map(s => {
           const colab = collaborators.find(c => c.id === s.collaboratorId);
           const colabName = colab ? colab.name : 'Responsable';
-          const dot = isMulti ? `<span style="color:${dept.color}; font-weight:900; margin-right:3px;">•</span>` : '';
-          return `<div style="font-weight:700; color:#0f172a; line-height:1.22; ${wrapStyle}">${dot}${escapeHtml(colabName)}</div>`;
+          const dot = (isMulti && !centered) ? `<span style="color:${dept.color}; font-weight:900; margin-right:3px;">•</span>` : '';
+          return `<div style="font-weight:700; color:#0f172a; line-height:1.2; ${wrapStyle} ${alignStyle}">${dot}${escapeHtml(colabName)}</div>`;
         }).join('');
 
         const customNotes = [];
@@ -5145,14 +5187,163 @@
           }
         });
         const notesHtml = customNotes.length > 0
-          ? `<div style="font-size:0.64rem; color:${dept.color}; font-weight:700; line-height:1.15; margin-top:2px;">${escapeHtml(customNotes.join(' • '))}</div>`
+          ? `<div style="font-size:0.6rem; color:${dept.color}; font-weight:700; line-height:1.12; margin-top:1px; ${alignStyle}">${escapeHtml(customNotes.join(' • '))}</div>`
           : '';
 
         return `${namesHtml}${notesHtml}`;
       }
 
+      // =========================================================================
+      // MODO ESPECIALIZADO: INFORME MENSUAL POR DEPARTAMENTO (O DIACONADO)
+      // =========================================================================
+      if (deptFilter && deptFilter !== 'ALL') {
+        const activeDepts = deptFilter === 'diaconado' ? ['diaconisas', 'diaconos'] : [deptFilter];
+
+        // Verificamos si este departamento solo tiene turnos en Sábado este mes
+        let hasFridayShifts = false;
+        weekends.forEach(wk => {
+          const friStr = formatDateKey(wk.friday);
+          const friMatches = shifts.filter(s => s.date === friStr && activeDepts.includes(s.departmentId));
+          if (friMatches.length > 0) hasFridayShifts = true;
+        });
+        const allSatOnly = activeDepts.every(k => DEPARTMENTS[k] && DEPARTMENTS[k].saturdayOnly);
+        const onlySaturdayView = allSatOnly && !hasFridayShifts;
+
+        if (onlySaturdayView) {
+          // Vista ejecutiva de Sábados (ej. Diaconisas + Diáconos, Diaconisas, Diáconos, Anciano)
+          const isDual = activeDepts.length === 2;
+          let rowsHtml = '';
+          weekends.forEach((wk, wkIdx) => {
+            const satStr = formatDateKey(wk.saturday);
+            const satShifts = shifts.filter(s => s.date === satStr);
+            const satNum = wk.saturday.getDate();
+            const rowBg = wkIdx % 2 === 0 ? '#eef7f6' : '#ffffff';
+
+            if (isDual) {
+              const cell1 = renderDeptCellContent(activeDepts[0], { isFri: false }, satShifts, true, true);
+              const cell2 = renderDeptCellContent(activeDepts[1], { isFri: false }, satShifts, true, true);
+              rowsHtml += `
+                <tr>
+                  <td style="background-color:${rowBg}; padding:8px 10px; text-align:center; font-weight:900; font-size:0.88rem; color:#0f2942; border-bottom:1px solid #cbd5e1; vertical-align:middle; width:22%;">
+                    ${satNum}
+                  </td>
+                  <td style="background-color:${rowBg}; padding:8px 10px; text-align:center; font-size:0.8rem; border-bottom:1px solid #cbd5e1; border-left:1px solid #d1e3e2; vertical-align:middle; width:39%;">
+                    ${cell1}
+                  </td>
+                  <td style="background-color:${rowBg}; padding:8px 10px; text-align:center; font-size:0.8rem; border-bottom:1px solid #cbd5e1; border-left:1px solid #d1e3e2; vertical-align:middle; width:39%;">
+                    ${cell2}
+                  </td>
+                </tr>
+              `;
+            } else {
+              const deptKey = activeDepts[0];
+              const deptShifts = satShifts.filter(s => s.departmentId === deptKey);
+              const cellContent = renderDeptCellContent(deptKey, { isFri: false }, satShifts, true, false);
+              const notesArr = [];
+              deptShifts.forEach(s => {
+                const n = (s.notes || '').trim();
+                if (n && !notesArr.includes(n)) notesArr.push(n);
+              });
+              rowsHtml += `
+                <tr>
+                  <td style="background-color:${rowBg}; padding:7px 10px; text-align:center; font-weight:800; font-size:0.74rem; color:#475569; border-bottom:1px solid #cbd5e1; vertical-align:middle; width:20%;">
+                    SEM ${wkIdx + 1}
+                  </td>
+                  <td style="background-color:${rowBg}; padding:7px 10px; text-align:center; font-weight:900; font-size:0.86rem; color:#0f2942; border-bottom:1px solid #cbd5e1; border-left:1px solid #d1e3e2; vertical-align:middle; width:22%;">
+                    Sáb ${satNum} ${MONTH_NAMES[wk.saturday.getMonth()].slice(0, 3)}
+                  </td>
+                  <td style="background-color:${rowBg}; padding:7px 12px; font-size:0.82rem; border-bottom:1px solid #cbd5e1; border-left:1px solid #d1e3e2; vertical-align:middle; width:58%;">
+                    ${cellContent}
+                  </td>
+                </tr>
+              `;
+            }
+          });
+
+          const headerCells = isDual
+            ? `
+              <th style="width:22%; background-color:#2b6f77; color:#ffffff; padding:8px 8px; text-align:center; font-size:0.76rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #082142;">SÁBADO</th>
+              <th style="width:39%; background-color:#2b6f77; color:#ffffff; padding:8px 8px; text-align:center; font-size:0.76rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; border-left:1px solid rgba(255,255,255,0.25); border-bottom:2px solid #082142;">${DEPARTMENTS[activeDepts[0]].name.toUpperCase()}</th>
+              <th style="width:39%; background-color:#2b6f77; color:#ffffff; padding:8px 8px; text-align:center; font-size:0.76rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; border-left:1px solid rgba(255,255,255,0.25); border-bottom:2px solid #082142;">${DEPARTMENTS[activeDepts[1]].name.toUpperCase()}</th>
+            `
+            : `
+              <th style="width:20%; background-color:#082142; color:#f6c84c; padding:7px 8px; text-align:center; font-size:0.72rem; font-weight:800; text-transform:uppercase; border-bottom:2px solid #d4af37;">SEMANA</th>
+              <th style="width:22%; background-color:#082142; color:#ffffff; padding:7px 8px; text-align:center; font-size:0.72rem; font-weight:800; text-transform:uppercase; border-left:1px solid rgba(255,255,255,0.2); border-bottom:2px solid #d4af37;">FECHA (SÁB)</th>
+              <th style="width:58%; background-color:#082142; color:#ffffff; padding:7px 12px; text-align:left; font-size:0.72rem; font-weight:800; text-transform:uppercase; border-left:1px solid rgba(255,255,255,0.2); border-bottom:2px solid #d4af37;">${DEPARTMENTS[activeDepts[0]].name.toUpperCase()} — RESPONSABLE(S)</th>
+            `;
+
+          return `
+            <div style="border:1.5px solid #082142; border-radius:6px; overflow:hidden; box-shadow:0 2px 6px rgba(8,33,66,0.06);">
+              <table style="width:100%; min-width:0; table-layout:fixed; border-collapse:collapse; font-family:'Montserrat',sans-serif;">
+                <thead>
+                  <tr>${headerCells}</tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        // Departamento con Viernes y Sábado (ej. Predicación, Alabanza, Especial, Audiovisual)
+        const deptKey = activeDepts[0];
+        const dept = DEPARTMENTS[deptKey] || { name: deptKey, color: '#082142' };
+        let deptRowsHtml = '';
+        weekends.forEach((wk, wkIdx) => {
+          const friStr = formatDateKey(wk.friday);
+          const satStr = formatDateKey(wk.saturday);
+          const friShifts = shifts.filter(s => s.date === friStr);
+          const satShifts = shifts.filter(s => s.date === satStr);
+          const friDay = String(wk.friday.getDate()).padStart(2, '0');
+          const satDay = String(wk.saturday.getDate()).padStart(2, '0');
+          const friMon = MONTH_NAMES[wk.friday.getMonth()].slice(0, 3);
+          const satMon = MONTH_NAMES[wk.saturday.getMonth()].slice(0, 3);
+          const rowBg = wkIdx % 2 === 0 ? '#ffffff' : '#f8fafc';
+
+          const friCell = renderDeptCellContent(deptKey, { isFri: true }, friShifts, true, false);
+          const satCell = renderDeptCellContent(deptKey, { isFri: false }, satShifts, true, false);
+
+          deptRowsHtml += `
+            <tr>
+              <td style="background-color:#082142; color:#f6c84c; font-weight:800; font-size:0.72rem; text-align:center; vertical-align:middle; padding:7px 6px; border-bottom:1.5px solid #d4af37; width:16%;">
+                SEM ${wkIdx + 1}
+              </td>
+              <td style="background-color:${rowBg}; padding:7px 10px; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1; vertical-align:middle; width:42%;">
+                <div style="margin-bottom:3px;">
+                  <span style="background-color:#dbeafe; color:#1e40af; border:1px solid #93c5fd; font-weight:800; font-size:0.65rem; padding:1px 6px; border-radius:4px;">VIE ${friDay} ${friMon}</span>
+                </div>
+                <div style="font-size:0.78rem;">${friCell}</div>
+              </td>
+              <td style="background-color:#fffdf5; padding:7px 10px; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1; vertical-align:middle; width:42%;">
+                <div style="margin-bottom:3px;">
+                  <span style="background-color:#fef3c7; color:#92400e; border:1px solid #fcd34d; font-weight:800; font-size:0.65rem; padding:1px 6px; border-radius:4px;">SÁB ${satDay} ${satMon}</span>
+                </div>
+                <div style="font-size:0.78rem;">${satCell}</div>
+              </td>
+            </tr>
+          `;
+        });
+
+        return `
+          <div style="border:1.5px solid #082142; border-radius:6px; overflow:hidden; box-shadow:0 2px 6px rgba(8,33,66,0.06);">
+            <table style="width:100%; min-width:0; table-layout:fixed; border-collapse:collapse; font-family:'Montserrat',sans-serif;">
+              <thead>
+                <tr>
+                  <th style="width:16%; background-color:#082142; color:#f6c84c; padding:7px 6px; text-align:center; font-size:0.68rem; font-weight:800; text-transform:uppercase; border-bottom:2px solid #d4af37;">SEMANA</th>
+                  <th style="width:42%; background-color:#082142; color:#ffffff; padding:7px 10px; text-align:left; font-size:0.7rem; font-weight:800; text-transform:uppercase; border-left:1px solid rgba(255,255,255,0.22); border-bottom:2px solid #d4af37;">VIERNES (${dept.name.toUpperCase()})</th>
+                  <th style="width:42%; background-color:#082142; color:#f6c84c; padding:7px 10px; text-align:left; font-size:0.7rem; font-weight:800; text-transform:uppercase; border-left:1px solid rgba(255,255,255,0.22); border-bottom:2px solid #d4af37;">SÁBADO (${dept.name.toUpperCase()})</th>
+                </tr>
+              </thead>
+              <tbody>${deptRowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // MODO MES COMPLETO (TODAS LAS ÁREAS): VERTICAL, BLOQUES Y ANCHO COMPACTO
+      // =========================================================================
       if (mode === 'mobile') {
-        let mobileHtml = '<div style="display:flex; flex-direction:column; gap:10px;">';
+        let mobileHtml = '<div style="display:flex; flex-direction:column; gap:6px;">';
         weekends.forEach((wk, wkIdx) => {
           const friStr = formatDateKey(wk.friday);
           const satStr = formatDateKey(wk.saturday);
@@ -5163,35 +5354,41 @@
           const friLabel = `VIE ${friDayNum} ${MONTH_NAMES[wk.friday.getMonth()].slice(0, 3).toUpperCase()}`;
           const satLabel = `SÁB ${satDayNum} ${MONTH_NAMES[wk.saturday.getMonth()].slice(0, 3).toUpperCase()}`;
 
+          // Si la semana tiene turnos asignados, mostramos solo los departamentos activos esa semana para máxima compacidad
+          const weekHasAnyShift = (friShifts.length + satShifts.length) > 0;
           let rowsHtml = '';
           DEPT_ORDER.forEach(deptKey => {
             const dept = DEPARTMENTS[deptKey];
             if (!dept) return;
+            const hasFri = friShifts.some(s => s.departmentId === deptKey);
+            const hasSat = satShifts.some(s => s.departmentId === deptKey);
+            if (weekHasAnyShift && !hasFri && !hasSat) return;
+
             const friCell = renderDeptCellContent(deptKey, { isFri: true }, friShifts, true);
             const satCell = renderDeptCellContent(deptKey, { isFri: false }, satShifts, true);
             rowsHtml += `
               <tr>
-                <td style="padding:5px 8px; font-weight:800; color:${dept.color}; border-bottom:1px solid #e2e8f0; width:26%; font-size:0.74rem; vertical-align:middle; background-color:#ffffff;">
-                  <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background-color:${dept.color}; margin-right:5px; vertical-align:middle;"></span>${dept.name}
+                <td style="padding:3px 6px; font-weight:800; color:${dept.color}; border-bottom:1px solid #e2e8f0; width:25%; font-size:0.68rem; vertical-align:middle; background-color:#ffffff; white-space:nowrap;">
+                  <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background-color:${dept.color}; margin-right:4px; vertical-align:middle;"></span>${dept.name}
                 </td>
-                <td style="padding:5px 8px; border-bottom:1px solid #e2e8f0; border-left:1px solid #e2e8f0; width:36%; background-color:#f8fbff; font-size:0.76rem; vertical-align:middle;">${friCell}</td>
-                <td style="padding:5px 8px; border-bottom:1px solid #e2e8f0; border-left:1px solid #e2e8f0; width:38%; background-color:#fffdf5; font-size:0.76rem; vertical-align:middle;">${satCell}</td>
+                <td style="padding:3px 6px; border-bottom:1px solid #e2e8f0; border-left:1px solid #e2e8f0; width:36%; background-color:#f8fbff; font-size:0.7rem; vertical-align:middle;">${friCell}</td>
+                <td style="padding:3px 6px; border-bottom:1px solid #e2e8f0; border-left:1px solid #e2e8f0; width:39%; background-color:#fffdf5; font-size:0.7rem; vertical-align:middle;">${satCell}</td>
               </tr>
             `;
           });
 
           mobileHtml += `
-            <div style="border:1.5px solid #94a3b8; border-top:3px solid #082142; border-radius:7px; overflow:hidden; background-color:#ffffff; box-shadow:0 2px 5px rgba(8,33,66,0.06);">
-              <div style="background-color:#082142; background-image:linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color:#ffffff; padding:6px 10px; display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #d4af37;">
-                <span style="background-color:rgba(246,200,76,0.18); border:1px solid #d4af37; color:#f6c84c; font-weight:900; font-size:0.74rem; padding:2px 8px; border-radius:4px; letter-spacing:0.4px;">◆ SEMANA ${wkIdx + 1}</span>
-                <span style="font-size:0.75rem; font-weight:800; color:#ffffff; letter-spacing:0.2px;">${friLabel} &nbsp;&bull;&nbsp; ${satLabel}</span>
+            <div style="border:1px solid #94a3b8; border-top:2.5px solid #082142; border-radius:6px; overflow:hidden; background-color:#ffffff; box-shadow:0 1px 3px rgba(8,33,66,0.05);">
+              <div style="background-color:#082142; background-image:linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color:#ffffff; padding:4px 8px; display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #d4af37;">
+                <span style="background-color:rgba(246,200,76,0.18); border:1px solid #d4af37; color:#f6c84c; font-weight:900; font-size:0.66rem; padding:1px 6px; border-radius:3px; letter-spacing:0.3px;">◆ SEMANA ${wkIdx + 1}</span>
+                <span style="font-size:0.68rem; font-weight:800; color:#ffffff; letter-spacing:0.2px;">${friLabel} &nbsp;&bull;&nbsp; ${satLabel}</span>
               </div>
               <table style="width:100%; min-width:0; table-layout:fixed; border-collapse:collapse; font-family:'Montserrat',sans-serif;">
                 <thead>
                   <tr>
-                    <th style="width:26%; padding:5px 8px; text-align:left; font-size:0.68rem; font-weight:800; text-transform:uppercase; background-color:#e2e8f0; color:#0f172a; border-bottom:1.5px solid #94a3b8;">Ministerio</th>
-                    <th style="width:36%; padding:5px 8px; text-align:left; font-size:0.68rem; font-weight:800; text-transform:uppercase; background-color:#dbeafe; color:#1e3a8a; border-bottom:1.5px solid #93c5fd; border-left:1px solid #cbd5e1;">${friLabel}</th>
-                    <th style="width:38%; padding:5px 8px; text-align:left; font-size:0.68rem; font-weight:800; text-transform:uppercase; background-color:#fef3c7; color:#92400e; border-bottom:1.5px solid #fcd34d; border-left:1px solid #cbd5e1;">${satLabel}</th>
+                    <th style="width:25%; padding:3px 6px; text-align:left; font-size:0.62rem; font-weight:800; text-transform:uppercase; background-color:#e2e8f0; color:#0f172a; border-bottom:1px solid #94a3b8;">Ministerio</th>
+                    <th style="width:36%; padding:3px 6px; text-align:left; font-size:0.62rem; font-weight:800; text-transform:uppercase; background-color:#dbeafe; color:#1e3a8a; border-bottom:1px solid #93c5fd; border-left:1px solid #cbd5e1;">${friLabel}</th>
+                    <th style="width:39%; padding:3px 6px; text-align:left; font-size:0.62rem; font-weight:800; text-transform:uppercase; background-color:#fef3c7; color:#92400e; border-bottom:1px solid #fcd34d; border-left:1px solid #cbd5e1;">${satLabel}</th>
                   </tr>
                 </thead>
                 <tbody>${rowsHtml}</tbody>
@@ -5204,7 +5401,7 @@
       }
 
       if (mode === 'cards') {
-        let cardsHtml = '<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 7px;">';
+        let cardsHtml = '<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 6px;">';
         weekends.forEach((wk, wkIdx) => {
           const friStr = formatDateKey(wk.friday);
           const satStr = formatDateKey(wk.saturday);
@@ -5221,25 +5418,25 @@
             const satCell = renderDeptCellContent(deptKey, { isFri: false }, satShifts);
             rowsHtml += `
               <tr>
-                <td style="padding:2px 5px; font-weight:800; color:${dept.color}; border-bottom:1px solid #f1f5f9; white-space:nowrap; width:26%; font-size:0.64rem; background-color:#ffffff;">${dept.name}</td>
-                <td style="padding:2px 5px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f1f5f9; width:34%; background-color:#f8fbff; font-size:0.66rem;">${friCell}</td>
-                <td style="padding:2px 5px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f1f5f9; width:40%; background-color:#fffdf5; font-size:0.66rem;">${satCell}</td>
+                <td style="padding:2px 5px; font-weight:800; color:${dept.color}; border-bottom:1px solid #f1f5f9; white-space:nowrap; width:26%; font-size:0.62rem; background-color:#ffffff;">${dept.name}</td>
+                <td style="padding:2px 5px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f1f5f9; width:35%; background-color:#f8fbff; font-size:0.64rem;">${friCell}</td>
+                <td style="padding:2px 5px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f1f5f9; width:39%; background-color:#fffdf5; font-size:0.64rem;">${satCell}</td>
               </tr>
             `;
           });
 
           cardsHtml += `
             <div style="border:1px solid #cbd5e1; border-top:2.5px solid #082142; border-radius:5px; overflow:hidden; background-color:#fff;">
-              <div style="background-color:#082142; background-image:linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color:#fff; padding:3px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.66rem; font-weight:800;">
+              <div style="background-color:#082142; background-image:linear-gradient(135deg, #082142 0%, #1e3a8a 100%); color:#fff; padding:3px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.64rem; font-weight:800;">
                 <span style="color:#f6c84c;">◆ SEMANA ${wkIdx + 1}</span>
                 <span style="color:#ffffff;">${friLabel} &bull; ${satLabel}</span>
               </div>
               <table style="width:100%; min-width:0; border-collapse:collapse; font-family:'Montserrat',sans-serif;">
                 <thead>
                   <tr>
-                    <th style="padding:3px 5px; text-align:left; font-size:0.6rem; font-weight:800; text-transform:uppercase; background-color:#e2e8f0; color:#0f172a; border-bottom:1px solid #cbd5e1;">Ministerio</th>
-                    <th style="padding:3px 5px; text-align:left; font-size:0.6rem; font-weight:800; text-transform:uppercase; background-color:#dbeafe; color:#1e40af; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1;">${friLabel}</th>
-                    <th style="padding:3px 5px; text-align:left; font-size:0.6rem; font-weight:800; text-transform:uppercase; background-color:#fef3c7; color:#92400e; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1;">${satLabel}</th>
+                    <th style="padding:3px 5px; text-align:left; font-size:0.58rem; font-weight:800; text-transform:uppercase; background-color:#e2e8f0; color:#0f172a; border-bottom:1px solid #cbd5e1;">Ministerio</th>
+                    <th style="padding:3px 5px; text-align:left; font-size:0.58rem; font-weight:800; text-transform:uppercase; background-color:#dbeafe; color:#1e40af; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1;">${friLabel}</th>
+                    <th style="padding:3px 5px; text-align:left; font-size:0.58rem; font-weight:800; text-transform:uppercase; background-color:#fef3c7; color:#92400e; border-bottom:1px solid #cbd5e1; border-left:1px solid #cbd5e1;">${satLabel}</th>
                   </tr>
                 </thead>
                 <tbody>${rowsHtml}</tbody>
@@ -5251,7 +5448,7 @@
         return cardsHtml;
       }
 
-      // Modo por defecto: Cuadrante Matricial Compacto (todas las semanas en una sola tabla ejecutiva sin rowspan para evitar desalineación)
+      // Modo por defecto: Cuadrante Matricial Ejecutivo Ultra-Compacto
       let bodyRowsHtml = '';
       weekends.forEach((wk, wkIdx) => {
         const days = [
@@ -5275,7 +5472,7 @@
           let deptCellsHtml = '';
           DEPT_ORDER.forEach(deptKey => {
             deptCellsHtml += `
-              <td style="background-color: ${rowBg}; padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #e2e8f0; vertical-align: middle; overflow: hidden;">
+              <td style="background-color: ${rowBg}; padding: 3px 5px; border-bottom: ${bottomBorder}; border-left: 1px solid #e2e8f0; vertical-align: middle; overflow: hidden;">
                 ${renderDeptCellContent(deptKey, d, dayShifts)}
               </td>
             `;
@@ -5283,13 +5480,13 @@
 
           bodyRowsHtml += `
             <tr style="background-color: ${rowBg};">
-              <td style="background-color: #082142; color: #f6c84c; font-weight: 800; font-size: 0.65rem; text-align: center; vertical-align: middle; border-bottom: ${semBottomBorder}; width: 52px; white-space: nowrap; padding: 4px 3px;">
-                <span style="display: inline-block; background-color: ${d.isFri ? 'rgba(246,200,76,0.18)' : 'transparent'}; border: ${d.isFri ? '1px solid #d4af37' : '1px solid rgba(212,175,55,0.35)'}; color: ${d.isFri ? '#f6c84c' : '#e2e8f0'}; border-radius: 4px; padding: 1px 5px; font-size: 0.62rem; font-weight: 800; line-height: 1.2;">
+              <td style="background-color: #082142; color: #f6c84c; font-weight: 800; font-size: 0.62rem; text-align: center; vertical-align: middle; border-bottom: ${semBottomBorder}; width: 50px; white-space: nowrap; padding: 3px 2px;">
+                <span style="display: inline-block; background-color: ${d.isFri ? 'rgba(246,200,76,0.18)' : 'transparent'}; border: ${d.isFri ? '1px solid #d4af37' : '1px solid rgba(212,175,55,0.35)'}; color: ${d.isFri ? '#f6c84c' : '#e2e8f0'}; border-radius: 3px; padding: 1px 4px; font-size: 0.58rem; font-weight: 800; line-height: 1.15;">
                   SEM ${wkIdx + 1}
                 </span>
               </td>
-              <td style="background-color: ${rowBg}; padding: 4px 6px; border-bottom: ${bottomBorder}; border-left: 1px solid #cbd5e1; white-space: nowrap; vertical-align: middle; width: 92px;">
-                <span style="${dateBadgeStyle} display: inline-block; font-weight: 800; font-size: 0.64rem; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.2px; line-height: 1.2;">
+              <td style="background-color: ${rowBg}; padding: 3px 5px; border-bottom: ${bottomBorder}; border-left: 1px solid #cbd5e1; white-space: nowrap; vertical-align: middle; width: 86px;">
+                <span style="${dateBadgeStyle} display: inline-block; font-weight: 800; font-size: 0.62rem; padding: 1px 5px; border-radius: 3px; letter-spacing: 0.2px; line-height: 1.15;">
                   ${d.shortDay} ${dayNum} ${shortMonth}
                 </span>
               </td>
@@ -5314,19 +5511,19 @@
         const shortTitle = deptKey === 'anciano' ? 'Anciano' : dept.name;
         const w = colWidths[deptKey] || '12%';
         return `
-          <th style="width: ${w}; background-color: #082142; padding: 6px 6px; text-align: left; font-size: 0.66rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; border-left: 1px solid rgba(255,255,255,0.22); border-bottom: 2px solid #d4af37; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-            <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background-color:#f6c84c; margin-right:4px; vertical-align:middle;"></span>${shortTitle}
+          <th style="width: ${w}; background-color: #082142; padding: 5px 5px; text-align: left; font-size: 0.64rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; border-left: 1px solid rgba(255,255,255,0.22); border-bottom: 2px solid #d4af37; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background-color:#f6c84c; margin-right:3px; vertical-align:middle;"></span>${shortTitle}
           </th>
         `;
       }).join('');
 
       return `
         <div style="border: 1.5px solid #082142; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 6px rgba(8,33,66,0.06);">
-          <table style="width: 100%; min-width: 0; table-layout: fixed; border-collapse: collapse; font-size: 10.5px; font-family: 'Montserrat', sans-serif;">
+          <table style="width: 100%; min-width: 0; table-layout: fixed; border-collapse: collapse; font-size: 10px; font-family: 'Montserrat', sans-serif;">
             <thead>
               <tr style="background-color: #082142;">
-                <th style="width: 54px; background-color: #082142; padding: 6px 4px; text-align: center; font-size: 0.63rem; font-weight: 800; color: #f6c84c; text-transform: uppercase; border-bottom: 2px solid #d4af37; white-space: nowrap;">Semana</th>
-                <th style="width: 94px; background-color: #082142; padding: 6px 6px; text-align: left; font-size: 0.66rem; font-weight: 800; color: #ffffff; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,0.22); border-bottom: 2px solid #d4af37; white-space: nowrap;">Día / Fecha</th>
+                <th style="width: 50px; background-color: #082142; padding: 5px 3px; text-align: center; font-size: 0.6rem; font-weight: 800; color: #f6c84c; text-transform: uppercase; border-bottom: 2px solid #d4af37; white-space: nowrap;">Semana</th>
+                <th style="width: 86px; background-color: #082142; padding: 5px 5px; text-align: left; font-size: 0.64rem; font-weight: 800; color: #ffffff; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,0.22); border-bottom: 2px solid #d4af37; white-space: nowrap;">Día / Fecha</th>
                 ${headerColsHtml}
               </tr>
             </thead>
@@ -5338,28 +5535,39 @@
       `;
     }
 
-    function downloadMonthImagePNG(mode = 'mobile') {
+    function downloadMonthImagePNG(mode = 'mobile', customDept, customMonth, customYear) {
       if (typeof html2canvas === 'undefined') {
         showToast('Preparando motor de imágenes...', 'info');
         const s = document.createElement('script');
         s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-        s.onload = () => downloadMonthImagePNG(mode);
+        s.onload = () => downloadMonthImagePNG(mode, customDept, customMonth, customYear);
         document.head.appendChild(s);
         return;
       }
 
+      const targetMonth = typeof customMonth === 'number' ? customMonth : currentMonth;
+      const targetYear = typeof customYear === 'number' ? customYear : currentYear;
+      const deptFilter = customDept || document.getElementById('filterDepartment')?.value || 'ALL';
+      const isDeptReport = deptFilter !== 'ALL';
       const isMobile = mode === 'mobile';
-      showToast(isMobile ? 'Generando imagen vertical para celular...' : 'Generando imagen ancha para PC...', 'info');
+      const deptLabel = getDeptFilterLabel(deptFilter);
 
-      const monthName = MONTH_NAMES[currentMonth];
-      const weeksHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, isMobile ? 'mobile' : 'matrix');
+      showToast(
+        isDeptReport
+          ? `Generando cuadrante de ${deptLabel}...`
+          : (isMobile ? 'Generando imagen vertical compacta...' : 'Generando imagen ancha compacta...'),
+        'info'
+      );
+
+      const monthName = MONTH_NAMES[targetMonth];
+      const weeksHtml = buildAlmanacWeeksHtml(targetMonth, targetYear, isMobile ? 'mobile' : 'matrix', deptFilter);
 
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.left = '-9999px';
       container.style.top = '0';
-      container.style.width = isMobile ? '540px' : '980px';
-      container.style.padding = isMobile ? '12px' : '12px 16px';
+      container.style.width = isDeptReport ? (isMobile ? '500px' : '680px') : (isMobile ? '500px' : '960px');
+      container.style.padding = isMobile ? '10px' : '10px 14px';
       container.style.background = '#ffffff';
       container.style.border = '2px solid #d4af37';
       container.style.borderRadius = '8px';
@@ -5367,23 +5575,27 @@
       container.style.fontFamily = "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
       container.style.zIndex = '-9999';
 
+      const mainHeading = isDeptReport
+        ? `Cuadrante de Servicio &bull; ${deptLabel}`
+        : (isMobile ? 'Roles Mensuales Vie y Sáb' : 'Cuadrante Mensual de Roles y Responsabilidades');
+
       container.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background-color: #082142; background-image: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: ${isMobile ? '8px 10px' : '8px 14px'}; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px;">
-          <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-            <img src="banner.png" alt="OneVoice27" style="height: ${isMobile ? '34px' : '42px'}; width: auto; max-width: ${isMobile ? '120px' : '180px'}; object-fit: contain; border-radius: 4px; flex-shrink: 0;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; background-color: #082142; background-image: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: ${isMobile ? '7px 10px' : '8px 12px'}; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 6px;">
+          <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+            <img src="banner.png" alt="OneVoice27" style="height: ${isMobile ? '30px' : '38px'}; width: auto; max-width: ${isMobile ? '110px' : '160px'}; object-fit: contain; border-radius: 4px; flex-shrink: 0;" onerror="if(!this.dataset.t){this.dataset.t='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
             <div style="min-width: 0;">
-              <div style="font-family: 'Playfair Display', serif; font-size: ${isMobile ? '0.94rem' : '1.12rem'}; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.15;">${isMobile ? 'Roles Mensuales Vie y Sáb' : 'Cuadrante Mensual de Roles y Responsabilidades'}</div>
-              <div style="color: #cbd5e1; font-size: ${isMobile ? '0.62rem' : '0.66rem'}; font-weight: 600; margin-top: 2px;">IASD Horeb &bull; Turnos de Viernes y Sábados</div>
+              <div style="font-family: 'Playfair Display', serif; font-size: ${isMobile ? '0.88rem' : '1.05rem'}; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.15;">${mainHeading}</div>
+              <div style="color: #cbd5e1; font-size: ${isMobile ? '0.58rem' : '0.64rem'}; font-weight: 600; margin-top: 1px;">Iglesia Adventista del Séptimo Día Horeb</div>
             </div>
           </div>
-          <div style="background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: ${isMobile ? '3px 9px' : '4px 12px'}; border-radius: 999px; font-size: ${isMobile ? '0.74rem' : '0.85rem'}; letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0;">
-            ${monthName.toUpperCase()} ${currentYear}
+          <div style="background-color: rgba(246, 200, 76, 0.16); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: ${isMobile ? '2px 8px' : '3px 10px'}; border-radius: 999px; font-size: ${isMobile ? '0.7rem' : '0.8rem'}; letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0;">
+            ${monthName.toUpperCase()} ${targetYear}
           </div>
         </div>
         ${weeksHtml}
-        <div style="margin-top: 6px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.6rem; color: #64748b; font-weight: 600;">
-          <span>OneVoice27 &bull; IASD Horeb</span>
-          <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+        <div style="margin-top: 5px; padding-top: 3px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.58rem; color: #64748b; font-weight: 600;">
+          <span>OneVoice27 &bull; IASD Horeb &bull; ${deptLabel}</span>
+          <span>${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
         </div>
       `;
 
@@ -5408,11 +5620,13 @@
       }).then(canvas => {
         if (container.parentElement) document.body.removeChild(container);
         const link = document.createElement('a');
-        const suffix = isMobile ? 'Vertical' : 'Ancho';
-        link.download = `Roles_${suffix}_${monthName}_${currentYear}.png`;
+        const suffix = isDeptReport
+          ? deptLabel.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_')
+          : (isMobile ? 'Vertical' : 'Ancho');
+        link.download = `Roles_${suffix}_${monthName}_${targetYear}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        showToast(`Imagen ${isMobile ? 'vertical (Celular)' : 'ancha (PC)'} de ${monthName} descargada`, 'success');
+        showToast(`Imagen (${isDeptReport ? deptLabel : suffix}) de ${monthName} descargada`, 'success');
       }).catch(err => {
         if (container.parentElement) document.body.removeChild(container);
         console.error('Error al exportar imagen del almanaque:', err);
@@ -5421,13 +5635,10 @@
     }
 
     function exportMonthPrintPDF() {
+      const initialDept = document.getElementById('filterDepartment')?.value || 'ALL';
       const monthName = MONTH_NAMES[currentMonth];
-      const weekends = getScheduleDaysForMonth(currentYear, currentMonth);
       const defaultZoom = 1.0;
       const defaultZoomPct = 100;
-      const matrixHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'matrix');
-      const mobileHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'mobile');
-      const cardsHtml = buildAlmanacWeeksHtml(currentMonth, currentYear, 'cards');
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
@@ -5447,6 +5658,14 @@
       canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
       printDoc.head.appendChild(canvasScript);
 
+      const monthOptionsHtml = MONTH_NAMES.map((mName, idx) =>
+        `<option value="${idx}" ${idx === currentMonth ? 'selected' : ''}>${mName}</option>`
+      ).join('');
+
+      const yearOptionsHtml = [2025, 2026, 2027].map(yr =>
+        `<option value="${yr}" ${yr === currentYear ? 'selected' : ''}>${yr}</option>`
+      ).join('');
+
       const styleEl = printDoc.createElement('style');
       styleEl.textContent = `
         @page {
@@ -5454,23 +5673,26 @@
           margin: 6mm 8mm;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { padding: 12px; color: #0f172a; background: #f1f5f9; font-size: 10.5px; line-height: 1.25; }
-        .print-container { max-width: 980px; margin: 0 auto; background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: max-width 0.2s ease, transform 0.15s ease; }
-        .print-container.mode-mobile { max-width: 540px; padding: 12px; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; background-color: #082142; background-image: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 8px 14px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 8px; gap: 10px; }
-        .header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-        .header-left img { height: 40px; width: auto; max-width: 170px; object-fit: contain; border-radius: 4px; }
-        .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
-        .header-title p { color: #cbd5e1; font-size: 0.65rem; font-weight: 600; margin: 2px 0 0; }
-        .badge-month { background: rgba(246, 200, 76, 0.15); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 0.84rem; text-align: right; white-space: nowrap; letter-spacing: 0.5px; }
-        .toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; max-width: 980px; margin-left: auto; margin-right: auto; background: #ffffff; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; }
-        .btn { padding: 5px 10px; font-size: 0.74rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
+        body { padding: 10px; color: #0f172a; background: #f1f5f9; font-size: 10px; line-height: 1.22; }
+        .print-container { max-width: 960px; margin: 0 auto; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #d4af37; box-shadow: 0 4px 14px rgba(8,33,66,0.08); transform-origin: top center; transition: max-width 0.2s ease, transform 0.15s ease; }
+        .print-container.mode-mobile { max-width: 520px; padding: 10px; }
+        .print-container.mode-dept { max-width: 640px; padding: 12px 14px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; background-color: #082142; background-image: linear-gradient(135deg, #05162e 0%, #082142 60%, #1e3a8a 100%); color: #ffffff; padding: 7px 12px; border-radius: 6px; border-bottom: 2.5px solid #d4af37; margin-bottom: 7px; gap: 10px; }
+        .header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+        .header-left img { height: 36px; width: auto; max-width: 150px; object-fit: contain; border-radius: 4px; }
+        .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.04rem; font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
+        .header-title p { color: #cbd5e1; font-size: 0.62rem; font-weight: 600; margin: 2px 0 0; }
+        .badge-month { background-color: rgba(246, 200, 76, 0.16); color: #f6c84c; border: 1.5px solid #d4af37; font-weight: 900; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; text-align: right; white-space: nowrap; letter-spacing: 0.5px; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; max-width: 960px; margin-left: auto; margin-right: auto; background: #ffffff; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #cbd5e1; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .toolbar-group { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+        .select-ctrl { padding: 4px 7px; font-size: 0.72rem; font-weight: 700; border-radius: 4px; border: 1px solid #94a3b8; color: #082142; background: #f8fafc; cursor: pointer; }
+        .btn { padding: 4px 9px; font-size: 0.72rem; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
         .btn-primary { background: #082142; color: #ffffff; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(8,33,66,0.2); }
         .btn-primary:hover { background: #0d366b; }
         .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
         .btn-outline:hover { background: #f1f5f9; }
         .btn-outline.active { background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; }
-        .footer-bar { margin-top: 6px; padding-top: 4px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.62rem; color: #64748b; font-weight: 600; }
+        .footer-bar { margin-top: 5px; padding-top: 3px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.6rem; color: #64748b; font-weight: 600; }
         @media print {
           html, body {
             background: #ffffff !important;
@@ -5496,16 +5718,35 @@
 
       printDoc.body.innerHTML = `
         <div class="toolbar no-print">
-          <span style="font-size: 0.74rem; color: #082142; font-weight: 800; margin-right: auto;">Roles (${weekends.length} sem.)</span>
-          <button class="btn btn-outline" id="btnModeMobile" onclick="switchReportMode('mobile')">📱 Vertical (Celular)</button>
-          <button class="btn btn-outline active" id="btnModeMatrix" onclick="switchReportMode('matrix')">🖥️ Ancho (Tabla PC)</button>
-          <button class="btn btn-outline" id="btnModeCards" onclick="switchReportMode('cards')">Bloques (2x2)</button>
-          <span id="zoomBadge" style="font-size: 0.73rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 7px; border-radius: 4px;">${defaultZoomPct}%</span>
-          <button class="btn btn-outline" onclick="zoomDoc(-0.05)" title="Reducir tamaño">−</button>
-          <button class="btn btn-outline" onclick="zoomDoc(0.05)" title="Aumentar tamaño">+</button>
-          <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" style="background: linear-gradient(135deg, #082142 0%, #1e3a8a 100%);">Descargar PNG</button>
-          <button class="btn btn-outline" onclick="window.close()">Cerrar</button>
-          <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+          <div class="toolbar-group">
+            <label style="font-size:0.7rem; font-weight:800; color:#082142;">Mes:</label>
+            <select id="popupSelectMonth" class="select-ctrl" onchange="refreshPopupReport()">${monthOptionsHtml}</select>
+            <select id="popupSelectYear" class="select-ctrl" onchange="refreshPopupReport()">${yearOptionsHtml}</select>
+            <label style="font-size:0.7rem; font-weight:800; color:#082142; margin-left:4px;">Dpto:</label>
+            <select id="popupSelectDept" class="select-ctrl" onchange="refreshPopupReport()">
+              <option value="ALL" ${initialDept === 'ALL' ? 'selected' : ''}>Todas las Áreas (Mes Completo)</option>
+              <option value="diaconado" ${initialDept === 'diaconado' ? 'selected' : ''}>Diaconado (Diaconisas y Diáconos)</option>
+              <option value="anciano" ${initialDept === 'anciano' ? 'selected' : ''}>Anciano de Turno</option>
+              <option value="predicaciones" ${initialDept === 'predicaciones' ? 'selected' : ''}>Predicación</option>
+              <option value="alabanza" ${initialDept === 'alabanza' ? 'selected' : ''}>Alabanza</option>
+              <option value="especial" ${initialDept === 'especial' ? 'selected' : ''}>Especial</option>
+              <option value="diaconisas" ${initialDept === 'diaconisas' ? 'selected' : ''}>Diaconisas</option>
+              <option value="diaconos" ${initialDept === 'diaconos' ? 'selected' : ''}>Diáconos</option>
+              <option value="audiovisual" ${initialDept === 'audiovisual' ? 'selected' : ''}>Audiovisual</option>
+            </select>
+          </div>
+          <div class="toolbar-group">
+            <button class="btn btn-outline" id="btnModeMobile" onclick="switchReportMode('mobile')">📱 Vertical</button>
+            <button class="btn btn-outline active" id="btnModeMatrix" onclick="switchReportMode('matrix')">🖥️ Ancho</button>
+            <button class="btn btn-outline" id="btnModeCards" onclick="switchReportMode('cards')">Bloques</button>
+            <span id="zoomBadge" style="font-size: 0.7rem; font-weight: 700; color: #082142; background: #fef3c7; border: 1px solid #d4af37; padding: 2px 6px; border-radius: 4px;">${defaultZoomPct}%</span>
+            <button class="btn btn-outline" onclick="zoomDoc(-0.05)" title="Reducir tamaño">−</button>
+            <button class="btn btn-outline" onclick="zoomDoc(0.05)" title="Aumentar tamaño">+</button>
+            <button class="btn btn-primary" onclick="downloadPopupAlmanacImage()" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);">Descargar PNG</button>
+            <button class="btn btn-outline" onclick="downloadPopupExcel()">Excel</button>
+            <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+            <button class="btn btn-outline" onclick="window.close()">✕</button>
+          </div>
         </div>
 
         <div class="print-container" id="printableArea">
@@ -5513,21 +5754,19 @@
             <div class="header-left">
               <img src="banner.png" alt="OneVoice27" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='banner-principal.png';}else{this.style.display='none';}">
               <div class="header-title">
-                <h1>Cuadrante Mensual de Roles y Responsabilidades</h1>
-                <p>Iglesia Adventista del Séptimo Día Horeb &bull; Viernes y Sábados</p>
+                <h1 id="popupHeaderTitle">Cuadrante Mensual de Roles y Responsabilidades</h1>
+                <p id="popupHeaderSub">Iglesia Adventista del Séptimo Día Horeb &bull; Viernes y Sábados</p>
               </div>
             </div>
-            <div class="badge-month">
+            <div class="badge-month" id="popupMonthBadge">
               ${monthName.toUpperCase()} ${currentYear}
             </div>
           </div>
 
-          <div id="reportViewMatrix">${matrixHtml}</div>
-          <div id="reportViewMobile" style="display: none;">${mobileHtml}</div>
-          <div id="reportViewCards" style="display: none;">${cardsHtml}</div>
+          <div id="reportDynamicBody"></div>
 
           <div class="footer-bar">
-            <span>OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos ministeriales</span>
+            <span id="popupFooterLeft">OneVoice27 &bull; IASD Horeb &bull; Cuadrante oficial de turnos ministeriales</span>
             <span>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} &bull; Página 1 de 1</span>
           </div>
         </div>
@@ -5535,26 +5774,30 @@
         <script>
           let currentZoom = ${defaultZoom};
           let currentMode = 'matrix';
-          function switchReportMode(mode) {
-            currentMode = mode;
-            const mEl = document.getElementById('reportViewMatrix');
-            const mobEl = document.getElementById('reportViewMobile');
-            const cEl = document.getElementById('reportViewCards');
-            const bM = document.getElementById('btnModeMatrix');
-            const bMob = document.getElementById('btnModeMobile');
-            const bC = document.getElementById('btnModeCards');
+          const monthNamesList = ${JSON.stringify(MONTH_NAMES)};
+
+          function refreshPopupReport() {
+            if (!window.opener || typeof window.opener.buildAlmanacWeeksHtml !== 'function') return;
+            const m = parseInt(document.getElementById('popupSelectMonth').value, 10);
+            const y = parseInt(document.getElementById('popupSelectYear').value, 10);
+            const dept = document.getElementById('popupSelectDept').value;
+            const deptLabel = window.opener.getDeptFilterLabel(dept);
+            const isDept = dept !== 'ALL';
+
+            const bodyEl = document.getElementById('reportDynamicBody');
+            bodyEl.innerHTML = window.opener.buildAlmanacWeeksHtml(m, y, currentMode, dept);
+
+            document.getElementById('popupMonthBadge').innerText = monthNamesList[m].toUpperCase() + ' ' + y;
+            document.getElementById('popupHeaderTitle').innerHTML = isDept
+              ? 'Cuadrante de Servicio &bull; ' + deptLabel
+              : 'Cuadrante Mensual de Roles y Responsabilidades';
+            document.getElementById('popupFooterLeft').innerHTML = 'OneVoice27 &bull; IASD Horeb &bull; ' + deptLabel;
+            document.title = 'Roles_' + deptLabel.replace(/[^a-zA-Z0-9]/g, '_') + '_' + monthNamesList[m] + '_' + y;
+
             const area = document.getElementById('printableArea');
-
-            mEl.style.display = mode === 'matrix' ? 'block' : 'none';
-            mobEl.style.display = mode === 'mobile' ? 'block' : 'none';
-            cEl.style.display = mode === 'cards' ? 'block' : 'none';
-
-            bM.classList.toggle('active', mode === 'matrix');
-            bMob.classList.toggle('active', mode === 'mobile');
-            bC.classList.toggle('active', mode === 'cards');
-
             if (area) {
-              area.classList.toggle('mode-mobile', mode === 'mobile');
+              area.classList.toggle('mode-mobile', !isDept && currentMode === 'mobile');
+              area.classList.toggle('mode-dept', isDept);
             }
 
             let pageStyle = document.getElementById('dynamicPageOrientation');
@@ -5563,10 +5806,19 @@
               pageStyle.id = 'dynamicPageOrientation';
               document.head.appendChild(pageStyle);
             }
-            pageStyle.textContent = mode === 'mobile'
+            pageStyle.textContent = (isDept || currentMode === 'mobile')
               ? '@page { size: portrait; margin: 6mm 8mm; }'
               : '@page { size: landscape; margin: 6mm 8mm; }';
           }
+
+          function switchReportMode(mode) {
+            currentMode = mode;
+            document.getElementById('btnModeMatrix').classList.toggle('active', mode === 'matrix');
+            document.getElementById('btnModeMobile').classList.toggle('active', mode === 'mobile');
+            document.getElementById('btnModeCards').classList.toggle('active', mode === 'cards');
+            refreshPopupReport();
+          }
+
           function zoomDoc(delta) {
             currentZoom = Math.max(0.65, Math.min(1.25, parseFloat((currentZoom + delta).toFixed(2))));
             const area = document.getElementById('printableArea');
@@ -5584,17 +5836,32 @@
             if (badge) badge.innerText = Math.round(currentZoom * 100) + '%';
           }
 
+          function downloadPopupExcel() {
+            if (!window.opener || typeof window.opener.exportMonthExcelCSV !== 'function') return;
+            const m = parseInt(document.getElementById('popupSelectMonth').value, 10);
+            const y = parseInt(document.getElementById('popupSelectYear').value, 10);
+            const dept = document.getElementById('popupSelectDept').value;
+            window.opener.exportMonthExcelCSV(dept, m, y);
+          }
+
           function downloadPopupAlmanacImage() {
             const el = document.getElementById('printableArea');
             if (!el || typeof html2canvas === 'undefined') {
               alert('Cargando motor de imagen, por favor intenta en unos segundos...');
               return;
             }
+            const m = parseInt(document.getElementById('popupSelectMonth').value, 10);
+            const y = parseInt(document.getElementById('popupSelectYear').value, 10);
+            const dept = document.getElementById('popupSelectDept').value;
+            const deptLabel = window.opener ? window.opener.getDeptFilterLabel(dept) : dept;
+            const suffix = dept !== 'ALL'
+              ? deptLabel.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_')
+              : (currentMode === 'mobile' ? 'Vertical' : (currentMode === 'cards' ? 'Bloques' : 'Ancho'));
+
             html2canvas(el, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' })
               .then(canvas => {
                 const link = document.createElement('a');
-                const suffix = currentMode === 'mobile' ? 'Vertical' : (currentMode === 'cards' ? 'Bloques' : 'Ancho');
-                link.download = 'Roles_' + suffix + '_${monthName}_${currentYear}.png';
+                link.download = 'Roles_' + suffix + '_' + monthNamesList[m] + '_' + y + '.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
               })
@@ -5602,9 +5869,11 @@
                 alert('No se pudo generar la imagen: ' + err);
               });
           }
+
+          refreshPopupReport();
         <\/script>
       `;
-      showToast(`Informe compacto de ${monthName} listo`, 'success');
+      showToast(`Informe de ${monthName} listo (puedes filtrar por Dpto y Mes)`, 'success');
     }
 
     // ==============================================================
@@ -5613,11 +5882,17 @@
 
     function exportShiftsExcelCSV() {
       const filterDept = document.getElementById('filterShiftDept')?.value || 'ALL';
+      const filterMonth = document.getElementById('filterShiftMonth')?.value || 'ALL';
       const searchTerm = (document.getElementById('searchShiftInput')?.value || '').toLowerCase().trim();
 
       let filtered = shifts.slice();
-      if (filterDept !== 'ALL') {
+      if (filterDept === 'diaconado') {
+        filtered = filtered.filter(s => s.departmentId === 'diaconisas' || s.departmentId === 'diaconos');
+      } else if (filterDept !== 'ALL') {
         filtered = filtered.filter(s => s.departmentId === filterDept);
+      }
+      if (filterMonth !== 'ALL') {
+        filtered = filtered.filter(s => (s.date || '').slice(5, 7) === filterMonth);
       }
       if (searchTerm) {
         filtered = filtered.filter(s => {
@@ -5658,11 +5933,13 @@
         return `"${str}"`;
       }).join(';')).join('\r\n');
 
-      let filename = 'Lista_Hermanos_Por_Asignacion.csv';
-      if (filterDept !== 'ALL' && DEPARTMENTS[filterDept]) {
-        const deptClean = DEPARTMENTS[filterDept].name.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_');
-        filename = `Lista_Hermanos_${deptClean}.csv`;
-      }
+      const deptPart = filterDept !== 'ALL'
+        ? getDeptFilterLabel(filterDept).replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_')
+        : 'Todas_Las_Areas';
+      const monthPart = filterMonth !== 'ALL'
+        ? '_' + (MONTH_NAMES[parseInt(filterMonth, 10) - 1] || filterMonth)
+        : '';
+      const filename = `Turnos_${deptPart}${monthPart}.csv`;
 
       const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
@@ -5673,16 +5950,22 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('Lista de hermanos descargada para Excel (.csv)', 'success');
+      showToast('Lista de turnos descargada para Excel (.csv)', 'success');
     }
 
     function exportShiftsPrintPDF() {
       const filterDept = document.getElementById('filterShiftDept')?.value || 'ALL';
+      const filterMonth = document.getElementById('filterShiftMonth')?.value || 'ALL';
       const searchTerm = (document.getElementById('searchShiftInput')?.value || '').toLowerCase().trim();
 
       let filtered = shifts.slice();
-      if (filterDept !== 'ALL') {
+      if (filterDept === 'diaconado') {
+        filtered = filtered.filter(s => s.departmentId === 'diaconisas' || s.departmentId === 'diaconos');
+      } else if (filterDept !== 'ALL') {
         filtered = filtered.filter(s => s.departmentId === filterDept);
+      }
+      if (filterMonth !== 'ALL') {
+        filtered = filtered.filter(s => (s.date || '').slice(5, 7) === filterMonth);
       }
       if (searchTerm) {
         filtered = filtered.filter(s => {
@@ -5700,9 +5983,9 @@
 
       filtered.sort((a, b) => a.date.localeCompare(b.date));
 
-      const filterTitle = filterDept !== 'ALL' && DEPARTMENTS[filterDept]
-        ? DEPARTMENTS[filterDept].name
-        : 'Todas las Asignaciones';
+      const deptTitle = filterDept !== 'ALL' ? getDeptFilterLabel(filterDept) : 'Todas las Asignaciones';
+      const monthTitle = filterMonth !== 'ALL' ? (' • ' + (MONTH_NAMES[parseInt(filterMonth, 10) - 1] || '')) : '';
+      const filterTitle = `${deptTitle}${monthTitle}`;
 
       const uniqueColabs = new Set(filtered.map(s => s.collaboratorId).filter(Boolean));
 
