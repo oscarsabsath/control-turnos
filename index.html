@@ -2785,7 +2785,7 @@
             <div style="display: grid; grid-template-columns: 115px 1fr; gap: 8px; margin-bottom: 6px;">
               <div>
                 <label style="font-size: 0.72rem; font-weight: 600;">Horario:</label>
-                <input type="text" id="flyerInputFriTime" class="form-control" value="20:00 – 21:00" oninput="onFlyerFieldInput()">
+                <input type="text" id="flyerInputFriTime" class="form-control" value="19:00 – 20:00" oninput="onFlyerFieldInput()">
               </div>
               <div>
                 <label style="font-size: 0.72rem; font-weight: 600;">Lugar / Actividad:</label>
@@ -3012,7 +3012,7 @@
                     <span id="flyerPreviewFriBadge">VIERNES 9 DE OCTUBRE</span>
                   </div>
                   <div class="flyer-row-item">
-                    <span id="flyerPreviewFriTime" style="font-weight: 700; color: #0f172a; white-space: nowrap;">20:00 – 21:00</span>
+                    <span id="flyerPreviewFriTime" style="font-weight: 700; color: #0f172a; white-space: nowrap;">19:00 – 20:00</span>
                     <span style="color: #cbd5e1;">|</span>
                     <div style="line-height: 1.2;">
                       <div id="flyerPreviewFriAct" style="font-size: 0.66rem; color: #64748b; font-weight: 600;">Iglesia</div>
@@ -7770,7 +7770,10 @@
       setFieldValue('flyerInputWeatherRain', saved ? (saved.weatherRain ?? 'no') : 'no');
       setFieldValue('flyerInputSunsetFri', saved ? (saved.sunsetFri ?? defaultSunsetFri) : defaultSunsetFri);
       setFieldValue('flyerInputSunsetSat', saved ? (saved.sunsetSat ?? defaultSunsetSat) : defaultSunsetSat);
-      setFieldValue('flyerInputFriTime', saved ? (saved.friTime ?? '20:00 – 21:00') : '20:00 – 21:00');
+      const savedFriTime = (saved && saved.friTime && saved.friTime !== '20:00 – 21:00' && saved.friTime !== '20:00 - 21:00')
+        ? saved.friTime
+        : '19:00 – 20:00';
+      setFieldValue('flyerInputFriTime', savedFriTime);
       setFieldValue('flyerInputFriAct', saved ? (saved.friAct ?? defaultFriAct) : defaultFriAct);
       setFieldValue('flyerInputFriSpeaker', saved ? (saved.friSpeaker ?? defaultFriSpeaker) : defaultFriSpeaker);
       setFieldValue('flyerInputSatAct1Time', saved ? (saved.satAct1Time ?? '12:00 – 13:15') : '12:00 – 13:15');
