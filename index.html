@@ -3364,7 +3364,7 @@
     const NOV_DEC_2026_ACTIVITIES = [
       // Noviembre 2026
       { id: 'act_2026_11_04', date: '2026-11-04', time: '20:00', duration: '', department: 'JAE', notes: 'Formación juvenil 1: Identidad adventista y testimonio cristiano' },
-      { id: 'act_2026_11_06', date: '2026-11-06', time: '20:00', duration: '', department: 'Familia', notes: 'Viernes de Hogar y Familia' },
+      { id: 'act_2026_11_06', date: '2026-11-06', time: '19:00 – 20:00', duration: '', department: 'Familia', notes: 'Viernes de Hogar y Familia' },
       { id: 'act_2026_11_07_1', date: '2026-11-07', time: '16:00', duration: '', department: 'Mayordomía / JA', notes: 'Discipulado de Mayordomía (tierra, templo, tiempo, tesoro y talento)' },
       { id: 'act_2026_11_07_2', date: '2026-11-07', time: '20:00', duration: 'Del 7 al 14 Nov', department: 'Iglesia General', notes: 'Semana de Oración (Cultos presenciales y por Zoom)' },
       { id: 'act_2026_11_08', date: '2026-11-08', time: '-', duration: '', department: 'JAE / Pioneros', notes: 'Convivencia de JAE y Pioneros' },
@@ -3372,7 +3372,7 @@
       { id: 'act_2026_11_15', date: '2026-11-15', time: '09:00', duration: '', department: 'Exploradores', notes: 'Caminata y convivencia conjunta Exploradores' },
       { id: 'act_2026_11_18', date: '2026-11-18', time: '20:00', duration: '', department: 'JAE', notes: 'Formación juvenil 2: Discipulado y testimonio personal' },
       { id: 'act_2026_11_21', date: '2026-11-21', time: '16:00', duration: '', department: 'Mayordomía / Mujer', notes: '2ª Sesión de Mayordomía / Culto Min. Mujer / JA (17h)' },
-      { id: 'act_2026_11_27', date: '2026-11-27', time: '20:00', duration: '', department: 'Jóvenes', notes: 'Viernes Joven en Horeb' },
+      { id: 'act_2026_11_27', date: '2026-11-27', time: '19:00 – 20:00', duration: '', department: 'Jóvenes', notes: 'Viernes Joven en Horeb' },
       { id: 'act_2026_11_28', date: '2026-11-28', time: '-', duration: '', department: 'Administración', notes: 'Reunión Administrativa (Planes y método de asambleas)' },
       { id: 'act_2026_11_29', date: '2026-11-29', time: '09:00', duration: '', department: 'Exploradores', notes: 'Caminata y convivencia conjunta Exploradores' },
       // Diciembre 2026
@@ -3406,13 +3406,13 @@
       'church_quarterly_activities'
     ], quarterlyWasInitialized ? [] : getDemoQuarterlyActivities());
 
-    if (localStorage.getItem('church_nov_dec_2026_v1') !== 'true') {
+    if (localStorage.getItem('church_nov_dec_2026_v2') !== 'true') {
       quarterlyActivities = mergeNovDec2026Activities(quarterlyActivities);
       try {
         localStorage.setItem('church_quarterly_activities_v1', JSON.stringify(quarterlyActivities));
         localStorage.setItem('church_quarterly_activities', JSON.stringify(quarterlyActivities));
         localStorage.setItem('church_quarterly_initialized', 'true');
-        localStorage.setItem('church_nov_dec_2026_v1', 'true');
+        localStorage.setItem('church_nov_dec_2026_v2', 'true');
       } catch (e) {}
     }
 
@@ -3439,10 +3439,35 @@
       return defaultData;
     }
 
+    function normalizeFlyersFridayTime(obj) {
+      if (!obj || typeof obj !== 'object') return false;
+      let changed = false;
+      for (const k of Object.keys(obj)) {
+        const entry = obj[k];
+        if (entry && typeof entry === 'object') {
+          if (entry.friTime !== '19:00 – 20:00') {
+            entry.friTime = '19:00 – 20:00';
+            changed = true;
+          }
+        }
+      }
+      return changed;
+    }
+
     let flyersData = loadSafeObjectData([
       'church_flyers_data_v1',
       'church_flyers_data'
     ], {});
+
+    if (localStorage.getItem('church_flyer_fri_19_20_v2') !== 'true') {
+      normalizeFlyersFridayTime(flyersData);
+      try {
+        const json = JSON.stringify(flyersData);
+        localStorage.setItem('church_flyers_data_v1', json);
+        localStorage.setItem('church_flyers_data', json);
+        localStorage.setItem('church_flyer_fri_19_20_v2', 'true');
+      } catch (e) {}
+    }
 
     // ==============================================================
     // CONFIGURACIÓN DE BASE DE DATOS EN LA NUBE (FIREBASE)
@@ -3548,19 +3573,19 @@
                 }).catch(() => {});
               }
             }
-            if (val.novDec2026AgendaVersion !== 1) {
+            if (val.novDec2026AgendaVersion !== 2) {
               quarterlyActivities = mergeNovDec2026Activities(quarterlyActivities);
               try {
                 localStorage.setItem('church_quarterly_activities_v1', JSON.stringify(quarterlyActivities));
                 localStorage.setItem('church_quarterly_activities', JSON.stringify(quarterlyActivities));
                 localStorage.setItem('church_quarterly_initialized', 'true');
-                localStorage.setItem('church_nov_dec_2026_v1', 'true');
+                localStorage.setItem('church_nov_dec_2026_v2', 'true');
               } catch(e){}
               if (db) {
                 db.ref('church_turnos').update({
                   quarterlyActivities: quarterlyActivities,
                   quarterlyActivitiesCleared: false,
-                  novDec2026AgendaVersion: 1,
+                  novDec2026AgendaVersion: 2,
                   updatedAt: Date.now()
                 }).catch(() => {});
               }
@@ -3574,9 +3599,21 @@
                   flyersData[pipeKey] = val.flyersData[k];
                 }
               }
+              if (val.flyerFriTime1920Version !== 2) {
+                normalizeFlyersFridayTime(flyersData);
+                if (db) {
+                  const cleanMigrated = getCleanFlyersDataForFirebase(flyersData);
+                  db.ref('church_turnos').update({
+                    flyersData: cleanMigrated || {},
+                    flyerFriTime1920Version: 2,
+                    updatedAt: Date.now()
+                  }).catch(() => {});
+                }
+              }
               try {
                 localStorage.setItem('church_flyers_data_v1', JSON.stringify(flyersData));
                 localStorage.setItem('church_flyers_data', JSON.stringify(flyersData));
+                localStorage.setItem('church_flyer_fri_19_20_v2', 'true');
               } catch(e){}
               const flyerSelect = document.getElementById('flyerWeekendSelect');
               const flyerModal = document.getElementById('weeklyFlyerModal');
@@ -3586,6 +3623,7 @@
                 }
               }
             } else if (flyersData && Object.keys(flyersData).length > 0 && db) {
+              normalizeFlyersFridayTime(flyersData);
               const cleanFlyers = getCleanFlyersDataForFirebase(flyersData);
               if (cleanFlyers) {
                 db.ref('church_turnos/flyersData').set(cleanFlyers).catch(() => {});
@@ -7770,9 +7808,19 @@
       setFieldValue('flyerInputWeatherRain', saved ? (saved.weatherRain ?? 'no') : 'no');
       setFieldValue('flyerInputSunsetFri', saved ? (saved.sunsetFri ?? defaultSunsetFri) : defaultSunsetFri);
       setFieldValue('flyerInputSunsetSat', saved ? (saved.sunsetSat ?? defaultSunsetSat) : defaultSunsetSat);
-      const savedFriTime = (saved && saved.friTime && saved.friTime !== '20:00 – 21:00' && saved.friTime !== '20:00 - 21:00')
-        ? saved.friTime
-        : '19:00 – 20:00';
+      const rawFriTime = (saved && typeof saved.friTime === 'string') ? saved.friTime.trim() : '';
+      const isValidFri1920 = rawFriTime.startsWith('19:00') && rawFriTime.includes('20:00');
+      const savedFriTime = isValidFri1920 ? rawFriTime : '19:00 – 20:00';
+      if (saved && saved.friTime !== savedFriTime) {
+        saved.friTime = savedFriTime;
+        try {
+          localStorage.setItem('church_flyers_data_v1', JSON.stringify(flyersData));
+          localStorage.setItem('church_flyers_data', JSON.stringify(flyersData));
+        } catch (e) {}
+        if (db) {
+          db.ref('church_turnos/flyersData/' + safeKey + '/friTime').set(savedFriTime).catch(() => {});
+        }
+      }
       setFieldValue('flyerInputFriTime', savedFriTime);
       setFieldValue('flyerInputFriAct', saved ? (saved.friAct ?? defaultFriAct) : defaultFriAct);
       setFieldValue('flyerInputFriSpeaker', saved ? (saved.friSpeaker ?? defaultFriSpeaker) : defaultFriSpeaker);
